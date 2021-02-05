@@ -1,18 +1,22 @@
 # rds-web
 
+The application to get RDS into the new OC Web interface.
+
 ## Project setup
 ```
 npm install
+pipenv install
 ```
 
 ### Compiles and hot-reloads for development
 ```
 npm run serve
+pipenv run python server.py
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+docker build
 ```
 
 ### Lints and fixes files

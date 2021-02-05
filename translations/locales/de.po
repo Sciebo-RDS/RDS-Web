@@ -1,0 +1,68 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: easygettext\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:22
+msgid "Cancel service selection"
+msgstr "Zurücksetzen"
+
+#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:34
+msgid "Enable DarkMode?"
+msgstr "Dunkle Farbgebung nutzen?"
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:16
+msgid "Home"
+msgstr "Startseite"
+
+#: /home/physicx/Projects/rds-web/src/App.vue:107
+msgid "item"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:19
+msgid "Save selection and activate services"
+msgstr "Dienste anpassen"
+
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:12
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:8
+msgid "Select All"
+msgstr "Alle auswählen"
+
+#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:29
+msgid "Select language"
+msgstr "Sprache ändern"
+
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:39
+msgid "Select services"
+msgstr "Wähle deine Dienste aus"
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:22
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:2
+msgid "Settings for language"
+msgstr "Sprache ändern"
+
+#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:2
+msgid "Settings for services"
+msgstr "Verknüpfte Dienste einstellen"
+
+#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:2
+msgid "Settings for theme"
+msgstr "Aussehen ändern"
+
+#: /home/physicx/Projects/rds-web/src/components/RevokeButton.vue:3
+msgid "Uninstall sciebo RDS"
+msgstr "Konto deaktivieren"
+
+#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:28
+msgid "Using DeviceMode?"
+msgstr "Farbgestaltung des Betriebssystem verwenden?"
