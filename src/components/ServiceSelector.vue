@@ -6,6 +6,7 @@
       :items="items"
       :label="$gettext('Select services')"
       multiple
+      :disabled="!firstRunFinished"
     >
       <template v-slot:prepend-item>
         <v-list-item ripple @click="toggle">
@@ -23,7 +24,7 @@
     </v-select>
     <v-btn
       depressed
-      :disabled="!selectedServicesChanged"
+      :disabled="!selectedServicesChanged || !firstRunFinished"
       color="error"
       class="mr-3"
       @click="saveSelection"
@@ -32,7 +33,7 @@
     </v-btn>
     <v-btn
       depressed
-      :disabled="!selectedServicesChanged"
+      :disabled="!selectedServicesChanged || !firstRunFinished"
       @click="resetSelection"
     >
       <translate>Cancel service selection</translate>
@@ -41,14 +42,39 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ServiceSelector",
   data: () => ({
     selectedItems: [],
-    activatedItems: [],
+    firstRunFinished: false,
   }),
+  watch: {
+    activatedItems(newVal) {
+      if (!this.firstRunFinished) {
+        this.selectedItems = newVal;
+        this.firstRunFinished = true;
+      }
+    },
+  },
   computed: {
-    items: function () {
+    ...mapState({
+      servicelist: (state) => state.RDSStore.servicelist,
+    }),
+    activatedItems: {
+      get() {
+        return this.servicelist;
+      },
+      set(servicelist) {
+        servicelist.forEach((service) => {
+          if (!this.servicelist.includes(service))
+            this.$services.RDS.sendService(service);
+        });
+        this.$services.RDS.requestServiceList();
+      },
+    },
+    items() {
       return ["Zenodo", "OSF", "Reva"];
     },
     selectedServicesChanged() {
@@ -86,8 +112,11 @@ export default {
       return "mdi-checkbox-blank-outline";
     },
   },
+  beforeMount() {
+    this.$services.RDS.requestServiceList()
+  },
   methods: {
-    toggle: function () {
+    toggle() {
       this.$nextTick(() => {
         if (this.selectedAllItems) {
           this.selectedItems = [];
@@ -96,12 +125,12 @@ export default {
         }
       });
     },
-    resetSelection: function () {
+    resetSelection() {
       this.$nextTick(() => {
         this.selectedItems = this.activatedItems;
       });
     },
-    saveSelection: function () {
+    saveSelection() {
       if (this.selectedItems.length == 0) {
         // change text
       }

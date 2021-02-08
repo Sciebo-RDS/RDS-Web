@@ -1,11 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersist from 'vuex-persist';
-import VueAxios from 'vue-axios';
-import axios from 'axios';
 
 Vue.use(Vuex)
-Vue.use(VueAxios, axios);
 
 const vuexLocalStorage = new VuexPersist({
     key: 'vuex',
@@ -27,9 +24,6 @@ const store = new Vuex.Store({
 
     // You can use it as a state getter function (probably the best solution)
     getters: {
-        getLastMessage(state) {
-            return state.lastMessage
-        },
         getLanguage(state) {
             return state.language;
         },
@@ -51,9 +45,6 @@ const store = new Vuex.Store({
             // https://github.com/vuejs/vuex/issues/1118
             Object.assign(state, getDefaultState())
         },
-        setLastMessage(state, payload) {
-            state.lastMessage = payload.message
-        },
         setLanguage(state, payload) {
             state.language = payload.language
         },
@@ -65,11 +56,6 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        SOCKET_getMessage(context, state) {
-            context.commit('setLastMessage', {
-                message: state.message
-            })
-        },
         setLanguage(context, state) {
             context.commit('setLanguage', {
                 language: state.language
@@ -86,7 +72,8 @@ const store = new Vuex.Store({
             })
         }
     },
-    plugins: [vuexLocalStorage.plugin]
+    plugins: [vuexLocalStorage.plugin],
+    strict: process.env.NODE_ENV !== 'production'
 });
 
 export default store

@@ -6,7 +6,7 @@ import "@/translations"
 import store from "./store"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import "./socket"
+import '@/services'
 
 
 Vue.config.productionTip = false
