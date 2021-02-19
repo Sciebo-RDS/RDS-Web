@@ -24,11 +24,11 @@ npm run serve
 pipenv run python websocket.py
 ```
 
-You can use tmux to create the server and client hot reload with this simple call.
+If you have installed `tmux` and `make`, you can use the following command to create the server and client hot reload for development.
 ```
-tmux new-session "npm run serve" \; split-window -h "pipenv run python websocket.py" \;  
+make test
 ```
-After that, your server will be reachable under localhost:8080 and the frontend under localhost:8085.
+After that, your server will be reachable under `localhost:8080` and the frontend under `localhost:8085`.
 
 ### Compiles and minifies for production
 We use docker to create containers. This will build a single server, which serves the frontend under port 8080.

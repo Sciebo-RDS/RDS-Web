@@ -21,4 +21,6 @@ lint:
 
 build:
 	npm run build
-	docker build
+
+test:
+	tmux new-session "npm run serve" \; split-window -h "pipenv run python websocket.py" \;  
