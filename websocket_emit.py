@@ -31,37 +31,14 @@ def authenticated_only(f):
     return wrapped
 
 
-servicelist = []
-
-
-@socketio.on("addService")
-@authenticated_only
-def addService(json):
-    LOGGER.info(json)
-    if json["service"] not in servicelist:
-        servicelist.append(json["service"])
-    LOGGER.info(servicelist)
-
-
-@socketio.on("requestUserServiceList")
-@authenticated_only
-def requestUserServiceList():
-    LOGGER.info(servicelist)
-    emit("UserServiceList", {"list": servicelist}, json=True)
-
-
-@socketio.on("requestServiceList")
-@authenticated_only
-def requestServiceList():
-    LOGGER.info(["Zenodo", "OSF", "Reva"])
-    emit("ServiceList", {"list": ["Zenodo", "OSF", "Reva"]}, json=True)
-
-
 @ socketio.on("connect")
 def connected():
     LOGGER.info("{} connected")
 
     if __name__ == "__main__":
+        clients[len(clients)] = request.sid
+        join_room(request.sid)
+        logging.info(clients)
         return
 
     if current_user.is_authenticated:
@@ -77,6 +54,7 @@ def disconnect():
     LOGGER.info("{} disconnected")
 
     if __name__ == "__main__":
+        leave_room(1)
         return
 
     del clients[current_user.userId]
@@ -97,6 +75,21 @@ if __name__ == "__main__":
         return redirect("http://localhost:8085")
 
     app.register_blueprint(socket_blueprint)
+
+    import threading
+    import time
+
+    def thread_function(name):
+        with app.test_request_context('/'):
+            for i in range(10):
+                logging.info("Thread %s: starting", name)
+                time.sleep(5)
+                socketio.emit("status", {"msg": "HUhu {} {}".format(id, i)}, room=clients[0])
+                logging.info("Thread %s: finishing", name)
+
+    x = threading.Thread(target=thread_function, args=(1,))
+    x.start()
+
     socketio.run(app, debug=True, port=8080)
 
 else:

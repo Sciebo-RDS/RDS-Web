@@ -3,7 +3,7 @@
     <v-card-title v-translate>Settings for services</v-card-title>
     <v-select
       v-model="selectedItems"
-      :items="items"
+      :items="servicelist"
       :label="$gettext('Select services')"
       multiple
       :disabled="!firstRunFinished"
@@ -60,22 +60,20 @@ export default {
   },
   computed: {
     ...mapState({
+      userservicelist: (state) => state.RDSStore.userservicelist,
       servicelist: (state) => state.RDSStore.servicelist,
     }),
     activatedItems: {
       get() {
-        return this.servicelist;
+        return this.userservicelist;
       },
       set(servicelist) {
         servicelist.forEach((service) => {
-          if (!this.servicelist.includes(service))
+          if (!this.userservicelist.includes(service))
             this.$services.RDS.sendService(service);
         });
-        this.$services.RDS.requestServiceList();
+        this.$services.RDS.requestUserServiceList();
       },
-    },
-    items() {
-      return ["Zenodo", "OSF", "Reva"];
     },
     selectedServicesChanged() {
       function compare(arr, array) {
@@ -101,7 +99,7 @@ export default {
       return res;
     },
     selectedAllItems() {
-      return this.selectedItems.length === this.items.length;
+      return this.selectedItems.length === this.servicelist.length;
     },
     selectedSomeItems() {
       return this.selectedItems.length > 0 && !this.selectedAllItems;
@@ -113,7 +111,8 @@ export default {
     },
   },
   beforeMount() {
-    this.$services.RDS.requestServiceList()
+    this.$services.RDS.requestServiceList();
+    this.$services.RDS.requestUserServiceList();
   },
   methods: {
     toggle() {
@@ -121,7 +120,7 @@ export default {
         if (this.selectedAllItems) {
           this.selectedItems = [];
         } else {
-          this.selectedItems = this.items.slice();
+          this.selectedItems = this.servicelist.slice();
         }
       });
     },
