@@ -1,9 +1,10 @@
 import Vue from "vue"
 import store from '../store.js'
 import RDS from "./RDS.js"
-import Settings from "./Settings.js"
 import VueSocketIO from 'vue-socket.io-extended';
 import { io } from 'socket.io-client';
+
+let modules = ["Settings"] // which modules in this folder should be added to store?
 
 const ioInstance = io('http://localhost:8080', {
     reconnection: true,
@@ -26,6 +27,12 @@ function addModule(moduleStore) {
         store.registerModule(moduleStore.name, moduleStore.store, { preserveState: true })
     }
 }
+function insertModule(modName) {
+    let resp = require(`@/store/services/${modName}.js`)
+    addModule(resp.default)
+}
 
 addModule(RDS)
-addModule(Settings)
+modules.forEach(element => {
+    insertModule(element)
+});

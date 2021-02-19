@@ -18,6 +18,12 @@ const routes = [
     icon: "mdi-home"
   },
   {
+    path: '/projects',
+    name: vm.$gettext('Projects'),
+    component: load("Projects"),
+    icon: "mdi-lightbulb-on"
+  },
+  {
     path: '/settings',
     name: vm.$gettext('Settings'),
     component: load("Settings"),

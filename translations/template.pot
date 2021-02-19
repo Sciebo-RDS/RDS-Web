@@ -21,6 +21,14 @@ msgstr ""
 msgid "item"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/src/components/WebsocketTester.vue:3
+msgid "Last message"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:22
+msgid "Projects"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:19
 msgid "Save selection and activate services"
 msgstr ""
@@ -38,7 +46,7 @@ msgstr ""
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:22
+#: /home/physicx/Projects/rds-web/src/router/index.js:28
 msgid "Settings"
 msgstr ""
 
