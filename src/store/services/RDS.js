@@ -1,3 +1,4 @@
+import store from "../store.js"
 
 const getDefaultState = () => {
     return {
@@ -14,13 +15,35 @@ export default {
         Vue.prototype.$services = Vue.prototype.$services || {}
         Vue.prototype.$services.RDS = {
             requestUserServiceList() {
-                $socket.client.emit("requestUserServiceList");
+                $socket.client.emit("getUserServices", (response) => {
+                    let serviceList = []
+                    let list = JSON.parse(response).list
+
+                    list.forEach(element => {
+                        serviceList.push(element.informations)
+                    });
+
+                    store.dispatch("SOCKET_UserServiceList", { list: serviceList })
+                });
             },
             requestServiceList() {
-                $socket.client.emit("requestServiceList");
+                $socket.client.emit("getServicesList", (response) => {
+                    // make it here the same secure like in php classic version
+                    let serviceList = []
+                    let list = JSON.parse(response)
+
+                    list.forEach(element => {
+                        serviceList.push(element.informations)
+                    });
+
+                    store.dispatch("SOCKET_ServiceList", { list: serviceList })
+                });
             },
-            sendService(service) {
+            addService(service) {
                 $socket.client.emit("addService", { service: service });
+            },
+            removeService(service) {
+                $socket.client.emit("removeService", { service: service });
             },
             sendMessage(message) {
                 $socket.client.emit("sendMessage", { message: message });

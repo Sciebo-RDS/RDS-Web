@@ -1,3 +1,0 @@
-# triggerMetadata
-# triggerFileSync
-# trigger publish

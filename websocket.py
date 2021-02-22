@@ -4,6 +4,8 @@ from flask_socketio import SocketIO, send, emit, disconnect, join_room, leave_ro
 from flask_login import current_user, logout_user
 import logging
 import functools
+import os
+from server.EasierRDS import HTTPManager, HTTPRequest
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -19,6 +21,38 @@ socket_blueprint = Blueprint("socket_blueprint", __name__)
 clients = {}
 
 
+def addJwtWithUser(response):
+    # here needs to make the response into a jwt and
+    return response
+
+
+def parseJwtAndCheckIfAllCorrect(response):
+    # check here, if the jwt is correct and take the username out of it and check against logged in user.
+    return response
+
+
+http = HTTPRequest(os.getenv("CIRCLE2_PORT_SERVICE",
+                             "https://sciebords-dev2.uni-muenster.de/port-service"))
+http.addRequest("getServicesList", "{url}/service", "get", addJwtWithUser)
+http.addRequest("getUserServices", "{url}/user/{userId}/service")
+http.addRequest("getService", "{url}/service/{servicename}")
+http.addRequest("getServiceForUser",
+                "{url}/user/{userId}/service/{servicename}")
+http.addRequest("addServiceForUser",
+                "{url}/exchange", "post", parseJwtAndCheckIfAllCorrect)  # add here the jwt security stuff from php
+http.addRequest("removeServiceForUser",
+                "{url}/user/{userId}/service/{servicename}", "delete")
+
+httpResearch = HTTPRequest(os.getenv("CIRCLE2_EXPORTER_SERVICE",
+                                     "https://sciebords-dev2.uni-muenster.de/exporter"))
+httpResearch.addRequest(
+    "addImport", "{url}/user/{userId}/research/{researchId}/imports")
+
+httpManager = HTTPManager(socketio)
+httpManager.addService(http)
+httpManager.addService(httpResearch)
+
+
 def authenticated_only(f):
     @ functools.wraps(f)
     def wrapped(*args, **kwargs):
@@ -31,35 +65,9 @@ def authenticated_only(f):
     return wrapped
 
 
-servicelist = []
-
-
-@socketio.on("addService")
-@authenticated_only
-def addService(json):
-    LOGGER.info(json)
-    if json["service"] not in servicelist:
-        servicelist.append(json["service"])
-    LOGGER.info(servicelist)
-
-
-@socketio.on("requestUserServiceList")
-@authenticated_only
-def requestUserServiceList():
-    LOGGER.info(servicelist)
-    emit("UserServiceList", {"list": servicelist}, json=True)
-
-
-@socketio.on("requestServiceList")
-@authenticated_only
-def requestServiceList():
-    LOGGER.info(["Zenodo", "OSF", "Reva"])
-    emit("ServiceList", {"list": ["Zenodo", "OSF", "Reva"]}, json=True)
-
-
-@ socketio.on("connect")
+@socketio.on("connect")
 def connected():
-    LOGGER.info("{} connected")
+    LOGGER.info("connected")
 
     if __name__ == "__main__":
         return
@@ -72,9 +80,9 @@ def connected():
         disconnect()
 
 
-@ socketio.on("disconnect")
+@socketio.on("disconnect")
 def disconnect():
-    LOGGER.info("{} disconnected")
+    LOGGER.info("disconnected")
 
     if __name__ == "__main__":
         return
@@ -83,8 +91,8 @@ def disconnect():
     logout_user()
 
 
-@ socketio.on("sendMessage")
-@ authenticated_only
+@socketio.on("sendMessage")
+@authenticated_only
 def handle_message(json):
     LOGGER.info("got {}".format(json))
     emit("getMessage", {"message": json["message"][::-1]}, json=True)
@@ -98,6 +106,3 @@ if __name__ == "__main__":
 
     app.register_blueprint(socket_blueprint)
     socketio.run(app, debug=True, port=8080)
-
-else:
-    pass

@@ -5,8 +5,9 @@
       v-model="selectedItems"
       :items="servicelist"
       :label="$gettext('Select services')"
+      :item-text="(item) => capitalize(item.servicename)"
+      :item-value="(item) => item"
       multiple
-      :disabled="!firstRunFinished"
     >
       <template v-slot:prepend-item>
         <v-list-item ripple @click="toggle">
@@ -58,6 +59,13 @@ export default {
       }
     },
   },
+  beforeCreate() {
+    this.$services.RDS.requestServiceList();
+    this.$services.RDS.requestUserServiceList();
+  },
+  beforeMount() {
+    this.selectedItems = this.activatedItems;
+  },
   computed: {
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
@@ -68,34 +76,49 @@ export default {
         return this.userservicelist;
       },
       set(servicelist) {
+        console.log(servicelist);
+        // remove not selected services
+        this.userservicelist.forEach((service) => {
+          if (!servicelist.includes(service)) {
+            this.$services.RDS.removeService(service);
+          }
+        });
+
+        // add new services
         servicelist.forEach((service) => {
           if (!this.userservicelist.includes(service))
-            this.$services.RDS.sendService(service);
+            this.$services.RDS.addService(service);
         });
         this.$services.RDS.requestUserServiceList();
       },
     },
     selectedServicesChanged() {
-      function compare(arr, array) {
+      let self = this;
+      function equal(arr, array) {
         // if the other array is a falsy value, return
         if (!array) return false;
 
         // compare lengths - can save a lot of time
         if (arr.length != array.length) return false;
 
-        for (var i = 0, l = arr.length; i < l; i++) {
-          // Check if we have nested arrays
-          if (arr[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!arr[i].equals(array[i])) return false;
-          } else if (arr[i] != array[i]) {
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;
+        found: for (let i = 0; i < arr.length; i++) {
+          const el = arr[i];
+          for (let j = 0; j < array.length; j++) {
+            const el2 = array[j];
+            if (
+              self.capitalize(el.servicename) ===
+              self.capitalize(el2.servicename)
+            ) {
+              continue found;
+            }
           }
+
+          return false;
         }
+
         return true;
       }
-      let res = !compare(this.selectedItems, this.activatedItems);
+      let res = !equal(this.selectedItems, this.activatedItems);
       return res;
     },
     selectedAllItems() {
@@ -110,11 +133,12 @@ export default {
       return "mdi-checkbox-blank-outline";
     },
   },
-  beforeMount() {
-    this.$services.RDS.requestServiceList();
-    this.$services.RDS.requestUserServiceList();
-  },
   methods: {
+    capitalize: function (value) {
+      if (typeof value !== "string") return "";
+      value = value.replace("port-", "");
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    },
     toggle() {
       this.$nextTick(() => {
         if (this.selectedAllItems) {
@@ -133,6 +157,7 @@ export default {
       if (this.selectedItems.length == 0) {
         // change text
       }
+
       this.activatedItems = this.selectedItems;
     },
   },

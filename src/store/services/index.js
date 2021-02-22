@@ -20,13 +20,13 @@ Vue.use(VueSocketIO, ioInstance, {
     mutationPrefix: 'SOCKET_',
     eventToActionTransformer: (actionName) => actionName // cancel camel case
 })
-Vue.use(RDS)
 
 function addModule(moduleStore) {
     if (!store.hasModule(moduleStore.name)) {
         store.registerModule(moduleStore.name, moduleStore.store, { preserveState: true })
     }
 }
+
 function insertModule(modName) {
     let resp = require(`@/store/services/${modName}.js`)
     addModule(resp.default)
@@ -36,3 +36,5 @@ addModule(RDS)
 modules.forEach(element => {
     insertModule(element)
 });
+
+Vue.use(RDS)
