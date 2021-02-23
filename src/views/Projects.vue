@@ -7,88 +7,95 @@ export default {
   data: () => ({
     projects: [
       {
-        userId: "admin",
-        researchIndex: 0,
-        researchId: 0,
-        status: 1,
         portIn: [
           {
             port: "port-reva",
-            properties: [
-              { portType: "fileStorage", value: true },
-              {
-                portType: "customProperties",
-                value: [{ key: "filepath", value: "/RDSTest" }],
-              },
-            ],
+            properties: {
+              type: ["fileStorage"],
+              customProperties: [
+                {
+                  filepath: "/RDSTest",
+                },
+              ],
+            },
           },
         ],
         portOut: [
           {
             port: "port-zenodo",
-            properties: [
-              { portType: "metadata", value: true },
-              {
-                portType: "customProperties",
-                value: [{ key: "projectId", value: "719218" }],
-              },
-            ],
+            properties: {
+              type: ["metadata"],
+              customProperties: [
+                {
+                  projectId: "719218",
+                },
+              ],
+            },
           },
         ],
+        researchId: 0,
+        researchIndex: 0,
+        status: 1,
+        userId: "admin",
       },
       {
-        userId: "admin",
-        researchIndex: 1,
-        researchId: 1,
-        status: 1,
         portIn: [
           {
             port: "port-owncloud",
-            properties: [
-              { portType: "fileStorage", value: true },
-              {
-                portType: "customProperties",
-                value: [{ key: "filepath", value: "/rocratetestfolder" }],
-              },
-            ],
+            properties: {
+              type: ["fileStorage"],
+              customProperties: [
+                {
+                  filepath: "/rocratetestfolder",
+                },
+              ],
+            },
           },
         ],
         portOut: [
           {
             port: "port-datasafe",
-            properties: [{ portType: "metadata", value: true }],
+            properties: {
+              type: ["metadata"],
+            },
           },
         ],
+        researchId: 1,
+        researchIndex: 1,
+        status: 1,
+        userId: "admin",
       },
       {
-        userId: "admin",
-        researchIndex: 2,
-        researchId: 2,
-        status: 1,
         portIn: [
           {
             port: "port-reva",
-            properties: [
-              { portType: "fileStorage", value: true },
-              {
-                portType: "customProperties",
-                value: [{ key: "filepath", value: "/RDSTest" }],
-              },
-            ],
+            properties: {
+              type: ["fileStorage"],
+              customProperties: [
+                {
+                  filepath: "/RDSTest",
+                },
+              ],
+            },
           },
         ],
         portOut: [
           {
             port: "port-zenodo",
-            properties: [
-              { portType: "metadata", value: true },
-              {
-                portType: "customProperties",
-                value: [{ key: "projectId", value: "719218" }],
-              },
-            ],
+            properties: {
+              type: ["metadata"],
+              customProperties: [
+                {
+                  projectId: "719218",
+                },
+              ],
+            },
           },
         ],
+        researchId: 2,
+        researchIndex: 2,
+        status: 1,
+        userId: "admin",
       },
     ],
   }),
