@@ -5,6 +5,7 @@ const getDefaultState = () => {
         lastMessage: "",
         userservicelist: [],
         servicelist: [],
+        researchlist: []
     }
 }
 
@@ -16,27 +17,19 @@ export default {
         Vue.prototype.$services.RDS = {
             requestUserServiceList() {
                 $socket.client.emit("getUserServices", (response) => {
-                    let serviceList = []
-                    let list = JSON.parse(response).list
-
-                    list.forEach(element => {
-                        serviceList.push(element.informations)
-                    });
-
-                    store.dispatch("SOCKET_UserServiceList", { list: serviceList })
+                    store.dispatch("SOCKET_UserServiceList", { list: JSON.parse(response).list.map(el => el.informations) })
                 });
             },
             requestServiceList() {
                 $socket.client.emit("getServicesList", (response) => {
                     // make it here the same secure like in php classic version
-                    let serviceList = []
-                    let list = JSON.parse(response)
-
-                    list.forEach(element => {
-                        serviceList.push(element.informations)
-                    });
-
-                    store.dispatch("SOCKET_ServiceList", { list: serviceList })
+                    store.dispatch("SOCKET_ServiceList", { list: JSON.parse(response).map(el => el.informations) })
+                });
+            },
+            requestResearchList() {
+                $socket.client.emit("getAllResearch", (response) => {
+                    // make it here the same secure like in php classic version
+                    store.dispatch("SOCKET_ResearchList", { list: JSON.parse(response) })
                 });
             },
             addService(service) {
@@ -62,6 +55,9 @@ export default {
             },
             getServiceList(state) {
                 return state.servicelist
+            },
+            getResearchList(state) {
+                return state.researchlist
             }
         },
         mutations: {
@@ -74,6 +70,9 @@ export default {
             setServiceList(state, payload) {
                 state.servicelist = payload.servicelist
             },
+            setResearchList(state, payload) {
+                state.researchlist = payload.researchlist
+            }
         },
         actions: {
             SOCKET_getMessage(context, state) {
@@ -91,6 +90,11 @@ export default {
                     servicelist: state.list
                 })
             },
+            SOCKET_ResearchList(context, state) {
+                context.commit('setResearchList', {
+                    researchlist: state.list
+                })
+            }
         },
     }
 }

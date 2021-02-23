@@ -1,10 +1,28 @@
 import logging
 import requests
 import os
+import json
 from flask_login import current_user
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
+
+
+def parseDict(data, socketio=None, httpManager=None):
+    if (socketio or httpManager) is None:
+        raise ValueError("socketio and httpManager are none.")
+
+    httpManager = httpManager or HTTPManager(socketio=socketio)
+
+    for key, value in data.items():
+        http = HTTPRequest(key)
+
+        for val in value:
+            http.addRequest(*val)
+
+        httpManager.addService(http)
+
+    return httpManager
 
 
 class HTTPRequest:
@@ -42,7 +60,7 @@ class HTTPRequest:
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
         if reqConf["function"] is not None:
-            return reqConf["function"](req.text)
+            return json.dumps(reqConf["function"](json.loads(req.text)))
         return req.text
 
 
