@@ -34,7 +34,7 @@ Beware: For testing or using, you need access to a working RDS instance.
 
 ### Run tests
 
-Runs the tests for vue and python.
+Runs the tests for vue and python after each other. If the first one fails, then the second one will not executed.
 
 ```
 make test
