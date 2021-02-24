@@ -12,11 +12,9 @@ export default {
             port: "port-reva",
             properties: {
               type: ["fileStorage"],
-              customProperties: [
-                {
-                  filepath: "/RDSTest",
-                },
-              ],
+              customProperties: {
+                filepath: "/RDSTest",
+              },
             },
           },
         ],
@@ -25,11 +23,9 @@ export default {
             port: "port-zenodo",
             properties: {
               type: ["metadata"],
-              customProperties: [
-                {
-                  projectId: "719218",
-                },
-              ],
+              customProperties: {
+                projectId: "719218",
+              },
             },
           },
         ],
@@ -44,11 +40,9 @@ export default {
             port: "port-owncloud",
             properties: {
               type: ["fileStorage"],
-              customProperties: [
-                {
-                  filepath: "/rocratetestfolder",
-                },
-              ],
+              customProperties: {
+                filepath: "/rocratetestfolder",
+              },
             },
           },
         ],
@@ -71,11 +65,9 @@ export default {
             port: "port-reva",
             properties: {
               type: ["fileStorage"],
-              customProperties: [
-                {
-                  filepath: "/RDSTest",
-                },
-              ],
+              customProperties: {
+                filepath: "/RDSTest",
+              },
             },
           },
         ],
@@ -84,11 +76,9 @@ export default {
             port: "port-zenodo",
             properties: {
               type: ["metadata"],
-              customProperties: [
-                {
-                  projectId: "719218",
-                },
-              ],
+              customProperties: {
+                projectId: "719218",
+              },
             },
           },
         ],
