@@ -22,5 +22,8 @@ lint:
 build:
 	npm run build
 
+hotreload:
+	tmux new-session "npm run serve" \; split-window -h "cd server && pipenv run python websocket.py" \;  
+
 test:
-	tmux new-session "npm run serve" \; split-window -h "pipenv run python websocket.py" \;  
+	tmux new-session "npm run test" \; split-window -h "cd server && pipenv run pytest" \;  

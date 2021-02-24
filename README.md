@@ -26,11 +26,19 @@ pipenv run python websocket.py
 
 If you have installed `tmux` and `make`, you can use the following command to create the server and client hot reload for development.
 ```
-make test
+make hotreload
 ```
 After that, your server will be reachable under `localhost:8080` and the frontend under `localhost:8085`.
 
 Beware: For testing or using, you need access to a working RDS instance.
+
+### Run tests
+
+Runs the tests for vue and python.
+
+```
+make test
+```
 
 ### Compiles and minifies for production
 We use docker to create containers. This will build a single server, which serves the frontend under port 8080.

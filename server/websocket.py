@@ -2,11 +2,12 @@ from __init__ import app
 from flask import Blueprint, request, redirect
 from flask_socketio import SocketIO, send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
+from src.Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack
+from src.EasierRDS import parseDict
 import logging
 import functools
 import os
 import json
-from server.EasierRDS import parseDict
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -20,57 +21,6 @@ socketio = SocketIO(
 socket_blueprint = Blueprint("socket_blueprint", __name__)
 
 clients = {}
-
-
-def parseResearchBack(response):
-    def parseProp(prop):
-        types = ["fileStorage", "metadata"]
-
-        data = [
-            {"key": typ, "value": True}
-            for typ in types
-            if typ in prop["type"]
-        ]
-
-        if "customProperties" in prop:
-            customProp = []
-            for cPro in customProp["customProperties"]:
-                pass
-
-            data.append(customProp)
-
-        return data
-
-
-def parseResearch(response):
-    def parseCustomProp(customProp):
-        return {val["key"]: val["value"] for val in customProp}
-
-    def parseProp(prop):
-        propList = {"type": []}
-        for val in prop:
-            if val["portType"] == "customProperties":
-                propList["customProperties"] = parseCustomProp(val["value"])
-            else:
-                propList["type"].append(val["portType"])
-        return propList
-
-    def parsePort(port):
-        return {
-            "port": port["port"],
-            "properties": parseProp(port["properties"])
-        }
-
-    data = {
-        "portIn": [parsePort(port) for port in response["portIn"]],
-        "portOut": [parsePort(port) for port in response["portOut"]]
-    }
-    response.update(data)
-    return response
-
-
-def parseAllResearch(response):
-    return [parseResearch(research) for research in response]
 
 
 url = "https://sciebords-dev2.uni-muenster.de"
@@ -101,7 +51,13 @@ data = {
         ("removeResearch",
          "{url}/user/{userId}/research/{researchId}", "delete"),
         ("addImport",
-         "{url}/user/{userId}/research/{researchId}/imports", "post")
+         "{url}/user/{userId}/research/{researchId}/imports", "post", parsePortBack),
+        ("addExport",
+         "{url}/user/{userId}/research/{researchId}/exports", "post", parsePortBack),
+        ("removeImport",
+         "{url}/user/{userId}/research/{researchId}/imports/{portId}", "delete"),
+        ("removeExport",
+         "{url}/user/{userId}/research/{researchId}/exports/{portId}", "delete")
     ],
     os.getenv("USE_CASE_SERVICE_METADATA_SERVICE", f"{url}/metadata"): [
         ("finishResearch", "{url}/user/{userId}/research/{researchId}", "put"),
