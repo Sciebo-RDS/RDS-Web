@@ -5,7 +5,7 @@
       v-model="selectedItems"
       :items="servicelist"
       :label="$gettext('Select services')"
-      :item-text="(item) => capitalize(item.servicename)"
+      :item-text="(item) => parseServicename(item.servicename)"
       :item-value="(item) => item"
       multiple
     >
@@ -25,7 +25,7 @@
     </v-select>
     <v-btn
       depressed
-      :disabled="!selectedServicesChanged || !firstRunFinished"
+      :disabled="!selectedServicesChanged"
       color="error"
       class="mr-3"
       @click="saveSelection"
@@ -34,7 +34,7 @@
     </v-btn>
     <v-btn
       depressed
-      :disabled="!selectedServicesChanged || !firstRunFinished"
+      :disabled="!selectedServicesChanged"
       @click="resetSelection"
     >
       <translate>Cancel service selection</translate>
@@ -49,19 +49,15 @@ export default {
   name: "ServiceSelector",
   data: () => ({
     selectedItems: [],
-    firstRunFinished: false,
   }),
   watch: {
     activatedItems(newVal) {
-      if (!this.firstRunFinished) {
-        this.selectedItems = newVal;
-        this.firstRunFinished = true;
-      }
+      this.selectedItems = newVal;
     },
   },
   beforeCreate() {
-    this.$services.RDS.requestServiceList();
-    this.$services.RDS.requestUserServiceList();
+    this.$requests.RDS.requestServiceList();
+    this.$requests.RDS.requestUserServiceList();
   },
   beforeMount() {
     this.selectedItems = this.activatedItems;
@@ -78,48 +74,24 @@ export default {
       set(servicelist) {
         console.log(servicelist);
         // remove not selected services
-        this.userservicelist.forEach((service) => {
-          if (!servicelist.includes(service)) {
-            this.$services.RDS.removeService(service);
+        for (const service in this.userservicelist) {
+          if (!this.containsService(servicelist, service)) {
+            this.$requests.RDS.removeService(service);
           }
-        });
+        }
 
         // add new services
-        servicelist.forEach((service) => {
-          if (!this.userservicelist.includes(service))
-            this.$services.RDS.addService(service);
-        });
-        this.$services.RDS.requestUserServiceList();
+        for (const service in this.servicelist) {
+          if (!this.containsService(this.userservicelist, service)) {
+            this.$requests.RDS.addService(service);
+          }
+        }
+
+        this.$requests.RDS.requestUserServiceList();
       },
     },
     selectedServicesChanged() {
-      let self = this;
-      function equal(arr, array) {
-        // if the other array is a falsy value, return
-        if (!array) return false;
-
-        // compare lengths - can save a lot of time
-        if (arr.length != array.length) return false;
-
-        found: for (let i = 0; i < arr.length; i++) {
-          const el = arr[i];
-          for (let j = 0; j < array.length; j++) {
-            const el2 = array[j];
-            if (
-              self.capitalize(el.servicename) ===
-              self.capitalize(el2.servicename)
-            ) {
-              continue found;
-            }
-          }
-
-          return false;
-        }
-
-        return true;
-      }
-      let res = !equal(this.selectedItems, this.activatedItems);
-      return res;
+      return !this.equalServices(this.selectedItems, this.activatedItems);
     },
     selectedAllItems() {
       return this.selectedItems.length === this.servicelist.length;
@@ -134,11 +106,6 @@ export default {
     },
   },
   methods: {
-    capitalize: function (value) {
-      if (typeof value !== "string") return "";
-      value = value.replace("port-", "");
-      return value.charAt(0).toUpperCase() + value.slice(1);
-    },
     toggle() {
       this.$nextTick(() => {
         if (this.selectedAllItems) {

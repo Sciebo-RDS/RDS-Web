@@ -28,7 +28,7 @@ export default {
   },
   methods: {
     sendSocket() {
-      this.$services.RDS.sendMessage(this.message);
+      this.$requests.RDS.sendMessage(this.message);
     },
   },
 };

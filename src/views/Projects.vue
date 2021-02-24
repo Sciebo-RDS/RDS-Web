@@ -12,7 +12,7 @@ export default {
     }),
   },
   beforeCreate() {
-    this.$services.RDS.requestResearchList();
+    this.$requests.RDS.requestResearchList();
   },
 };
 </script>

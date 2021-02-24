@@ -13,8 +13,8 @@ export default {
     getDefaultState,
     install: function (Vue) {
         let $socket = Vue.prototype.$socket
-        Vue.prototype.$services = Vue.prototype.$services || {}
-        Vue.prototype.$services.RDS = {
+        Vue.prototype.$requests = Vue.prototype.$requests || {}
+        Vue.prototype.$requests.RDS = {
             requestUserServiceList() {
                 $socket.client.emit("getUserServices", (response) => {
                     store.dispatch("SOCKET_UserServiceList", { list: JSON.parse(response).list.map(el => el.informations) })
