@@ -22,12 +22,29 @@ socket_blueprint = Blueprint("socket_blueprint", __name__)
 clients = {}
 
 
+def parseResearchBack(response):
+    def parseProp(prop):
+        types = ["fileStorage", "metadata"]
+
+        data = [
+            {"key": typ, "value": True}
+            for typ in types
+            if typ in prop["type"]
+        ]
+
+        if "customProperties" in prop:
+            customProp = []
+            for cPro in customProp["customProperties"]:
+                pass
+
+            data.append(customProp)
+
+        return data
+
+
 def parseResearch(response):
     def parseCustomProp(customProp):
-        propList = []
-        for val in customProp:
-            propList.append({val["key"]: val["value"]})
-        return propList
+        return {val["key"]: val["value"] for val in customProp}
 
     def parseProp(prop):
         propList = {"type": []}
@@ -45,12 +62,8 @@ def parseResearch(response):
         }
 
     data = {
-        "portIn": [
-            parsePort(port) for port in response["portIn"]
-        ],
-        "portOut": [
-            parsePort(port) for port in response["portOut"]
-        ]
+        "portIn": [parsePort(port) for port in response["portIn"]],
+        "portOut": [parsePort(port) for port in response["portOut"]]
     }
     response.update(data)
     return response
@@ -63,8 +76,7 @@ def parseAllResearch(response):
 url = "https://sciebords-dev2.uni-muenster.de"
 
 data = {
-    os.getenv("USE_CASE_SERVICE_PORT_SERVICE",
-              f"{url}/port-service"): [
+    os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
         ("getUserServices", "{url}/user/{userId}/service"),
         ("getServicesList", "{url}/service"),
         ("getService", "{url}/service/{servicename}"),
@@ -73,16 +85,14 @@ data = {
         ("removeServiceForUser",
          "{url}/user/{userId}/service/{servicename}", "delete")
     ],
-    os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE",
-              f"{url}/exporter"): [
+    os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE", f"{url}/exporter"): [
         ("getAllFiles", "{url}/user/{userId}/research/{researchId}"),
         ("triggerFileSynchronization",
          "{url}/user/{userId}/research/{researchId}", "post"),
         ("removeAllFiles",
          "{url}/user/{userId}/research/{researchId}", "delete")
     ],
-    os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER",
-              f"{url}/research"): [
+    os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"): [
         ("getAllResearch", "{url}/user/{userId}", "get", parseAllResearch),
         ("getResearch",
          "{url}/user/{userId}/research/{researchId}", "get", parseResearch),
@@ -93,15 +103,11 @@ data = {
         ("addImport",
          "{url}/user/{userId}/research/{researchId}/imports", "post")
     ],
-    os.getenv("USE_CASE_SERVICE_METADATA_SERVICE",
-              f"{url}/metadata"): [
-        ("finishResearch",
-         "{url}/user/{userId}/research/{researchId}", "put"),
+    os.getenv("USE_CASE_SERVICE_METADATA_SERVICE", f"{url}/metadata"): [
+        ("finishResearch", "{url}/user/{userId}/research/{researchId}", "put"),
         ("triggerMetadataSynchronization",
          "{url}/user/{userId}/research/{researchId}", "patch")
     ]
-
-
 }
 
 httpManager = parseDict(data, socketio=socketio)

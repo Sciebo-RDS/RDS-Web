@@ -22,13 +22,11 @@ export default {
             },
             requestServiceList() {
                 $socket.client.emit("getServicesList", (response) => {
-                    // make it here the same secure like in php classic version
                     store.dispatch("SOCKET_ServiceList", { list: JSON.parse(response).map(el => el.informations) })
                 });
             },
             requestResearchList() {
                 $socket.client.emit("getAllResearch", (response) => {
-                    // make it here the same secure like in php classic version
                     store.dispatch("SOCKET_ResearchList", { list: JSON.parse(response) })
                 });
             },

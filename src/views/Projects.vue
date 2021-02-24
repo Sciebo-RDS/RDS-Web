@@ -1,5 +1,5 @@
 <template>
-  <v-container>{{ researchlist }}</v-container>
+  <v-container>{{researchlist[0]}}</v-container>
 </template>
 
 <script>
