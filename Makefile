@@ -1,6 +1,7 @@
 install:
 	apt install gettext
 	npm install
+	npm install --only=dev
 
 l10n-compile:
 	 npm run localize-compile 
@@ -13,7 +14,7 @@ flask:
 	FLASK_APP=server.py flask run
 
 socket:
-	pipenv run python websocket.py
+	cd server && pipenv run python websocket.py
 
 lint:
 	npm run lint
@@ -26,4 +27,4 @@ hotreload:
 	tmux new-session "npm run serve" \; split-window -h "cd server && pipenv run python websocket.py" \;  
 
 test:
-	tmux new-session "npm run test" \; split-window -h "cd server && pipenv run pytest" \;  
+	npm test && cd server && pipenv run pytest
