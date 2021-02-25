@@ -20,6 +20,10 @@
   padding: 16px 24px 16px !important;
 }
 
+.v-expansion-panel-header--active {
+  color: #3f50b5;
+}
+
 </style>
 
 <script>
