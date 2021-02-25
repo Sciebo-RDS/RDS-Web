@@ -1,9 +1,14 @@
 <template>
-  <v-container>Heyho</v-container>
+  <v-container><ProjectList></ProjectList></v-container>
 </template>
 
 <script>
+import ProjectList from '../components/ProjectList'
+
 export default {
+  components: {
+    ProjectList
+  },
   data: () => ({
     projects: [
       {
