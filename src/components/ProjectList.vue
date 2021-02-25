@@ -1,5 +1,17 @@
 <template>
-    <ProjectSetting></ProjectSetting>
+    <v-row justify="center">
+      <v-expansion-panels inset focusable>
+      <v-expansion-panel
+        v-for="(item,i) in 5"
+        :key="i"
+        >
+        <v-expansion-panel-header> Project {{ item }} </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <ProjectSetting></ProjectSetting>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      </v-expansion-panels>
+    </v-row>
 </template>
 
 <script>
