@@ -14,6 +14,14 @@
     </v-row>
 </template>
 
+<style lang="scss">
+
+.v-expansion-panel-content__wrap {
+  padding: 16px 24px 16px !important;
+}
+
+</style>
+
 <script>
 import ProjectSetting from './ProjectSetting'
 
