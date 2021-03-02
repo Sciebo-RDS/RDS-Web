@@ -1,20 +1,17 @@
 <template>
-  <v-container>
-    <v-row>
-      <Header></Header>
-    </v-row>
-    <ProjectList></ProjectList>
-  </v-container>
+  <v-main style="padding: 0px">
+    <ProjectList  />
+  </v-main>
 </template>
 
 <script>
-import Header from '../components/Header'
+/*import Header from '../components/Header'*/
 import ProjectList from '../components/ProjectList'
 
 
 export default {
   components: {
-    Header,
+    /*Header,*/
     ProjectList
   },
   data: () => ({
