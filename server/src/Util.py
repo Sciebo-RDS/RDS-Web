@@ -70,3 +70,28 @@ def parseAllResearch(response):
 
 def parseAllResearchBack(response):
     return [parseResearchBack(research) for research in response]
+
+
+def listContainsService(arr, service):
+    for el in arr:
+        try:
+            if el["servicename"] == service["servicename"]:
+                return True
+        except Exception as e:
+            print(e)
+
+        try:
+            if el["informations"]["servicename"] == service["informations"]["servicename"]:
+                return True
+        except Exception as e:
+            print(e)
+
+    return False
+
+
+def removeDuplicates(response):
+    withoutDuplicates = []
+    for service in response:
+        if not listContainsService(withoutDuplicates, service):
+            withoutDuplicates.append(service)
+    return withoutDuplicates

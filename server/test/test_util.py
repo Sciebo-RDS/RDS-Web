@@ -1,5 +1,6 @@
-from ..src.Util import parseResearch, parseResearchBack, parseAllResearch, parseAllResearchBack
+from ..src.Util import parseResearch, parseResearchBack, parseAllResearch, parseAllResearchBack, removeDuplicates
 import unittest
+import copy
 
 
 class Test_parser(unittest.TestCase):
@@ -140,3 +141,10 @@ class Test_parser(unittest.TestCase):
             parseResearch(rdsResponse[0])))
         self.assertEqual(rdsResponse, parseAllResearchBack(
             parseAllResearch(rdsResponse)))
+
+    def test_removeDuplicate(self):
+        expected = [{"informations":{"credentials":{"password":True,"userId":True},"fileTransferArchive":0,"fileTransferMode":0,"implements":["fileStorage"],"servicename":"port-reva"},"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXJ2aWNlbmFtZSI6InBvcnQtcmV2YSIsImF1dGhvcml6ZV91cmwiOm51bGwsImRhdGUiOiIyMDIxLTAyLTI0IDE2OjU3OjAwLjY0MTU4NiIsImltcGxlbWVudHMiOlsiZmlsZVN0b3JhZ2UiXX0.tH-QihxXsDv_9oJNPXLpfB11CiTmwxCJcOrVhR-qfwk"},{"informations":{"credentials":{"password":False,"userId":False},"fileTransferArchive":0,"fileTransferMode":0,"implements":["metadata"],"servicename":"port-datasafe"},"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXJ2aWNlbmFtZSI6InBvcnQtZGF0YXNhZmUiLCJhdXRob3JpemVfdXJsIjpudWxsLCJkYXRlIjoiMjAyMS0wMi0yNCAxNjo1NzowMC42NDE5NTAiLCJpbXBsZW1lbnRzIjpbIm1ldGFkYXRhIl19.XZjOjups0zIpFWE4847AiopoKXTKx77M1nfAdnWT72E"},{"informations":{"authorize_url":"https://10.14.29.60/owncloud/index.php/apps/oauth2/authorize%3Fredirect_uri=https://10.14.29.60/owncloud/index.php/apps/rds/oauth&response_type=code&client_id=KGvhrKUA3PJGLqDoLlRbF2hlFZmg7OHZb0bLE6CZhyY5pWpZsn1cylBjNGPn9PQD","client_id":"KGvhrKUA3PJGLqDoLlRbF2hlFZmg7OHZb0bLE6CZhyY5pWpZsn1cylBjNGPn9PQD","fileTransferArchive":0,"fileTransferMode":0,"implements":["fileStorage"],"refresh_url":"https://10.14.29.60/owncloud/index.php/apps/oauth2/api/v1/token","servicename":"port-owncloud"},"jwt":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZXJ2aWNlbmFtZSI6InBvcnQtb3duY2xvdWQiLCJhdXRob3JpemVfdXJsIjoiaHR0cHM6Ly8xMC4xNC4yOS42MC9vd25jbG91ZC9pbmRleC5waHAvYXBwcy9vYXV0aDIvYXV0aG9yaXplJTNGcmVkaXJlY3RfdXJpPWh0dHBzOi8vMTAuMTQuMjkuNjAvb3duY2xvdWQvaW5kZXgucGhwL2FwcHMvcmRzL29hdXRoJnJlc3BvbnNlX3R5cGU9Y29kZSZjbGllbnRfaWQ9S0d2aHJLVUEzUEpHTHFEb0xsUmJGMmhsRlptZzdPSFpiMGJMRTZDWmh5WTVwV3Bac24xY3lsQmpOR1BuOVBRRCIsImRhdGUiOiIyMDIxLTAyLTI0IDE2OjU3OjAwLjY0MjE3OSIsImltcGxlbWVudHMiOlsiZmlsZVN0b3JhZ2UiXX0.uwzm7zT52L2pnHQsiK9qLShywmTmf2x1d3A0VkX5c-A"}]
+        example = copy.deepcopy(expected)
+        example.append(expected[1])
+
+        self.assertEqual(expected, removeDuplicates(example))
