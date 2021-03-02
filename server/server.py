@@ -14,6 +14,9 @@ import requests
 import uuid
 import os
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -59,6 +62,9 @@ def index():
             return redirect("/")
 
     if current_user.is_authenticated:
+        if "code" in request.args and "state" in request.args:
+            return render_template("exchangeCode.html")
+
         return render_template("index.html")
 
     return redirect(

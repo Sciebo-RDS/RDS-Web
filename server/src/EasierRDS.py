@@ -38,8 +38,11 @@ class HTTPRequest:
         }
 
     def makeRequest(self, key, data=None):
-        if data is None or not isinstance(data, dict):
+        if data is None:
             data = {}
+
+        if isinstance(data, str):
+            data = json.loads(data)
 
         try:
             data["userId"] = current_user.userId
@@ -54,7 +57,7 @@ class HTTPRequest:
         url = reqConf["url"].format(**data)
         LOGGER.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
-            url, json=data, verify=False)
+            url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True")
 
         LOGGER.debug(
             "status_code: {}, content: {}".format(req.status_code, req.text))
@@ -79,7 +82,7 @@ class HTTPManager:
             def outerFn(key):
                 def reqFn(*args):
                     try:
-                        return service.makeRequest(key, args)
+                        return service.makeRequest(key, *args)
                     except Exception as e:
                         LOGGER.error(
                             "make request error: {}".format(e), exc_info=True)

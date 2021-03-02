@@ -1,13 +1,15 @@
 from __init__ import app
-from flask import Blueprint, request, redirect
+from flask import Blueprint, request, redirect, render_template
 from flask_socketio import SocketIO, send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
-from src.Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack
+from src.Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
 from src.EasierRDS import parseDict
 import logging
 import functools
 import os
 import json
+import requests
+import jwt
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -28,10 +30,9 @@ url = "https://sciebords-dev2.uni-muenster.de"
 data = {
     os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
         ("getUserServices", "{url}/user/{userId}/service"),
-        ("getServicesList", "{url}/service"),
+        ("getServicesList", "{url}/service", "get", removeDuplicates),
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
-        ("addServiceForUser", "{url}/exchange", "post"),
         ("removeServiceForUser",
          "{url}/user/{userId}/service/{servicename}", "delete")
     ],
@@ -93,11 +94,16 @@ def connected():
     LOGGER.info("connected")
 
     if __name__ == "__main__":
+        emit("ServiceList", httpManager.makeRequest("getServicesList"))
+        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
         return
 
     if current_user.is_authenticated:
         current_user.websocketId = request.sid
         clients[current_user.userId] = current_user
+        
+        emit("ServiceList", httpManager.makeRequest("getServicesList"))
+        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
     else:
         logout_user()
         disconnect()
@@ -116,15 +122,80 @@ def disconnect():
 
 @ socketio.on("sendMessage")
 @ authenticated_only
-def handle_message(json):
-    LOGGER.info("got {}".format(json))
-    emit("getMessage", {"message": json["message"][::-1]}, json=True)
+def handle_message(jsonData):
+    LOGGER.info("got {}".format(jsonData))
+    emit("getMessage", {"message": jsonData["message"][::-1]}, json=True)
+
+
+@socketio.on("addCredentials")
+@authenticated_only
+def credentials(jsonData):
+    jsonData = json.loads(jsonData)
+
+    body = {
+        "servicename": jsonData["servicename"],
+        "username": jsonData["username"],
+        "password": jsonData["password"]
+    }
+
+    try:
+        body["userId"] = current_user.userId
+    except:
+        body["userId"] = "admin"
+
+    if not body["username"]:
+        body["username"] = "---"
+
+    urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
+    req = requests.post(f"{urlPort}/credentials", json=body,
+                        verify=os.getenv("VERIFY_SSL", "False") == "True")
+    LOGGER.debug(req.text)
+
+    # update userserviceslist on client
+    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+
+    return req.status_code < 300
+
+
+@socketio.on("exchangeCode")
+@authenticated_only
+def exchangeCode(jsonData):
+    jsonData = json.loads(jsonData)
+
+    body = {
+        'servicename': "port-owncloud",
+        'code': jsonData["code"],
+        'state': jsonData["state"]
+    }
+
+    try:
+        body["userId"] = current_user.userId
+    except:
+        body["userId"] = "admin"
+
+    # TODO exchange it in the background for user and redirect to wizard / projects
+
+    jwtEncode = jwt.encode(body, os.getenv(
+        "OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
+
+    urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
+
+    req = requests.post(f"{urlPort}/exchange", json=jwtEncode,
+                        verify=os.getenv("VERIFY_SSL", "False") == "True")
+    LOGGER.debug(req.text)
+
+    # update userserviceslist on client
+    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+
+    return req.status_code < 300
 
 
 if __name__ == "__main__":
 
     @ app.route("/")
     def index():
+        if "code" in request.args and "state" in request.args:
+            return render_template("exchangeCode.html")
         return redirect("http://localhost:8085")
 
     app.register_blueprint(socket_blueprint)
