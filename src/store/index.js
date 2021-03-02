@@ -1,5 +1,10 @@
 import store from "./store.js";
-import "./services"
+import services from "./services"
 
+export default {
+    install(Vue) {
+        Vue.use(services)
+    }
+}
 
-export default store
+export { store }
