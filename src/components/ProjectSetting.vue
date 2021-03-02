@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-container class="grey lighten-5">
+        <!-- white in production-->
+        <v-container class="grey lighten-5"> 
 
       <ProjectStepper />
     

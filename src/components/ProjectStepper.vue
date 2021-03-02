@@ -5,7 +5,7 @@
         :complete="e1 > 1"
         step="1"
       >
-        Files
+        Configuration
       </v-stepper-step>
 
       <v-divider></v-divider>
@@ -20,7 +20,7 @@
       <v-divider></v-divider>
 
       <v-stepper-step step="3">
-        Confirm
+        Publish
       </v-stepper-step>
     </v-stepper-header>
 
@@ -28,9 +28,12 @@
       <v-stepper-content step="1">
         <v-card
           class="mb-12"
-          color="grey lighten-1"
-          height="200px"
-        ></v-card>
+          color="white"
+          height="auto"
+          flat
+        >
+            <StepConfiguration/>
+        </v-card>
 
         <v-btn
           color="primary"
@@ -86,7 +89,12 @@
 </template>
 
 <script>
+import StepConfiguration from "./StepConfiguration"
+
   export default {
+    components: {
+        StepConfiguration
+    },
     data () {
       return {
         e1: 1,
