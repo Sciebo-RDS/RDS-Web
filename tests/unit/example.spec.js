@@ -20,3 +20,4 @@ describe('HelloWorld.vue', () => {
     expect(wrapper.html()).toMatchSnapshot()
   })
 })
+

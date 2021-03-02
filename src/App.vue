@@ -1,10 +1,7 @@
 <template>
   <div>
     <v-app id="inspire">
-      <!--<v-system-bar app class="d-xl-none">
-      <v-spacer></v-spacer>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-    </v-system-bar>-->
+      <overlay />
 
       <v-navigation-drawer v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
@@ -23,14 +20,22 @@
 
         <v-list>
           <v-list-item-group v-model="model" mandatory color="indigo">
-            <v-list-item v-for="(item, i) in views" :key="i" :to="item.path">
+            <v-list-item
+              v-for="(item, i) in views"
+              :key="i"
+              :to="item.path"
+              v-show="
+                !$store.getters.isWizardFinished != !item.hide ||
+                item.name == 'Home'
+              "
+            >
               <v-list-item-icon>
                 <v-icon v-text="item.icon" />
               </v-list-item-icon>
 
               <v-list-item-content>
                 <v-list-item-title
-                  v-text="$gettext(item.name)"
+                  v-text="$gettext(item.title)"
                 ></v-list-item-title>
               </v-list-item-content>
             </v-list-item>
@@ -90,6 +95,7 @@
 import router from "./router/index.js";
 import { mapGetters } from "vuex";
 import Vue from "vue";
+import overlay from "@/components/Overlay.vue";
 
 export default {
   sockets: {
@@ -101,18 +107,25 @@ export default {
       console.log("server disconnected");
     },
   },
-  data: () => ({
-    drawer: null,
-    views: router.options.routes,
-    model: null,
-  }),
-  components: {},
+  data() {
+    return {
+      drawer: null,
+      views: router.options.routes,
+      model: null,
+    };
+  },
+  components: { overlay },
   methods: {},
   computed: {
     ...mapGetters({
       isDarkMode: "isDarkMode",
       getLanguage: "getLanguage",
     }),
+  },
+  beforeCreate() {
+    if (!this.$store.getters.isWizardFinished) {
+      this.$router.push({ name: "Wizard" });
+    }
   },
   beforeMount: function () {
     let language = this.getLanguage;

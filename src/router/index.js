@@ -13,21 +13,32 @@ function load(component) {
 const routes = [
   {
     path: '/',
-    name: vm.$gettext("Home"),
+    name : "Home",
+    title: vm.$gettext("Home"),
     component: load("Home"),
     icon: "mdi-home"
   },
   {
     path: '/projects',
-    name: vm.$gettext('Projects'),
+    name : "Projects",
+    title: vm.$gettext('Projects'),
     component: load("Projects"),
     icon: "mdi-lightbulb-on"
   },
   {
     path: '/settings',
-    name: vm.$gettext('Settings'),
+    name : "Settings",
+    title: vm.$gettext('Settings'),
     component: load("Settings"),
     icon: "mdi-cog"
+  },
+  {
+    path: '/wizard',
+    name : "Wizard",
+    title: vm.$gettext('Wizard'),
+    component: load("Wizard"),
+    icon: "mdi- wizard-hat",
+    hide: true
   },
 ]
 

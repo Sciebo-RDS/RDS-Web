@@ -3,8 +3,9 @@
 const getDefaultState = () => {
     return {
         darkMode: false,
-        deviceMode: false,
+        deviceMode: true,
         language: "en",
+        finishedWizard: false
     }
 }
 
@@ -29,6 +30,9 @@ export default {
             },
             usingDeviceMode(state) {
                 return state.deviceMode == true
+            },
+            isWizardFinished(state) {
+                return state.finishedWizard
             }
         },
 
@@ -47,6 +51,9 @@ export default {
             },
             setDeviceMode(state, payload) {
                 state.deviceMode = payload.deviceMode
+            },
+            setWizardFinished(state) {
+                state.finishedWizard = true
             }
         },
         actions: {

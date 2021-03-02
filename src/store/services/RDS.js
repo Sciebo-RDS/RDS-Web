@@ -17,12 +17,12 @@ export default {
         Vue.prototype.$requests.RDS = {
             requestUserServiceList() {
                 $socket.client.emit("getUserServices", (response) => {
-                    store.dispatch("SOCKET_UserServiceList", { list: JSON.parse(response).list.map(el => el.informations) })
+                    store.dispatch("SOCKET_UserServiceList", { list: response })
                 });
             },
             requestServiceList() {
                 $socket.client.emit("getServicesList", (response) => {
-                    store.dispatch("SOCKET_ServiceList", { list: JSON.parse(response).map(el => el.informations) })
+                    store.dispatch("SOCKET_ServiceList", { list: response })
                 });
             },
             requestResearchList() {
@@ -30,11 +30,20 @@ export default {
                     store.dispatch("SOCKET_ResearchList", { list: JSON.parse(response) })
                 });
             },
-            addService(service) {
-                $socket.client.emit("addService", { service: service });
+            exchangeCode(data) {
+                if (!!data.code && !!data.state) {
+                    $socket.client.emit("exchangeCode", JSON.stringify(data), (response) => {
+                        console.log("exchangeCode response", response)
+                    });
+                }
+            },
+            addServiceWithCredentials(service) {
+                $socket.client.emit("addCredentials", JSON.stringify(service), (response) => {
+                    console.log("credentials response", response)
+                });
             },
             removeService(service) {
-                $socket.client.emit("removeService", { service: service });
+                $socket.client.emit("removeServiceForUser", JSON.stringify(service));
             },
             sendMessage(message) {
                 $socket.client.emit("sendMessage", { message: message });
@@ -80,12 +89,15 @@ export default {
             },
             SOCKET_UserServiceList(context, state) {
                 context.commit('setUserServiceList', {
-                    servicelist: state.list
+                    servicelist: JSON.parse(state).list.map(el => el.informations)
                 })
             },
             SOCKET_ServiceList(context, state) {
                 context.commit('setServiceList', {
-                    servicelist: state.list
+                    servicelist: JSON.parse(state).map(el => {
+                        el.informations.state = el.jwt
+                        return el.informations
+                    })
                 })
             },
             SOCKET_ResearchList(context, state) {

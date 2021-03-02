@@ -10,15 +10,47 @@ msgstr ""
 "Generated-By: easygettext\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:4
+msgid "Activate RDS"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:10
+msgid "Add services"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:22
 msgid "Cancel service selection"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:38
+msgid "Connect your %{name} account with RDS"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:59
+msgid "Continue"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:34
 msgid "Enable DarkMode?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:16
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:16
+msgid "Finish"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:69
+msgid "Go to projects"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:26
+msgid "Grant access"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:46
+msgid "Grant access to %{name}"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:17
 msgid "Home"
 msgstr ""
 
@@ -30,7 +62,11 @@ msgstr ""
 msgid "Last message"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:22
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:23
+msgid "Permit RDS to access your ownCloud files."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:24
 msgid "Projects"
 msgstr ""
 
@@ -51,7 +87,7 @@ msgstr ""
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:28
+#: /home/physicx/Projects/rds-web/src/router/index.js:31
 msgid "Settings"
 msgstr ""
 
@@ -73,4 +109,12 @@ msgstr ""
 
 #: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:28
 msgid "Using DeviceMode?"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/router/index.js:38
+msgid "Wizard"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:65
+msgid "You configure RDS properly."
 msgstr ""

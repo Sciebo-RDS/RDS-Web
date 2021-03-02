@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            data = {}
+            
+            for(const [key, value] of urlParams.entries()){
+                data[key] = value
+            }
+
+            if (window.opener) {
+                window.opener.event.$emit("exchangeCode", data)
+            } else {
+                // TODO needs some workaround, if window.opener cannot be used.
+            }
+            window.close()
+        </script>
+    </head>
+    <body>
+        This window will close automatically. Otherwise click here.
+        <button type="button" onclick="window.close()">Close</button>
+    </body>
+</html>

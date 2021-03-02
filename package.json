@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --port 8085",
     "build": "vue-cli-service build",
+    "owncloud": "vue-cli-service build --target lib --inline-vue",
     "test:unit": "vue-cli-service test:unit --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",
     "localize-compile": "vue-gettext-cli compile --locales en de",

@@ -7,6 +7,7 @@
       :label="$gettext('Select services')"
       :item-text="(item) => parseServicename(item.servicename)"
       :item-value="(item) => item"
+      :value-comparator="(a, b) => a.servicename == b.servicename"
       multiple
     >
       <template v-slot:prepend-item>
@@ -52,12 +53,9 @@ export default {
   }),
   watch: {
     activatedItems(newVal) {
+      console.log(newVal);
       this.selectedItems = newVal;
     },
-  },
-  beforeCreate() {
-    this.$requests.RDS.requestServiceList();
-    this.$requests.RDS.requestUserServiceList();
   },
   beforeMount() {
     this.selectedItems = this.activatedItems;
@@ -72,16 +70,16 @@ export default {
         return this.userservicelist;
       },
       set(servicelist) {
-        console.log(servicelist);
         // remove not selected services
-        for (const service in this.userservicelist) {
+        for (const service of this.userservicelist) {
           if (!this.containsService(servicelist, service)) {
             this.$requests.RDS.removeService(service);
           }
         }
 
         // add new services
-        for (const service in this.servicelist) {
+        // TODO: Trigger oauth2 workflow
+        for (const service of this.servicelist) {
           if (!this.containsService(this.userservicelist, service)) {
             this.$requests.RDS.addService(service);
           }

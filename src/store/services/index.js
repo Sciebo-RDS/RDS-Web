@@ -8,9 +8,8 @@ let modules = ["Settings"] // which modules in this folder should be added to st
 
 const ioInstance = io('http://localhost:8080', {
     reconnection: true,
-    reconnectionDelay: 2000,
-    maxReconnectionAttempts: 10,
-    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
+    maxReconnectionAttempts: Infinity,
     transports: ["websocket"]
 });
 
@@ -23,7 +22,7 @@ Vue.use(VueSocketIO, ioInstance, {
 
 function addModule(moduleStore) {
     if (!store.hasModule(moduleStore.name)) {
-        store.registerModule(moduleStore.name, moduleStore.store, { preserveState: true })
+        store.registerModule(moduleStore.name, moduleStore.store, { preserveState: process.env.NODE_ENV === 'production' })
     }
 }
 
