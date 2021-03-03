@@ -16,12 +16,7 @@ import uuid
 import os
 import logging
 import json
-from dotenv import load_dotenv
 from flask_cors import CORS
-
-from pathlib import Path
-env_path = Path('..') / '.env'
-load_dotenv(dotenv_path=env_path)
 
 development_mode = (os.getenv('DEV_FLASK_DEBUG', 'False') == 'True')
 
