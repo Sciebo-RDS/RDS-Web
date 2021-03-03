@@ -16,8 +16,7 @@ logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
 
 socketio = SocketIO(
-    app, cors_allowed_origins=[
-        "http://localhost:8085", "http://localhost:8080"]
+    app, cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS"))
 )
 
 socket_blueprint = Blueprint("socket_blueprint", __name__)
@@ -80,7 +79,7 @@ def triggerSynchronization(json):
 def authenticated_only(f):
     @ functools.wraps(f)
     def wrapped(*args, **kwargs):
-        if not __name__ == "__main__" and not current_user.is_authenticated:
+        if not current_user.is_authenticated:
             logout_user()
             disconnect()
         else:
@@ -93,15 +92,10 @@ def authenticated_only(f):
 def connected():
     LOGGER.info("connected")
 
-    if __name__ == "__main__":
-        emit("ServiceList", httpManager.makeRequest("getServicesList"))
-        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
-        return
-
     if current_user.is_authenticated:
         current_user.websocketId = request.sid
         clients[current_user.userId] = current_user
-        
+
         emit("ServiceList", httpManager.makeRequest("getServicesList"))
         emit("UserServiceList", httpManager.makeRequest("getUserServices"))
     else:
@@ -112,9 +106,6 @@ def connected():
 @ socketio.on("disconnect")
 def disconnect():
     LOGGER.info("disconnected")
-
-    if __name__ == "__main__":
-        return
 
     del clients[current_user.userId]
     logout_user()
@@ -135,13 +126,9 @@ def credentials(jsonData):
     body = {
         "servicename": jsonData["servicename"],
         "username": jsonData["username"],
-        "password": jsonData["password"]
+        "password": jsonData["password"],
+        "userId": current_user.userId
     }
-
-    try:
-        body["userId"] = current_user.userId
-    except:
-        body["userId"] = "admin"
 
     if not body["username"]:
         body["username"] = "---"
@@ -165,13 +152,9 @@ def exchangeCode(jsonData):
     body = {
         'servicename': "port-owncloud",
         'code': jsonData["code"],
-        'state': jsonData["state"]
+        'state': jsonData["state"],
+        "userId": current_user.userId
     }
-
-    try:
-        body["userId"] = current_user.userId
-    except:
-        body["userId"] = "admin"
 
     # TODO exchange it in the background for user and redirect to wizard / projects
 
@@ -188,15 +171,3 @@ def exchangeCode(jsonData):
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
 
     return req.status_code < 300
-
-
-if __name__ == "__main__":
-
-    @ app.route("/")
-    def index():
-        if "code" in request.args and "state" in request.args:
-            return render_template("exchangeCode.html")
-        return redirect("http://localhost:8085")
-
-    app.register_blueprint(socket_blueprint)
-    socketio.run(app, debug=True, port=8080)

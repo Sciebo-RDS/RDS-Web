@@ -14,9 +14,12 @@ import requests
 import uuid
 import os
 import logging
+import json
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
+CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")))
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -39,7 +42,39 @@ class User(UserMixin):
         self.websocketId = websocketId
 
 
-@app.route("/")
+@ app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        if current_user.is_authenticated:
+            return "", 200
+        else:
+            "", 401
+
+    if "access_token" in request.args:
+        token = request.args["access_token"]
+        headers = {"Authorization": "Bearer {}".format(token)}
+        req = requests.get(
+            "{}/index.php/apps/rds/informations".format(
+                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud")
+            ),
+            headers=headers,
+            verify=False,
+        )
+
+        if req.status_code == 200:
+            data = req.json()
+            user = User(
+                id=uuid.uuid4(), userId=data["username"], websocketId=None, token=token
+            )
+            user_store[user.get_id()] = user
+            login_user(user)
+
+            return "", 200
+
+    return "", 401
+
+
+@ app.route("/")
 def index():
     if "access_token" in request.args:
         token = request.args["access_token"]
@@ -75,13 +110,13 @@ def index():
     )
 
 
-@login_manager.user_loader
+@ login_manager.user_loader
 def load_user(user_id):
     return user_store.get(user_id)
 
 
-@app.route("/logout")
-@login_required
+@ app.route("/logout")
+@ login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))

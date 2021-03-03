@@ -12,7 +12,6 @@ def parsePropBack(prop):
                   for key, value in prop.get("customProperties", {}).items()]
 
     data.append({"portType": "customProperties", "value": customProp})
-    print(data)
 
     return data
 
@@ -78,13 +77,13 @@ def listContainsService(arr, service):
             if el["servicename"] == service["servicename"]:
                 return True
         except Exception as e:
-            print(e)
+            pass
 
         try:
             if el["informations"]["servicename"] == service["informations"]["servicename"]:
                 return True
         except Exception as e:
-            print(e)
+            pass
 
     return False
 
