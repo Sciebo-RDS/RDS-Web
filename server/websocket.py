@@ -11,6 +11,12 @@ import json
 import requests
 import jwt
 
+from dotenv import load_dotenv
+
+from pathlib import Path
+env_path = Path('..') / '.env'
+load_dotenv(dotenv_path=env_path)
+
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -67,6 +73,28 @@ data = {
 }
 
 httpManager = parseDict(data, socketio=socketio)
+
+
+def exchangeCode(data):
+    body = {
+        'servicename': "port-owncloud",
+        'code': data["code"],
+        'state': data["state"],
+        "userId": current_user.userId
+    }
+
+    # TODO exchange it in the background for user and redirect to wizard / projects
+
+    jwtEncode = jwt.encode(body, os.getenv(
+        "OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
+
+    urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
+
+    req = requests.post(f"{urlPort}/exchange", json=jwtEncode,
+                        verify=os.getenv("VERIFY_SSL", "False") == "True")
+    LOGGER.debug(req.text)
+
+    return req
 
 
 @ socketio.event
@@ -149,22 +177,7 @@ def credentials(jsonData):
 def exchangeCode(jsonData):
     jsonData = json.loads(jsonData)
 
-    body = {
-        'servicename': "port-owncloud",
-        'code': jsonData["code"],
-        'state': jsonData["state"],
-        "userId": current_user.userId
-    }
-
-    # TODO exchange it in the background for user and redirect to wizard / projects
-
-    jwtEncode = jwt.encode(body, os.getenv(
-        "OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
-
-    urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
-
-    req = requests.post(f"{urlPort}/exchange", json=jwtEncode,
-                        verify=os.getenv("VERIFY_SSL", "False") == "True")
+    req = exchangeCode(jsonData)
     LOGGER.debug(req.text)
 
     # update userserviceslist on client
