@@ -7,7 +7,7 @@ let modules = ["Settings"] // which modules in this folder should be added to st
 
 function addModule(moduleStore) {
     if (!store.hasModule(moduleStore.name)) {
-        store.registerModule(moduleStore.name, moduleStore.store, { preserveState: process.env.NODE_ENV === 'production' })
+        store.registerModule(moduleStore.name, moduleStore.store, { preserveState: !!Object.values(moduleStore.store.state)[0] })
     }
 }
 
@@ -22,7 +22,8 @@ export default {
             reconnection: true,
             reconnectionDelay: 3000,
             maxReconnectionAttempts: Infinity,
-            transports: ["websocket"]
+            transports: ["websocket"],
+            autoConnect: false
         });
 
         Vue.use(VueSocketIO, ioInstance, {

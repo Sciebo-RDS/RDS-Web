@@ -10,9 +10,7 @@
           </v-col>
         </v-row>
         <v-row align="center" justify="center">
-          <v-col>
-            <translate>Service activation in progress</translate>
-          </v-col>
+          <v-col>{{ subtext }}</v-col>
         </v-row>
       </v-container>
     </v-overlay>
@@ -20,10 +18,18 @@
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
   data: () => ({
     visible: false,
   }),
+  props: {
+    subtext: {
+      type: String,
+      default: Vue.prototype.$gettext("Service activation in progress"),
+    },
+  },
   mounted() {
     this.$root.$on("showoverlay", () => {
       this.show();

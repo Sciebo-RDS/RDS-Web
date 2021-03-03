@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app id="inspire">
-      <overlay />
+      <overlay :subtext="overlayText" />
 
       <v-navigation-drawer v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
@@ -11,7 +11,10 @@
                 ><v-avatar class="mb-4" color="green darken-3" size="64">
                   <v-img src="@/assets/sciebo.png" /></v-avatar
               ></v-col>
-              <v-col fill-height="true"><h3>Sciebo RDS</h3></v-col></v-row
+              <v-col fill-height="true"
+                ><h3>Sciebo RDS</h3>
+                Drin? {{ auth.loggedIn }}</v-col
+              ></v-row
             >
           </v-container>
         </v-sheet>
@@ -112,6 +115,7 @@ export default {
       drawer: null,
       views: router.options.routes,
       model: null,
+      overlayText: null,
     };
   },
   components: { overlay },
@@ -145,6 +149,18 @@ export default {
     }
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
+  },
+  mounted() {
+    this.overlayText = this.$gettext("Wait for login");
+
+    var checkLoginStatus = setInterval(() => {
+      this.$emit("showoverlay");
+      if (this.auth.loggedIn) {
+        clearInterval(checkLoginStatus);
+        this.overlayText = null;
+        this.$emit("hideoverlay");
+      }
+    }, 500);
   },
 };
 </script>
