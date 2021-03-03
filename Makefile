@@ -24,7 +24,7 @@ build:
 	npm run build
 
 hotreload:
-	tmux new-session "npm run serve" \; split-window -h "cd server && pipenv run python websocket.py" \;  
+	tmux new-session "while true; do npm run serve; done" \; split-window -h "cd server && while true; do pipenv run python server.py; done" \;  
 
 test:
 	npm test && cd server && pipenv run pytest
