@@ -13,10 +13,11 @@ import VueAxios from 'vue-axios'
 Vue.use(VueAxios, axios)
 Vue.use(config)
 Vue.use(integrations)
-Vue.use(customMethods)
-Vue.use(storeInstall)
 
 Vue.prototype.auth.login()
+
+Vue.use(customMethods)
+Vue.use(storeInstall)
 
 new Vue({
   router,

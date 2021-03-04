@@ -136,7 +136,7 @@ def index(path):
         return app.send_static_file(path)
 
     return redirect(
-        os.getenv("REDIRECTION_URL")
+        os.getenv("VUE_APP_REDIRECTION_URL")
     )
 
 

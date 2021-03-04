@@ -27,6 +27,7 @@
           <v-btn
             @click="grantAccess(getInformations('port-owncloud'))"
             color="primary"
+            :disabled="!auth.loggedIn"
           >
             <translate>Grant access</translate>
           </v-btn>
@@ -34,9 +35,9 @@
 
         <v-stepper-content step="2">
           <v-container flex>
-            <v-row>
+            <v-row justify="start">
               <v-col v-for="(service, index) in filteredServices" :key="index">
-                <v-card class="mb-12 pa-2">
+                <v-card class="mb-12 pa-2" max-width="500">
                   <v-container>
                     <v-row>
                       <v-col>
@@ -113,9 +114,6 @@ export default {
     servicename: "",
     zIndex: 1000,
   }),
-  watch: {
-    currentStep() {},
-  },
   computed: {
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
@@ -152,7 +150,6 @@ export default {
       this.$router.push("/projects");
     },
     getInformations(servicename, services = undefined) {
-      console.log(services);
       if (services === undefined) {
         services = this.servicelist;
       }

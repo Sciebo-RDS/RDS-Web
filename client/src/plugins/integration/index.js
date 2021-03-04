@@ -12,11 +12,12 @@ export default {
         Vue.prototype.auth.loggedIn = false
 
         Vue.prototype.auth.login = function () {
+            // First check, if we have already a session
             Vue.prototype.$http.get(`${Vue.config.server}/login`).then(() => {
-                console.log("already logged in")
                 Vue.prototype.auth.loggedIn = true
                 Vue.prototype.$socket.client.open()
             }).catch(() => {
+                //if not, execute all loginMethods
                 Vue.prototype.auth.loggedIn = false
                 Promise.all(Vue.prototype.auth.loginMethods.map(fn => fn())).then((results) => {
                     if (results.includes(true)) {

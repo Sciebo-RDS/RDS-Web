@@ -2,8 +2,6 @@
 export default {
     install: function (Vue) {
         Vue.prototype.openPopup = async function (service, ctx) {
-            console.log(ctx)
-
             let url = decodeURIComponent(service.authorize_url) + "&state=" + service.state;
             ctx.$_popup = window.open(url, "_blank");
             ctx.$root.$emit("showoverlay")
@@ -14,16 +12,6 @@ export default {
                     ctx.$root.$emit("hideoverlay")
                 }
             }, 250);
-
-            window.event = new Vue();
-            window.event.$on("exchangeCode", (response) => {
-                console.log(response);
-                clearInterval(checkPopup);
-                this.$store.commit("exchangeCode", response);
-                delete window.event;
-                ctx.$root.$emit("hideoverlay")
-            });
-
         }
 
         Vue.prototype.parseServicename = function (value) {

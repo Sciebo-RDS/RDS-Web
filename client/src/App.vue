@@ -5,17 +5,23 @@
 
       <v-navigation-drawer v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
-          <v-container fill-height
-            ><v-row no-gutters align="center" justify="center">
-              <v-col
-                ><v-avatar class="mb-4" color="green darken-3" size="64">
-                  <v-img src="@/assets/sciebo.png" /></v-avatar
-              ></v-col>
-              <v-col fill-height="true"
-                ><h3>Sciebo RDS</h3>
-                Drin? {{ auth.loggedIn }}</v-col
-              ></v-row
-            >
+          <v-container>
+            <v-row no-gutters align="center">
+              <v-col>
+                <v-avatar class="mb-4" color="green darken-3" size="64">
+                  <v-img src="@/assets/sciebo.png" />
+                </v-avatar>
+              </v-col>
+              <v-col>
+                <div
+                  :class="[
+                    'text-h6',
+                    auth.loggedIn ? 'primary--text' : 'error--text',
+                  ]"
+                  v-text="'Sciebo RDS'"
+                />
+              </v-col>
+            </v-row>
           </v-container>
         </v-sheet>
 
@@ -101,6 +107,9 @@ import Vue from "vue";
 import overlay from "@/components/Overlay.vue";
 
 export default {
+  props: {
+    server: { type: String, default: null },
+  },
   sockets: {
     connect: function () {
       console.log("socket connected");

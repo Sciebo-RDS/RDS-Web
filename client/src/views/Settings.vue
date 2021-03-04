@@ -8,9 +8,6 @@
     <v-row>
       <v-col class="text-right"><RevokeButton /></v-col
     ></v-row>
-    <v-row
-      ><v-col><WebsocketTester /></v-col
-    ></v-row>
   </v-container>
 </template>
 
@@ -19,7 +16,6 @@ import LanguageSelector from "@/components/LanguageSelector.vue";
 import ServiceSelector from "@/components/ServiceSelector.vue";
 import RevokeButton from "@/components/RevokeButton.vue";
 import ThemeSelector from "@/components/ThemeSelector.vue";
-import WebsocketTester from "@/components/WebsocketTester.vue";
 
 export default {
   components: {
@@ -27,7 +23,6 @@ export default {
     ServiceSelector,
     RevokeButton,
     ThemeSelector,
-    WebsocketTester,
   },
 };
 </script>

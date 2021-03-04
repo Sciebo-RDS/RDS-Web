@@ -53,7 +53,6 @@ export default {
   }),
   watch: {
     activatedItems(newVal) {
-      console.log(newVal);
       this.selectedItems = newVal;
     },
   },

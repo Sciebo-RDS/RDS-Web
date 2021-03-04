@@ -9,6 +9,10 @@ script('rds', array("rds-web.umd.min.js"));
 
 
 <script>
+    OC.rds = {
+        server: <?php print_unescaped($_['cloudURL']); ?>
+    }
+
     new Vue({
         components: {
             rdsWeb: rds-web

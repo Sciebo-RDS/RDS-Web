@@ -18,7 +18,7 @@ function insertModule(modName) {
 
 export default {
     install: function (Vue) {
-        const ioInstance = io(Vue.config.socket.server || "http://localhost:8080", {
+        const ioInstance = io(Vue.config.socket.server, {
             reconnection: true,
             reconnectionDelay: 3000,
             maxReconnectionAttempts: Infinity,

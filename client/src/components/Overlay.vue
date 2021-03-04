@@ -10,7 +10,7 @@
           </v-col>
         </v-row>
         <v-row align="center" justify="center">
-          <v-col>{{ subtext }}</v-col>
+          <v-col>{{ text }}</v-col>
         </v-row>
       </v-container>
     </v-overlay>
@@ -24,10 +24,18 @@ export default {
   data: () => ({
     visible: false,
   }),
+  computed: {
+    text() {
+      if (this.subtext === null) {
+        return Vue.prototype.$gettext("Service activation in progress");
+      }
+      return this.subtext;
+    },
+  },
   props: {
     subtext: {
       type: String,
-      default: Vue.prototype.$gettext("Service activation in progress"),
+      default: null,
     },
   },
   mounted() {
