@@ -73,9 +73,12 @@
       <v-stepper-content step="3">
         <v-card
           class="mb-12"
-          color="grey lighten-1"
-          height="200px"
-        ></v-card>
+          color="white"
+          height="auto"
+          flat
+        >
+        <StepPublish/>
+        </v-card>
 
         <v-btn text
         @click="e1 = 2">
@@ -95,10 +98,12 @@
 
 <script>
 import StepConfiguration from "./StepConfiguration"
+import StepPublish from "./StepPublish"
 
   export default {
     components: {
-        StepConfiguration
+        StepConfiguration,
+        StepPublish
     },
     data () {
       return {
