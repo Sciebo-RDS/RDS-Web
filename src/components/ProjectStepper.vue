@@ -35,6 +35,11 @@
             <StepConfiguration/>
         </v-card>
 
+        <v-btn text
+        disabled>
+          Back
+        </v-btn>
+
         <v-btn
           color="primary"
           @click="e1 = 2"
@@ -42,9 +47,6 @@
           Continue
         </v-btn>
 
-        <v-btn text>
-          Cancel
-        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="2">
@@ -54,6 +56,11 @@
           height="200px"
         ></v-card>
 
+        <v-btn text
+        @click="e1 = 1">
+          Back
+        </v-btn>
+
         <v-btn
           color="primary"
           @click="e1 = 3"
@@ -61,9 +68,6 @@
           Continue
         </v-btn>
 
-        <v-btn text>
-          Cancel
-        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="3">
@@ -73,16 +77,17 @@
           height="200px"
         ></v-card>
 
-        <v-btn
-          color="primary"
-          @click="e1 = 1"
-        >
-          Continue
+        <v-btn text
+        @click="e1 = 2">
+          Back
         </v-btn>
 
-        <v-btn text>
-          Cancel
+        <v-btn
+          color="success"
+        >
+          Publish
         </v-btn>
+
       </v-stepper-content>
     </v-stepper-items>
   </v-stepper>
