@@ -7,7 +7,7 @@
     </v-system-bar>-->
 
     <v-app-bar app flat>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none"></v-app-bar-nav-icon>
       <v-toolbar-title></v-toolbar-title>
     </v-app-bar>
 
@@ -49,19 +49,27 @@
 
       <v-card-text style="position: fixed; bottom: 5px">
         <v-fab-transition>
-          <v-btn
-            v-show="true"
-            color="success"
-            dark
-            absolute
-            top
-            right
-            fab
-            @click="none"
-            title="Add project"
-          >
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-show="true"
+              color="success"
+              dark
+              absolute
+              top
+              right
+              fab
+              @click="none"
+              v-bind="attrs"
+              v-on="on"
+              
+            >
+          
             <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
+          </template>
+            <span><translate>New project</translate></span>
+        </v-tooltip>
         </v-fab-transition>
       </v-card-text>
     </v-app>
