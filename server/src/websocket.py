@@ -1,9 +1,9 @@
-from __init__ import app
 from flask import Blueprint, request, redirect, render_template
-from flask_socketio import SocketIO, send, emit, disconnect, join_room, leave_room
+from flask_socketio import send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
-from src.Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
-from src.EasierRDS import parseDict
+from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
+from .EasierRDS import parseDict
+from .app import socketio
 import logging
 import functools
 import os
@@ -15,9 +15,6 @@ import jwt
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
 
-socketio = SocketIO(
-    app, cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS"))
-)
 
 socket_blueprint = Blueprint("socket_blueprint", __name__)
 

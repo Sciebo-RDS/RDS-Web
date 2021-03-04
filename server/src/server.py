@@ -1,3 +1,4 @@
+from flask_cors import CORS
 from flask import Response, stream_with_context
 from flask import render_template, request, redirect, url_for
 from flask_login import (
@@ -8,18 +9,17 @@ from flask_login import (
     logout_user,
     current_user,
 )
-from flask_socketio import SocketIO
-from __init__ import app
-from websocket import socket_blueprint, socketio, exchangeCode
+from .app import app, socketio
+from .websocket import socket_blueprint, exchangeCode
+import json
 import requests
 import uuid
 import os
 import logging
-import json
-from flask_cors import CORS
+import uuid
+import os
 
 development_mode = (os.getenv('DEV_FLASK_DEBUG', 'False') == 'True')
-
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")))
 
 logging.basicConfig(level=logging.DEBUG)
@@ -46,6 +46,17 @@ class User(UserMixin):
         self.id = id
         self.userId = userId
         self.websocketId = websocketId
+
+
+@app.route("/informations")
+def informations():
+    data = {}
+
+    redirectUrl = os.getenv("VUE_APP_REDIRECTION_URL")
+    if redirectUrl is not None:
+        data["redirectUrl"] = redirectUrl
+
+    return json.dumps(data)
 
 
 @ app.route("/login", methods=["GET", "POST"])
@@ -138,7 +149,3 @@ def index(path):
     return redirect(
         os.getenv("VUE_APP_REDIRECTION_URL")
     )
-
-
-if __name__ == "__main__":
-    socketio.run(app, debug=development_mode, port=8080)
