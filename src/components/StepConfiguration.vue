@@ -1,39 +1,89 @@
 <template>
     <v-container>
         <v-card flat >
-            <v-card-title>What and where to publish?</v-card-title>
-            <v-card-subtitle>Please select the services you want to publish to: </v-card-subtitle>
-            <v-card-text>
-                        <!--<p>{{ selected }}</p>-->
-                        <v-checkbox
-                        v-model="selected"
-                        label="reva"
-                        value="port-reva"
-                        ></v-checkbox>
-                        <v-checkbox
-                        v-model="selected"
-                        label="datasafe"
-                        value="port-datasafe"
-                        ></v-checkbox>
-                        <v-checkbox
-                        v-model="selected"
-                        label="zenodo"
-                        value="port-zenodo"
-                        ></v-checkbox>
-            </v-card-text>
-            <v-card-actions><v-btn>Select Folder</v-btn> </v-card-actions>
-            <v-card-subtitle style="padding-top:0px">Current Folder: /path/to/current/folder</v-card-subtitle>
-            
+            <v-card-title>Configure your Project</v-card-title>
+            <!--<v-card-subtitle>Please select the services you want to publish to: </v-card-subtitle>-->
+              <v-row>
+                <v-col>
+                    <v-card flat>
+                      <v-card-subtitle>1. Which folder do you want to publish?</v-card-subtitle>
+                      <v-card-actions><v-btn>Select Folder</v-btn></v-card-actions>
+                      <v-card-subtitle style="padding-top:0px;">Current Folder: /path/to/current/folder</v-card-subtitle>
+                    </v-card>
+                  </v-col>
+                  <v-col>
+                    <v-card flat>
+                      <v-card-subtitle>2. Which Services do you want to publish to?</v-card-subtitle>
+                      <v-card-text>
+                        <v-select
+                          v-model="selectedPorts"
+                          :items="ports"
+                          label="Select your Services"
+                          multiple
+                          chips
+                          >
+                          <template v-slot:prepend-item>
+                            <v-list-item
+                              ripple
+                              @click="toggle"
+                            >
+                              <v-list-item-action>
+                                <v-icon :color="selectedPorts.length > 0 ? 'indigo darken-4' : ''">
+                                  {{ icon }}
+                                </v-icon>
+                              </v-list-item-action>
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                  Select All
+                                </v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                            <v-divider class="mt-2"></v-divider>
+                          </template>
+                        </v-select>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-card>
     </v-container>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        selected: [],
-      }
+    data: () => ({
+      ports: [
+        'reva',
+        'datasafe',
+        'zenodo',
+      ],
+      selectedPorts: [],
+    }),
+
+    computed: {
+      selectAllPorts () {
+        return this.selectedPorts.length === this.ports.length
+      },
+      selectSomePorts () {
+        return this.selectedPorts.length > 0 && !this.selectAllPorts
+      },
+      icon () {
+        if (this.selectAllPorts) return 'mdi-close-box'
+        if (this.selectSomePorts) return 'mdi-minus-box'
+        return 'mdi-checkbox-blank-outline'
+      },
+    },
+
+    methods: {
+      toggle () {
+        this.$nextTick(() => {
+          if (this.selectAllPorts) {
+            this.selectedPorts = []
+          } else {
+            this.selectedPorts = this.ports.slice()
+          }
+        })
+      },
     },
   }
 </script>
