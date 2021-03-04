@@ -47,19 +47,20 @@
         <v-container fluid> <router-view /> </v-container>
       </v-main>
 
-      <v-card-text style="position: fixed; bottom: 0px" class="d-xl-none">
+      <v-card-text style="position: fixed; bottom: 5px">
         <v-fab-transition>
           <v-btn
             v-show="true"
-            color="pink"
+            color="success"
             dark
             absolute
             top
             right
             fab
-            @click="drawer = !drawer"
+            @click="none"
+            title="Add project"
           >
-            <v-icon>mdi-menu</v-icon>
+            <v-icon>mdi-plus-thick</v-icon>
           </v-btn>
         </v-fab-transition>
       </v-card-text>
