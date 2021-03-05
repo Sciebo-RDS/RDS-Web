@@ -20,5 +20,5 @@ COPY --from=web /app/dist /usr/share/nginx/html
 COPY ./server/starter.py .
 COPY ./server/src ./src
 
-CMD gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:5000 app:app --daemon && \
+CMD gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:5000 starter:app --daemon && \
     nginx -g 'daemon off;'
