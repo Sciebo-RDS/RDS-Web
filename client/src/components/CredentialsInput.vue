@@ -26,6 +26,9 @@
           v-model="password"
           :rules="rules"
           :label="$gettext(`Password`)"
+          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordShow ? 'text' : 'password'"
+          @click:append="passwordShow = !passwordShow"
           @keydown.enter="saveCredentials"
         >
         </v-text-field>
@@ -61,6 +64,7 @@ export default {
     ],
     username: "",
     password: "",
+    passwordShow: false,
   }),
   computed: {
     parsedServicename() {
@@ -74,7 +78,7 @@ export default {
       }
     },
     saveCredentials() {
-      this.$requests.RDS.addServiceWithCredentials({
+      this.$store.dispatch("addServiceWithCredentials", {
         username: this.username,
         password: this.password,
         servicename: this.servicename,

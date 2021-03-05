@@ -1,5 +1,5 @@
 <template>
-  <v-container>{{researchlist[0]}}</v-container>
+  <v-container>{{ researchlist[0] }}</v-container>
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
     }),
   },
   beforeCreate() {
-    this.$requests.RDS.requestResearchList();
+    this.$store.dispatch("requestResearchList");
   },
 };
 </script>

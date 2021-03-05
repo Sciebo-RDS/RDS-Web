@@ -3,7 +3,7 @@ from flask_socketio import send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
 from .EasierRDS import parseDict
-from .app import socketio
+from .app import socketio, clients
 import logging
 import functools
 import os
@@ -11,14 +11,11 @@ import json
 import requests
 import jwt
 
-
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
 
 
 socket_blueprint = Blueprint("socket_blueprint", __name__)
-
-clients = {}
 
 
 url = "https://sciebords-dev2.uni-muenster.de"

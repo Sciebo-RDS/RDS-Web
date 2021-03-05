@@ -3,6 +3,7 @@ import requests
 import os
 import json
 from flask_login import current_user
+from .app import store, cache
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -38,6 +39,9 @@ class HTTPRequest:
         }
 
     def makeRequest(self, key, data=None):
+        if os.getenv("DEV_FLASK_USE_JSON", "False") == "True":
+            return cache[key]
+
         if data is None:
             data = {}
 
@@ -62,9 +66,14 @@ class HTTPRequest:
         LOGGER.debug(
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
-        if reqConf["function"] is not None:
-            return json.dumps(reqConf["function"](json.loads(req.text)))
-        return req.text
+        response = req.text
+
+        try:
+            response = json.dumps(reqConf["function"](json.loads(req.text)))
+        except:
+            pass
+
+        return store(key, response)
 
 
 class HTTPManager:

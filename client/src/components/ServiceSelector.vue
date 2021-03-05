@@ -72,7 +72,7 @@ export default {
         // remove not selected services
         for (const service of this.userservicelist) {
           if (!this.containsService(servicelist, service)) {
-            this.$requests.RDS.removeService(service);
+            this.$store.dispatch("removeService", service);
           }
         }
 
@@ -80,11 +80,11 @@ export default {
         // TODO: Trigger oauth2 workflow
         for (const service of this.servicelist) {
           if (!this.containsService(this.userservicelist, service)) {
-            this.$requests.RDS.addService(service);
+            this.$store.dispatch("addService", service);
           }
         }
 
-        this.$requests.RDS.requestUserServiceList();
+        this.$store.dispatch("requestUserServiceList");
       },
     },
     selectedServicesChanged() {

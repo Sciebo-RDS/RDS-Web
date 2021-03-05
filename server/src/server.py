@@ -9,7 +9,7 @@ from flask_login import (
     logout_user,
     current_user,
 )
-from .app import app, socketio
+from .app import app, socketio, user_store, development_mode
 from .websocket import socket_blueprint, exchangeCode
 import json
 import requests
@@ -19,17 +19,12 @@ import logging
 import uuid
 import os
 
-development_mode = (os.getenv('DEV_FLASK_DEBUG', 'False') == 'True')
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")))
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
 
 login_manager = LoginManager()
-
-# temporary user_store
-user_store = {}
-
 login_manager.init_app(app)
 login_manager.login_view = "index"
 app.register_blueprint(socket_blueprint)

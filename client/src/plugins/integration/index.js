@@ -25,7 +25,13 @@ export default {
                         Vue.prototype.$socket.client.open()
                     } else {
                         if (!Vue.config.skipRedirect) {
-                            window.location = Vue.config.redirectUrl
+                            if (Vue.config.redirectUrl === undefined) {
+                                Vue.$http.get("/informations").then((response) => {
+                                    Vue.config.redirectUrl = response.redirectUrl
+                                    Vue.prototype.$config.redirectUrl = Vue.config.redirectUrl
+                                    window.location = Vue.config.redirectUrl
+                                })
+                            }
                         }
                     }
                 })

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-btn depressed @click="uninstallRDS">
+    <v-btn depressed @click="uninstallRDS" color="error">
       <translate>Uninstall sciebo RDS</translate>
     </v-btn>
   </v-container>
@@ -11,7 +11,10 @@ export default {
   name: "RevokeButton",
   methods: {
     uninstallRDS() {
-      this.$requests.RDS.removeService(this.getInformations("port-owncloud"));
+      this.$store.dispatch(
+        "removeService",
+        this.getInformations("port-owncloud")
+      );
     },
   },
 };

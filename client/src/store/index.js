@@ -1,10 +1,7 @@
+import Vue from "vue"
+import Socket from "./socket"
 import store from "./store.js";
-import services from "./services"
+Vue.use(Socket)
 
-export default {
-    install(Vue) {
-        Vue.use(services)
-    }
-}
 
-export { store }
+export default store
