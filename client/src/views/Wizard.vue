@@ -83,9 +83,11 @@
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-    <v-overlay
+    <v-dialog
+      v-model="overlay"
+      persistent
+      max-width="500px"
       :z-index="zIndex"
-      :value="overlay"
       @keydown.esc="overlay = false"
     >
       <v-card shaped outlined raised>
@@ -97,7 +99,7 @@
           v-on:closecredentials="overlay = false"
         />
       </v-card>
-    </v-overlay>
+    </v-dialog>
   </div>
 </template>
 

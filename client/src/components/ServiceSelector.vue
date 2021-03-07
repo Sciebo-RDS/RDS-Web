@@ -45,9 +45,11 @@
 
 <script>
 import { mapState } from "vuex";
+//import CredentialsInput from "@/components/CredentialsInput";
 
 export default {
   name: "ServiceSelector",
+  //components: { CredentialsInput },
   data: () => ({
     selectedItems: [],
   }),

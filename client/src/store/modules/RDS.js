@@ -12,39 +12,16 @@ export default {
     name: "RDSStore",
     state: getDefaultState(),
     getters: {
-        getLastMessage(state) {
-            return state.lastMessage
-        },
-        getUserServiceList(state) {
-            return state.userservicelist
-        },
-        getServiceList(state) {
-            return state.servicelist
-        },
-        getResearchList(state) {
-            return state.researchlist
-        }
+        getUserServiceList: (state) => state.userservicelist,
+        getServiceList: (state) => state.servicelist,
+        getResearchList: (state) => state.researchlist
     },
     mutations: {
-        setLastMessage(state, payload) {
-            state.lastMessage = payload.message
-        },
-        setUserServiceList(state, payload) {
-            state.userservicelist = payload.servicelist
-        },
-        setServiceList(state, payload) {
-            state.servicelist = payload.servicelist
-        },
-        setResearchList(state, payload) {
-            state.researchlist = payload.researchlist
-        }
+        setUserServiceList: (state, payload) => { state.userservicelist = payload.servicelist },
+        setServiceList: (state, payload) => { state.servicelist = payload.servicelist },
+        setResearchList: (state, payload) => { state.researchlist = payload.researchlist }
     },
     actions: {
-        SOCKET_getMessage(context, state) {
-            context.commit('setLastMessage', {
-                message: state.message
-            })
-        },
         SOCKET_UserServiceList(context, state) {
             context.commit('setUserServiceList', {
                 servicelist: JSON.parse(state).list.map(el => el.informations)

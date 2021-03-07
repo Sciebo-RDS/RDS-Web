@@ -4,6 +4,7 @@
       <v-col><LanguageSelector /></v-col>
       <v-col><ThemeSelector /></v-col>
       <v-col><ServiceSelector /></v-col>
+      <v-col><ServiceEditor /></v-col>
     </v-row>
     <v-row>
       <v-col class="text-right"><RevokeButton /></v-col
@@ -16,6 +17,7 @@ import LanguageSelector from "@/components/LanguageSelector.vue";
 import ServiceSelector from "@/components/ServiceSelector.vue";
 import RevokeButton from "@/components/RevokeButton.vue";
 import ThemeSelector from "@/components/ThemeSelector.vue";
+import ServiceEditor from "@/components/ServiceEditor.vue";
 
 export default {
   components: {
@@ -23,6 +25,7 @@ export default {
     ServiceSelector,
     RevokeButton,
     ThemeSelector,
+    ServiceEditor,
   },
 };
 </script>
