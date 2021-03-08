@@ -55,8 +55,19 @@ export default {
     showUsername: Boolean,
     showPassword: Boolean,
     servicename: String,
+    visible: Boolean,
   },
-
+  beforeMount() {
+    this.checkInputs();
+  },
+  watch: {
+    // eslint-disable-next-line no-unused-vars
+    visible(newVal, oldVal) {
+      if (newVal) {
+        this.checkInputs();
+      }
+    },
+  },
   data: () => ({
     rules: [
       (value) => !!value || "Required.",
@@ -73,6 +84,7 @@ export default {
   },
   methods: {
     checkInputs() {
+      console.log(this.showUsername, this.showPassword);
       if (!this.showUsername && !this.showPassword) {
         this.saveCredentials();
       }

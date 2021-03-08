@@ -1,110 +1,174 @@
 <template>
-  <v-card min-width="600">
-    <v-card-title v-translate>User Profile</v-card-title>
+  <div>
+    <v-card>
+      <v-card-title v-translate>Manage your access to services</v-card-title>
 
-    <v-tabs vertical >
-      <v-tab>
-        <v-icon left> mdi-account </v-icon>
-        <translate>Informations</translate>
-      </v-tab>
-      <v-tab class="left">
-        <v-icon left>mdi-plus-circle</v-icon>
-        <translate>Add service</translate>
-      </v-tab>
-      <v-tab>
-        <v-icon left> mdi-minus-circle </v-icon>
-        <translate>Remove service</translate>
-      </v-tab>
+      <v-tabs>
+        <v-tab>
+          <v-icon left> mdi-account </v-icon>
+          <translate>Informations</translate>
+        </v-tab>
+        <v-tab>
+          <v-icon left>mdi-plus-circle</v-icon>
+          <translate>Add service</translate>
+        </v-tab>
+        <v-tab v-if="filteredUserService.length > 0">
+          <v-icon left> mdi-minus-circle </v-icon>
+          <translate>Remove service</translate>
+        </v-tab>
 
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>
-              Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi
-              ac felis. Etiam feugiat lorem non metus. Sed a libero.
-            </p>
-
-            <p>
-              Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus.
-              Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc.
-              Aliquam lobortis. Aliquam lobortis. Suspendisse non nisl sit amet
-              velit hendrerit rutrum.
-            </p>
-
-            <p class="mb-0">
-              Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
-              Pellentesque libero tortor, tincidunt et, tincidunt eget, semper
-              nec, quam. Phasellus blandit leo ut odio.
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>
-              Morbi nec metus. Suspendisse faucibus, nunc et pellentesque
-              egestas, lacus ante convallis tellus, vitae iaculis lacus elit id
-              tortor. Sed mollis, eros et ultrices tempus, mauris ipsum aliquam
-              libero, non adipiscing dolor urna a orci. Curabitur ligula sapien,
-              tincidunt non, euismod vitae, posuere imperdiet, leo. Nunc sed
-              turpis.
-            </p>
-
-            <p>
-              Suspendisse feugiat. Suspendisse faucibus, nunc et pellentesque
-              egestas, lacus ante convallis tellus, vitae iaculis lacus elit id
-              tortor. Proin viverra, ligula sit amet ultrices semper, ligula
-              arcu tristique sapien, a accumsan nisi mauris ac eros. In hac
-              habitasse platea dictumst. Fusce ac felis sit amet ligula pharetra
-              condimentum.
-            </p>
-
-            <p>
-              Sed consequat, leo eget bibendum sodales, augue velit cursus nunc,
-              quis gravida magna mi a libero. Nam commodo suscipit quam. In
-              consectetuer turpis ut velit. Sed cursus turpis vitae tortor.
-              Aliquam eu nunc.
-            </p>
-
-            <p>
-              Etiam ut purus mattis mauris sodales aliquam. Ut varius tincidunt
-              libero. Aenean viverra rhoncus pede. Duis leo. Fusce fermentum
-              odio nec arcu.
-            </p>
-
-            <p class="mb-0">
-              Donec venenatis vulputate lorem. Aenean viverra rhoncus pede. In
-              dui magna, posuere eget, vestibulum et, tempor auctor, justo.
-              Fusce commodo aliquam arcu. Suspendisse enim turpis, dictum sed,
-              iaculis a, condimentum nec, nisi.
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-card-text>
-            <p>
-              Fusce a quam. Phasellus nec sem in justo pellentesque facilisis.
-              Nam eget dui. Proin viverra, ligula sit amet ultrices semper,
-              ligula arcu tristique sapien, a accumsan nisi mauris ac eros. In
-              dui magna, posuere eget, vestibulum et, tempor auctor, justo.
-            </p>
-
-            <p class="mb-0">
-              Cras sagittis. Phasellus nec sem in justo pellentesque facilisis.
-              Proin sapien ipsum, porta a, auctor quis, euismod ut, mi. Donec
-              quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nam
-              at tortor in tellus interdum sagittis.
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-tab-item>
-    </v-tabs>
-  </v-card>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <p>
+                <translate>
+                  In this card, you manage your access to services via RDS.
+                </translate>
+              </p>
+              <p>
+                <translate>
+                  If you want to remove all access in once or remove the access
+                  for your ownCloud account, click the "revoke button".
+                </translate>
+              </p>
+            </v-card-text>
+          </v-card>
+          <v-card class="d-flex justify-end">
+            <RevokeButton />
+          </v-card>
+        </v-tab-item>
+        <v-tab-item>
+          <v-container flex>
+            <v-row justify="start">
+              <v-col v-for="(service, index) in filteredServices" :key="index">
+                <v-card class="mb-12 pa-2" max-width="500">
+                  <v-container>
+                    <v-row>
+                      <v-col>
+                        <translate
+                          :translate-params="{
+                            name: parseServicename(service.servicename),
+                          }"
+                        >
+                          Connect your %{name} account with RDS
+                        </translate>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-btn color="primary" @click="grantAccess(service)">
+                          <translate>Grant access</translate>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-tab-item>
+        <v-tab-item v-if="filteredUserService.length > 0">
+          <v-container flex>
+            <v-row>
+              <v-col
+                v-for="(service, index) in filteredUserService"
+                :key="index"
+              >
+                <v-card class="mb-12 pa-2" max-width="500">
+                  <v-container>
+                    <v-row>
+                      <v-col>
+                        <translate
+                          :translate-params="{
+                            name: parseServicename(service.servicename),
+                          }"
+                        >
+                          Delete %{name} from your account.
+                        </translate>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-btn color="error" @click="removeAccess(service)">
+                          <translate>Remove access</translate>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
+    <v-dialog
+      v-model="overlay"
+      persistent
+      max-width="500px"
+      :z-index="zIndex"
+      @keydown.esc="overlay = false"
+    >
+      <v-card shaped outlined raised>
+        <CredentialsInput
+          ref="credinput"
+          :showUsername="username"
+          :showPassword="password"
+          :servicename="servicename"
+          :visible="overlay"
+          v-on:closecredentials="overlay = false"
+        />
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
-export default {};
+import CredentialsInput from "@/components/CredentialsInput";
+import { mapState } from "vuex";
+import RevokeButton from "@/components/RevokeButton.vue";
+
+export default {
+  components: { CredentialsInput, RevokeButton },
+  computed: {
+    ...mapState({
+      userservicelist: (state) => state.RDSStore.userservicelist,
+      servicelist: (state) => state.RDSStore.servicelist,
+    }),
+    filteredServices() {
+      return this.excludeServices(this.servicelist, this.userservicelist);
+    },
+    filteredUserService() {
+      return this.excludeServices(this.userservicelist, [
+        {
+          servicename: "port-owncloud",
+        },
+      ]);
+    },
+  },
+  data: () => ({
+    popup: undefined,
+    overlay: false,
+    username: "",
+    password: "",
+    servicename: "",
+    zIndex: 1000,
+  }),
+  methods: {
+    grantAccess(service) {
+      if (!service.credentials) {
+        this.openPopup(service, this);
+      } else {
+        this.servicename = service.servicename;
+        this.username = service.credentials.userId;
+        this.password = service.credentials.password;
+        this.overlay = true;
+      }
+    },
+    removeAccess(service) {
+      console.log(service);
+      this.$store.dispatch("removeService", service);
+    },
+  },
+};
 </script>
