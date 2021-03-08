@@ -10,111 +10,174 @@ msgstr ""
 "Generated-By: easygettext\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:4
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:5
 msgid "Activate RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:10
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:12
+msgid "Add service"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:11
 msgid "Add services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:22
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:28
+msgid "Cancel input"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:22
 msgid "Cancel service selection"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:38
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:47
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:39
 msgid "Connect your %{name} account with RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:59
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:60
 msgid "Continue"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:34
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:75
+msgid "Delete %{name} from your account."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:34
 msgid "Enable DarkMode?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:16
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:4
+msgid "Enter your credentials for %{ parsedServicename }."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:17
 msgid "Finish"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:69
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:70
 msgid "Go to projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:26
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:57
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:27
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:49
 msgid "Grant access"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:46
-msgid "Grant access to %{name}"
-msgstr ""
-
-#: /home/physicx/Projects/rds-web/src/router/index.js:17
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:17
 msgid "Home"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/App.vue:107
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:28
+msgid ""
+"If you want to remove all access in once or remove the access\n"
+"                  for your ownCloud account, click the \"revoke button\"."
+msgstr ""
+"If you want to remove all access in once or remove the access\n"
+"                  for your ownCloud account, click the \"Uninstall RDS\" button."
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:23
+msgid "In this card, you manage your access to services via RDS."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:8
+msgid "Informations"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/App.vue:112
 msgid "item"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/WebsocketTester.vue:3
-msgid "Last message"
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:3
+msgid "Manage your access to services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:23
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:64
+msgid "Password"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:24
 msgid "Permit RDS to access your ownCloud files."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:24
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:24
 msgid "Projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:19
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:85
+msgid "Remove access"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:16
+msgid "Remove service"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:23
+msgid "Save credentials"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:19
 msgid "Save selection and activate services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:12
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:8
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:12
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:8
 msgid "Select All"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:29
+#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:29
 msgid "Select language"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:39
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:39
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:31
+#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:10
+msgid "Service activation in progress"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:31
 msgid "Settings"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:2
 msgid "Settings for language"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:2
 msgid "Settings for services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:2
 msgid "Settings for theme"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/RevokeButton.vue:3
+#: /home/physicx/Projects/rds-web/client/src/components/RevokeButton.vue:3
 msgid "Uninstall sciebo RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:28
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:43
+msgid "Username"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:28
 msgid "Using DeviceMode?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:38
+#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:6
+msgid "Wait"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/App.vue:60
+msgid "Wait for login"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:38
 msgid "Wizard"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:65
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:66
 msgid "You configure RDS properly."
 msgstr ""

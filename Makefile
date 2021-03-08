@@ -1,15 +1,17 @@
 install:
 	apt install gettext
-	npm install
-	npm install --only=dev
+	cd client
+	npm --prefix ./client install
+	npm --prefix ./client install --only=dev
 
 l10n-compile:
-	 npm run localize-compile 
+	npm --prefix ./client run localize-compile 
 	
 l10n-extract:
-	npm run localize-extract
+	npm --prefix ./client run localize-extract
 
 flask:
+	cd server
 	pipenv shell
 	FLASK_APP=starter.py flask run
 
@@ -17,14 +19,14 @@ socket:
 	cd server && pipenv run python websocket.py
 
 lint:
-	npm run lint
+	npm --prefix ./client run lint
 	pipenv run black .
 
 build:
-	npm run build
+	npm --prefix ./client run build
 
 hotreload:
 	tmux new-session "cd client && while true; do npm run serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;  
 
 test:
-	npm test && cd server && pipenv run pytest
+	npm --prefix ./client test && cd server && pipenv run pytest

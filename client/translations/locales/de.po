@@ -10,112 +10,175 @@ msgstr ""
 "Generated-By: easygettext\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:4
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:5
 msgid "Activate RDS"
 msgstr "RDS aktivieren"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:10
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:12
+#, fuzzy
+msgid "Add service"
+msgstr "Dienste hinzufügen"
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:11
 msgid "Add services"
 msgstr "Dienste hinzufügen"
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:22
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:28
+msgid "Cancel input"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:22
 msgid "Cancel service selection"
 msgstr "Zurücksetzen"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:38
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:47
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:39
 msgid "Connect your %{name} account with RDS"
 msgstr "Verbinde dein %{name} Konto"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:59
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:60
 msgid "Continue"
 msgstr "Weiter"
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:34
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:75
+msgid "Delete %{name} from your account."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:34
 msgid "Enable DarkMode?"
 msgstr "Dunkle Farbgebung nutzen?"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:16
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:4
+msgid "Enter your credentials for %{ parsedServicename }."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:17
 msgid "Finish"
 msgstr "Abschluss"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:69
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:70
 #, fuzzy
 msgid "Go to projects"
 msgstr "Projekte"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:26
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:57
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:27
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:49
 msgid "Grant access"
 msgstr "Zugriff gewähren"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:46
-msgid "Grant access to %{name}"
-msgstr "Zugriff zu %{name} gewähren"
-
-#: /home/physicx/Projects/rds-web/src/router/index.js:17
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:17
 msgid "Home"
 msgstr "Startseite"
 
-#: /home/physicx/Projects/rds-web/src/App.vue:107
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:28
+msgid ""
+"If you want to remove all access in once or remove the access\n"
+"                  for your ownCloud account, click the \"revoke button\"."
+msgstr "Falls Du alle Zugänge, inklusive deinen ownCloud Zugang, entfernen möchtest, klicke auf den unteren Knopf."
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:23
+msgid "In this card, you manage your access to services via RDS."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:8
+msgid "Informations"
+msgstr "Informationen"
+
+#: /home/physicx/Projects/rds-web/client/src/App.vue:112
 msgid "item"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/src/components/WebsocketTester.vue:3
-msgid "Last message"
-msgstr "Letzte Nachricht"
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:3
+msgid "Manage your access to services"
+msgstr "Verwalte deine Dienstzugänge"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:23
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:64
+msgid "Password"
+msgstr "Passwort"
+
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:24
 msgid "Permit RDS to access your ownCloud files."
 msgstr "Gewähre RDS Zugriff auf deine ownCloud Dateien."
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:24
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:24
 msgid "Projects"
 msgstr "Projekte"
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:19
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:85
+msgid "Remove access"
+msgstr "Zugang entfernen"
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:16
+#, fuzzy
+msgid "Remove service"
+msgstr "Wähle deine Dienste aus"
+
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:23
+msgid "Save credentials"
+msgstr "Zugangsdaten speichern"
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:19
 msgid "Save selection and activate services"
 msgstr "Dienste anpassen"
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:12
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:8
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:12
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:8
 msgid "Select All"
 msgstr "Alle auswählen"
 
-#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:29
+#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:29
 msgid "Select language"
 msgstr "Sprache ändern"
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:39
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:39
 msgid "Select services"
 msgstr "Wähle deine Dienste aus"
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:31
+#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:10
+msgid "Service activation in progress"
+msgstr "Dienstaktivierung im Gange"
+
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:31
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: /home/physicx/Projects/rds-web/src/components/LanguageSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:2
 msgid "Settings for language"
 msgstr "Sprache ändern"
 
-#: /home/physicx/Projects/rds-web/src/components/ServiceSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceSelector.vue:2
 msgid "Settings for services"
 msgstr "Verknüpfte Dienste einstellen"
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:2
 msgid "Settings for theme"
 msgstr "Aussehen ändern"
 
-#: /home/physicx/Projects/rds-web/src/components/RevokeButton.vue:3
+#: /home/physicx/Projects/rds-web/client/src/components/RevokeButton.vue:3
 msgid "Uninstall sciebo RDS"
 msgstr "Konto deaktivieren"
 
-#: /home/physicx/Projects/rds-web/src/components/ThemeSelector.vue:28
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:43
+msgid "Username"
+msgstr "Benutzername"
+
+#: /home/physicx/Projects/rds-web/client/src/components/ThemeSelector.vue:28
 msgid "Using DeviceMode?"
 msgstr "Farbgestaltung des Betriebssystem verwenden?"
 
-#: /home/physicx/Projects/rds-web/src/router/index.js:38
+#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:6
+msgid "Wait"
+msgstr "Warte"
+
+#: /home/physicx/Projects/rds-web/client/src/App.vue:60
+msgid "Wait for login"
+msgstr "Warte auf Abschluss"
+
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:38
 msgid "Wizard"
 msgstr "Helfer"
 
-#: /home/physicx/Projects/rds-web/src/views/Wizard.vue:65
+#: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:66
 msgid "You configure RDS properly."
 msgstr "RDS korrekt konfiguriert."

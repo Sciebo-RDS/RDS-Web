@@ -18,6 +18,10 @@ LOGGER = logging.getLogger()
 socket_blueprint = Blueprint("socket_blueprint", __name__)
 
 
+def refreshUserServices(data):
+    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+
+
 url = "https://sciebords-dev2.uni-muenster.de"
 
 data = {
@@ -27,7 +31,7 @@ data = {
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
         ("removeServiceForUser",
-         "{url}/user/{userId}/service/{servicename}", "delete")
+         "{url}/user/{userId}/service/{servicename}", "delete", refreshUserServices)
     ],
     os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE", f"{url}/exporter"): [
         ("getAllFiles", "{url}/user/{userId}/research/{researchId}"),
