@@ -34,7 +34,49 @@
             </v-card-text>
           </v-card>
           <v-card class="d-flex justify-end">
-            <RevokeButton />
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  depressed
+                  v-bind="attrs"
+                  v-on="on"
+                  color="error"
+                  class="ma-4"
+                >
+                  <translate>Uninstall sciebo RDS</translate>
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline">
+                  <translate>Uninstall sciebo RDS</translate>
+                </v-card-title>
+
+                <v-card-text translate>
+                  This will remove all services from RDS and all projects. If
+                  you want to reuse this service, you need to start all over
+                  again. This cannot be undone. Are you sure?
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="error"
+                    text
+                    @click="
+                      uninstallRDS();
+                      dialog = false;
+                    "
+                  >
+                    Remove access to RDS
+                  </v-btn>
+                  <v-btn color="primary" @click="dialog = false">
+                    Cancel
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card>
         </v-tab-item>
         <v-tab-item>
@@ -126,10 +168,9 @@
 <script>
 import CredentialsInput from "@/components/CredentialsInput";
 import { mapState } from "vuex";
-import RevokeButton from "@/components/RevokeButton.vue";
 
 export default {
-  components: { CredentialsInput, RevokeButton },
+  components: { CredentialsInput },
   computed: {
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
@@ -153,6 +194,7 @@ export default {
     password: "",
     servicename: "",
     zIndex: 1000,
+    dialog: false,
   }),
   methods: {
     grantAccess(service) {
@@ -168,6 +210,12 @@ export default {
     removeAccess(service) {
       console.log(service);
       this.$store.dispatch("removeService", service);
+    },
+    uninstallRDS() {
+      this.$store.dispatch(
+        "removeService",
+        this.getInformations("port-owncloud")
+      );
     },
   },
 };

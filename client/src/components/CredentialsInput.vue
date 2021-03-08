@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <v-row><v-col class="text-h6" translate>Add server</v-col></v-row>
+    <v-row><v-col class="headline" translate>Add server</v-col></v-row>
     <v-row>
       <v-col>
         <div v-show="noInput">
