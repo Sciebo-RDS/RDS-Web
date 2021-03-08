@@ -1,10 +1,19 @@
 <template>
   <v-container fluid>
+    <v-row><v-col class="text-h6" translate>Add server</v-col></v-row>
     <v-row>
       <v-col>
-        <translate>
-          Enter your credentials for %{ parsedServicename }.
-        </translate>
+        <div v-show="noInput">
+          <translate>
+            The service %{ parsedServicename } does not need any inputs, because
+            it can inherate the credentials on another way.
+          </translate>
+        </div>
+        <div v-show="!noInput">
+          <translate>
+            Enter your credentials for %{ parsedServicename }.
+          </translate>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -57,17 +66,6 @@ export default {
     servicename: String,
     visible: Boolean,
   },
-  beforeMount() {
-    this.checkInputs();
-  },
-  watch: {
-    // eslint-disable-next-line no-unused-vars
-    visible(newVal, oldVal) {
-      if (newVal) {
-        this.checkInputs();
-      }
-    },
-  },
   data: () => ({
     rules: [
       (value) => !!value || "Required.",
@@ -81,10 +79,12 @@ export default {
     parsedServicename() {
       return this.parseServicename(this.servicename);
     },
+    noInput() {
+      return !this.showUsername && !this.showPassword;
+    },
   },
   methods: {
     checkInputs() {
-      console.log(this.showUsername, this.showPassword);
       if (!this.showUsername && !this.showPassword) {
         this.saveCredentials();
       }
