@@ -11,7 +11,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
       </v-expansion-panels>
-      <v-btn @click="addProject">Add</v-btn>
     </v-row>
     
 </template>
@@ -39,38 +38,7 @@ export default {
       projects: Array,
     },
     methods: {
-      /* hardcoded test data for now */
-      addProject () {
-        this.projects.push({
-        portIn: [
-          {
-            port: "",
-            properties: {
-              type: [""],
-              customProperties: {
-                filepath: "none",
-              },
-            },
-          },
-        ],
-        portOut: [
-          {
-            port: "",
-            properties: {
-              type: [""],
-              customProperties: {
-                projectId: Math.floor(Math.random()*10000),
-              },
-            },
-          },
-        ],
-        researchId: this.projects.length,
-        researchIndex: 0,
-        status: 1,
-        userId: "admin",
-      })
-      }
-    },
     emits: ['delete-project'],
+    }
 }
 </script>
