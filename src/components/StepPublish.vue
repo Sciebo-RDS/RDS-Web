@@ -9,8 +9,16 @@
             </v-card-subtitle>
             <v-card-text>
                 <!-- replace with logic-->
-                $settingsOverview
+                PortIn: {{project.portIn[0].port}}<br>
+                PortOut: {{project.portOut[0].port}}<br>
+                ProjectID: {{project.portOut[0].properties.customProperties.projectId}}<br>
             </v-card-text>
         </v-card>
     </v-container>
 </template>
+
+<script>
+export default {
+    props: ['project'],
+}
+</script>

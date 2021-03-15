@@ -1,6 +1,6 @@
 <template>
   <v-main style="padding: 0px">
-    <ProjectList  />
+    <ProjectList :projects="projects"  />
   </v-main>
 </template>
 
@@ -8,11 +8,9 @@
 /*import Header from '../components/Header'*/
 import ProjectList from '../components/ProjectList'
 
-
 export default {
   components: {
-    /*Header,*/
-    ProjectList
+    ProjectList,
   },
   data: () => ({
     projects: [

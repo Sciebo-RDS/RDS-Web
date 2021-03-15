@@ -4,7 +4,7 @@
         <v-container class="grey lighten-5">
             <v-row>
                 <v-col>
-                    <ProjectStepper />
+                    <ProjectStepper :project="project" />
                 </v-col>
             </v-row>
             
@@ -23,6 +23,7 @@ import ProjectStepper from "./ProjectStepper"
 export default {
     components: {
         ProjectStepper
-    }
+    },
+    props: ['project'],
 }
 </script>

@@ -32,7 +32,7 @@
           height="auto"
           flat
         >
-            <StepConfiguration/>
+            <StepConfiguration :project="project"/>
         </v-card>
 
         <v-btn text
@@ -77,7 +77,7 @@
           height="auto"
           flat
         >
-        <StepPublish/>
+        <StepPublish :project="project"/>
         </v-card>
 
         <v-btn text
@@ -110,5 +110,6 @@ import StepPublish from "./StepPublish"
         e1: 1,
       }
     },
+    props: ['project'],
   }
 </script>
