@@ -87,6 +87,7 @@
 
         <v-btn
           color="success"
+          @click="alert('Publishing project...')"
         >
           Publish
         </v-btn>
@@ -111,5 +112,10 @@ import StepPublish from "./StepPublish"
       }
     },
     props: ['project'],
+    methods: {
+        alert(msg){
+            alert(msg);
+        }
+    }
   }
 </script>

@@ -7,7 +7,7 @@
                 <v-col>
                     <v-card flat>
                       <v-card-subtitle>1. Which folder do you want to publish?</v-card-subtitle>
-                      <v-card-actions><v-btn @click="alert(1)">Select Folder</v-btn></v-card-actions>
+                      <v-card-actions><v-btn @click="alert('this will open a file browser')">Select Folder</v-btn></v-card-actions>
                       <v-card-subtitle style="padding-top:0px;">Current Folder: {{project.portIn[0].properties.customProperties.filepath}}</v-card-subtitle>
                     </v-card>
                   </v-col>
