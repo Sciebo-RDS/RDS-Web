@@ -7,7 +7,7 @@
         >
         <v-expansion-panel-header> Project {{ project.researchId+1 }} </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <ProjectSetting :project=project></ProjectSetting>
+          <ProjectSetting @delete-project="$emit('delete-project', project.researchId)" :project=project></ProjectSetting>
         </v-expansion-panel-content>
       </v-expansion-panel>
       </v-expansion-panels>
@@ -44,22 +44,22 @@ export default {
         this.projects.push({
         portIn: [
           {
-            port: "port-reva",
+            port: "",
             properties: {
-              type: ["fileStorage"],
+              type: [""],
               customProperties: {
-                filepath: "/RDSTest",
+                filepath: "none",
               },
             },
           },
         ],
         portOut: [
           {
-            port: "port-zenodo",
+            port: "",
             properties: {
-              type: ["metadata"],
+              type: [""],
               customProperties: {
-                projectId: "719218",
+                projectId: Math.floor(Math.random()*10000),
               },
             },
           },
@@ -70,6 +70,7 @@ export default {
         userId: "admin",
       })
       }
-    }
+    },
+    emits: ['delete-project'],
 }
 </script>

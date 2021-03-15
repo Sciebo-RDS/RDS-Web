@@ -11,7 +11,7 @@
             <v-row align-content="end" justify="space-around">
                 <v-col cols="auto" class="mr-auto"/>
                 <v-col cols="auto">
-                    <v-btn tile color="error" >delete project</v-btn>
+                    <v-btn tile color="error" @click="onDelete(project.researchId)">delete project</v-btn>
                 </v-col>
             </v-row>
         </v-container>
@@ -25,5 +25,10 @@ export default {
         ProjectStepper
     },
     props: ['project'],
+    methods: {
+        onDelete(id) {
+            this.$emit('delete-project', id)
+        }
+    }
 }
 </script>

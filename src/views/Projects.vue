@@ -1,6 +1,6 @@
 <template>
   <v-main style="padding: 0px">
-    <ProjectList :projects="projects"  />
+    <ProjectList @delete-project="deleteProject" :projects="projects"  />
   </v-main>
 </template>
 
@@ -97,5 +97,10 @@ export default {
       },
     ],
   }),
+  methods: {
+    deleteProject(id) {
+      this.projects = this.projects.filter((projects) => projects.researchId !== id)
+    }
+  }
 };
 </script>
