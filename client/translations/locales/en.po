@@ -10,15 +10,16 @@ msgstr ""
 "Generated-By: easygettext\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:26
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:3
+msgid "(popup)"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:5
 msgid "Activate RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:2
-msgid "Add server"
-msgstr ""
-
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:12
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:3
 msgid "Add service"
 msgstr ""
 
@@ -26,7 +27,17 @@ msgstr ""
 msgid "Add services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:37
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:49
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:47
+msgid "Are you sure?"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:67
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:58
+msgid "Cancel"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:30
 msgid "Cancel input"
 msgstr ""
 
@@ -34,7 +45,7 @@ msgstr ""
 msgid "Cancel service selection"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:79
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:6
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:39
 msgid "Connect your %{name} account with RDS"
 msgstr ""
@@ -43,7 +54,7 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:107
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:13
 msgid "Delete %{name} from your account."
 msgstr ""
 
@@ -51,7 +62,7 @@ msgstr ""
 msgid "Enable DarkMode?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:12
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:13
 msgid "Enter your credentials for %{ parsedServicename }."
 msgstr ""
 
@@ -63,7 +74,8 @@ msgstr ""
 msgid "Go to projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:89
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:25
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:2
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:27
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:49
 msgid "Grant access"
@@ -73,20 +85,18 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:28
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:9
 msgid ""
-"If you want to remove all access in once or remove the access\n"
-"                  for your ownCloud account, click the \"revoke button\"."
+"If you want to remove all access in once or remove the access for your\n"
+"          ownCloud account, click the \"revoke button\"."
 msgstr ""
-"If you want to remove all access in once or remove the access\n"
-"                  for your ownCloud account, click the \"Uninstall RDS\" button."
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:23
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:46
+msgid "If you want to reuse this service, you need to add it again."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:7
 msgid "In this card, you manage your access to services via RDS."
-msgstr ""
-
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:8
-msgid "Informations"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/src/App.vue:112
@@ -97,7 +107,7 @@ msgstr ""
 msgid "Manage your access to services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:94
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:72
 msgid "Password"
 msgstr ""
 
@@ -109,15 +119,24 @@ msgstr ""
 msgid "Projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:117
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:60
+msgid "Remove %{ name }"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:29
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:6
 msgid "Remove access"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:16
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:55
+msgid "Remove access to RDS"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:37
 msgid "Remove service"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:32
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:27
 msgid "Save credentials"
 msgstr ""
 
@@ -158,27 +177,30 @@ msgstr ""
 msgid "Settings for theme"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:6
-msgid ""
-"The service %{ parsedServicename } does not need any inputs, because\n"
-"            it can inherate the credentials on another way."
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:46
+msgid "This cannot be undone."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:47
-msgid ""
-"This will remove all services from RDS and all projects. If\n"
-"                  you want to reuse this service, you need to start all over\n"
-"                  again. This cannot be undone. Are you sure?"
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:8
+msgid "This service does not require any input, as it can derive the credentials by other means."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:43
+msgid "This will remove all services from RDS and all projects."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:41
+msgid "This will remove your access to %{ servicename } from RDS."
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/src/components/RevokeButton.vue:3
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:34
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:39
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:44
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:2
 msgid "Uninstall sciebo RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:73
+#: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:61
 msgid "Username"
 msgstr ""
 

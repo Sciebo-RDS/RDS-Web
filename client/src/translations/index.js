@@ -18,5 +18,5 @@ Vue.use(GetTextPlugin, {
         }
     },
     translations: translations,
-    silent: true,
+    silent: false,
 })
