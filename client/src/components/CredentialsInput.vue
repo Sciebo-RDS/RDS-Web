@@ -1,61 +1,53 @@
 <template>
-  <v-container fluid>
-    <v-row><v-col class="headline" translate>Add server</v-col></v-row>
-    <v-row>
-      <v-col>
-        <div v-show="noInput">
-          <translate>
-            The service %{ parsedServicename } does not need any inputs, because
-            it can inherate the credentials on another way.
-          </translate>
-        </div>
-        <div v-show="!noInput">
-          <translate>
-            Enter your credentials for %{ parsedServicename }.
-          </translate>
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-text-field
-          v-if="showUsername"
-          v-model="username"
-          :rules="rules"
-          :label="$gettext(`Username`)"
-          @keydown.enter="saveCredentials"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-text-field
-          ref="passwordInput"
-          v-if="showPassword"
-          v-model="password"
-          :rules="rules"
-          :label="$gettext(`Password`)"
-          :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="passwordShow ? 'text' : 'password'"
-          @click:append="passwordShow = !passwordShow"
-          @keydown.enter="saveCredentials"
-        >
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-btn @click="saveCredentials" color="primary">
-          <translate>Save credentials</translate>
-        </v-btn>
-      </v-col>
-      <v-col>
-        <v-btn @click="$emit('closecredentials')" color="error">
-          <translate>Cancel input</translate>
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-card>
+    <v-card-title class="headline">
+      <translate>Add service</translate>
+    </v-card-title>
+
+    <v-card-text>
+      <div v-show="noInput">
+        <translate>
+          This service does not require any input, as it can derive the credentials by other means.
+        </translate>
+      </div>
+      <div v-show="!noInput">
+        <translate>
+          Enter your credentials for %{ parsedServicename }.
+        </translate>
+      </div>
+
+      <v-text-field
+        v-if="showUsername"
+        v-model="username"
+        :rules="rules"
+        :label="$gettext(`Username`)"
+        @keydown.enter="saveCredentials"
+      ></v-text-field>
+      <v-text-field
+        ref="passwordInput"
+        v-if="showPassword"
+        v-model="password"
+        :rules="rules"
+        :label="$gettext(`Password`)"
+        :append-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
+        :type="passwordShow ? 'text' : 'password'"
+        @click:append="passwordShow = !passwordShow"
+        @keydown.enter="saveCredentials"
+      >
+      </v-text-field>
+    </v-card-text>
+    <v-divider></v-divider>
+
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn @click="saveCredentials" color="primary">
+        <translate>Save credentials</translate>
+      </v-btn>
+      <v-btn @click="$emit('closecredentials')" color="error">
+        <translate>Cancel input</translate>
+      </v-btn>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
