@@ -38,7 +38,6 @@ export default {
       projects: Array,
     },
     methods: {
-    emits: ['delete-project'],
     }
 }
 </script>
