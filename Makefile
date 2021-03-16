@@ -25,6 +25,9 @@ lint:
 build:
 	npm --prefix ./client run build
 
+build-oc:
+	npm --prefix ./client run owncloud
+
 hotreload:
 	tmux new-session "cd client && while true; do npm run serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;  
 

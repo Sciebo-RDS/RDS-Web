@@ -5,6 +5,7 @@ namespace OCA\RDS\Controller;
 use OCP\AppFramework\Controller;
 use OCP\Template;
 use OCP\IRequest;
+use OCP\Util;
 
 /**
 - Define a new page controller
@@ -12,6 +13,7 @@ use OCP\IRequest;
 
 class PageController extends Controller
 {
+    protected $appName;
     private $userId;
 
     /**
@@ -39,6 +41,7 @@ class PageController extends Controller
         RDSService $rdsService
     ) {
         parent::__construct($AppName, $request);
+        $this->appName = $appName;
         $this->userId = $userId;
         $this->clientMapper = $clientMapper;
         $this->userSession = $userSession;
@@ -54,6 +57,9 @@ class PageController extends Controller
 
     public function index()
     {
+        Util::addScript($this->appName, 'rds');
+        Util::addStyle($this->appName, 'rds.umd');
+
         $userId = $this->userSession->getUser()->getUID();
         $t = new Template('rds', 'main.research');
         $t->assign('clients', $this->clientMapper->findByUser($userId));

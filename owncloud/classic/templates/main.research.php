@@ -1,10 +1,10 @@
 <?php
-style('rds', array('style', "rds-web.css"));
-script('rds', array("rds-web.umd.min.js"));
+style('rds', array('style', "rds.css"));
+script('rds', array("rds.umd.min.js"));
 ?>
 
 <div id='app'>
-    <rdsWeb />
+    <rds />
 </div>
 
 
@@ -15,7 +15,7 @@ script('rds', array("rds-web.umd.min.js"));
 
     new Vue({
         components: {
-            rdsWeb: rds-web
+            rds
         }
     }).$mount('#app')
 </script>
