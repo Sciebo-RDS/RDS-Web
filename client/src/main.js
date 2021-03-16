@@ -2,7 +2,7 @@ import Vue from 'vue'
 import config from "./config"
 import store from "./store"
 import integrations from "./plugins/integration"
-import router from './router'
+import routes from './router'
 import vuetify from './plugins/vuetify';
 import customMethods from "./plugins/customMethods"
 import "@/translations"
@@ -19,6 +19,8 @@ Vue.use(integrations)
 Vue.prototype.auth.login()
 
 Vue.use(customMethods)
+Vue.use(routes)
+let router = Vue.prototype.$routers
 
 new Vue({
   router,

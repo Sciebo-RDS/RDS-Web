@@ -3,7 +3,7 @@
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
 
-    <v-app-bar app flat>
+    <v-app-bar app flat class="d-lg-none">
       <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none"></v-app-bar-nav-icon>
       <v-toolbar-title></v-toolbar-title>
     </v-app-bar>
@@ -90,7 +90,6 @@
 </style>
 
 <script>
-import router from "./router/index.js";
 import { mapGetters } from "vuex";
 import Vue from "vue";
 import overlay from "@/components/Overlay.vue";
@@ -111,7 +110,7 @@ export default {
   data() {
     return {
       drawer: null,
-      views: router.options.routes,
+      views: this.$router.options.routes,
       model: null,
       overlayText: null,
     };
