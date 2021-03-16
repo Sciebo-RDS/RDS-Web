@@ -100,7 +100,7 @@ msgstr "Falls Du diesen Dienst später erneut nutzen willst, musst Du ihn wieder
 
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:7
 msgid "In this card, you manage your access to services via RDS."
-msgstr "Verwalte deine Dienstzugänge"
+msgstr "Hier können Zugänge zu deinem RDS Konto hinzugefügt oder entfernt werden."
 
 #: /home/physicx/Projects/rds-web/client/src/App.vue:112
 msgid "item"
