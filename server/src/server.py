@@ -66,17 +66,17 @@ def login():
         token = request.args["access_token"]
         headers = {"Authorization": "Bearer {}".format(token)}
         req = requests.get(
-            "{}/index.php/apps/rds/informations".format(
-                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud")
+            "{}/ocs/v2.php/cloud/user?format=json".format(
+                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud/index.php")
             ),
             headers=headers,
             verify=False,
         )
 
         if req.status_code == 200:
-            data = req.json()
+            data = req.json()["ocs"]["data"]
             user = User(
-                id=uuid.uuid4(), userId=data["username"], websocketId=None, token=token
+                id=uuid.uuid4(), userId=data["id"], websocketId=None, token=token
             )
             user_store[user.get_id()] = user
             login_user(user)
@@ -114,17 +114,17 @@ def index(path):
         token = request.args["access_token"]
         headers = {"Authorization": "Bearer {}".format(token)}
         req = requests.get(
-            "{}/index.php/apps/rds/informations".format(
-                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud")
+            "{}/ocs/v2.php/cloud/user?format=json".format(
+                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud/index.php")
             ),
             headers=headers,
             verify=False,
         )
 
         if req.status_code == 200:
-            data = req.json()
+            data = req.json()["ocs"]["data"]
             user = User(
-                id=uuid.uuid4(), userId=data["username"], websocketId=None, token=token
+                id=uuid.uuid4(), userId=data["id"], websocketId=None, token=token
             )
             user_store[user.get_id()] = user
             login_user(user)

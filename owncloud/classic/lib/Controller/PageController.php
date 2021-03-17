@@ -2,10 +2,18 @@
 
 namespace OCA\RDS\Controller;
 
-use OCP\AppFramework\Controller;
+use \OCA\OAuth2\Db\ClientMapper;
+use OCP\IUserSession;
+use OCP\IURLGenerator;
+use \OCA\RDS\Service\RDSService;
+
 use OCP\Template;
 use OCP\IRequest;
 use OCP\Util;
+use OCP\AppFramework\{
+    Controller,
+    Http\TemplateResponse
+};
 
 /**
 - Define a new page controller
@@ -19,14 +27,14 @@ class PageController extends Controller
     /**
      * @var IURLGenerator
      */
-    protected $urlGenerator;
+    private $urlGenerator;
 
     /**
      * @var UrlService
      */
-    protected $urlService;
+    private $urlService;
 
-    protected $rdsService;
+    private $rdsService;
 
     use Errors;
 
@@ -41,7 +49,7 @@ class PageController extends Controller
         RDSService $rdsService
     ) {
         parent::__construct($AppName, $request);
-        $this->appName = $appName;
+        $this->appName = $AppName;
         $this->userId = $userId;
         $this->clientMapper = $clientMapper;
         $this->userSession = $userSession;
@@ -57,37 +65,21 @@ class PageController extends Controller
 
     public function index()
     {
-        Util::addScript($this->appName, 'rds');
-        Util::addStyle($this->appName, 'rds.umd');
+        $policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
+        $policy->addAllowedConnectDomain(parse_url($this->urlService->getURL())["host"]);
+        $policy->addAllowedConnectDomain("localhost:8080");
+        \OC::$server->getContentSecurityPolicyManager()->addDefaultPolicy($policy);
 
         $userId = $this->userSession->getUser()->getUID();
-        $t = new Template('rds', 'main.research');
-        $t->assign('clients', $this->clientMapper->findByUser($userId));
-        $t->assign('user_id', $userId);
-        $t->assign('urlGenerator', $this->urlGenerator);
-        $t->assign("cloudURL", $this->urlService->getURL());
-        $t->assign("oauthname", $this->rdsService->getOauthValue());
-        return $t;
-    }
 
-    /**
-     * Returns the user mail address
-     *
-     * @return object an object mailaddress
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
-    public function mailaddress()
-    {
-        return $this->handleNotFound(function () {
-            $user = \OC::$server->getUserSession()->getUser();
-            $data = [
-                "email" => $user->getEMailAddress(),
-                "username" => $user->getUserName(),
-                "displayname" => $user->getDisplayName()
-            ];
-            return $data;
-        });
+        $params = [
+            'clients' => $this->clientMapper->findByUser($userId),
+            'user_id' => $userId,
+            'urlGenerator' => $this->urlGenerator,
+            "cloudURL" => $this->urlService->getURL(),
+            "oauthname" => $this->rdsService->getOauthValue(),
+        ];
+
+        return new TemplateResponse('rds', "main.research", $params);
     }
 }
