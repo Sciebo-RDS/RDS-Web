@@ -4,20 +4,25 @@ namespace OCA\RDS\Controller;
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-use phpseclib3\Crypt\RSA;
+use Jose\Component\Core\AlgorithmManager;
+use Jose\Component\Core\JWK;
+use Jose\Component\Signature\Algorithm\RS256;
+use Jose\Component\Signature\JWSBuilder;
+use Jose\Component\KeyManagement\JWKFactory;
+use Jose\Component\Signature\Serializer\CompactSerializer;
+use Jose\Component\Core\Util\RSAKey;
+
 use \OCA\OAuth2\Db\ClientMapper;
 use OCP\IUserSession;
 use OCP\IURLGenerator;
 use \OCA\RDS\Service\RDSService;
 
 use OCP\IRequest;
-use OCP\Util;
 use OCP\AppFramework\{
     Controller,
     Http\TemplateResponse
 };
-
-use \Firebase\JWT\JWT;
+use OCP\IConfig;
 
 /**
 - Define a new page controller
@@ -42,6 +47,9 @@ class PageController extends Controller
 
     private $public_key;
     private $private_key;
+    private $jwsBuilder;
+
+    private $config;
 
     use Errors;
 
@@ -53,7 +61,8 @@ class PageController extends Controller
         ClientMapper $clientMapper,
         IUserSession $userSession,
         IURLGenerator $urlGenerator,
-        RDSService $rdsService
+        RDSService $rdsService,
+        IConfig $config
     ) {
         parent::__construct($AppName, $request);
         $this->appName = $AppName;
@@ -64,20 +73,22 @@ class PageController extends Controller
         $this->rdsService = $rdsService;
         $this->urlService = $rdsService->getUrlService();
 
-        $config = array(
-            "digest_alg" => "sha512",
-            "private_key_bits" => 1024,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        $this->config = $config;
 
-        $private_key_res = openssl_pkey_new($config);
-        openssl_pkey_export($private_key_res, $this->private_key);
-        $this->public_key = openssl_pkey_get_details($private_key_res)['key'];
+        $this->jwk = RSAKey::createFromJWK(JWKFactory::createRSAKey(
+            4096 // Size in bits of the key. We recommend at least 2048 bits.
+        ));
 
+        $this->private_key = $this->config->getAppValue("rds", "privatekey", "");
+        $this->public_key = $this->config->getAppValue("rds", "publickey", "");
 
-        $private = RSA::createKey();
-        $this->private = $private->withPadding(RSA::SIGNATURE_PKCS1);
-        $this->public = $private->getPublicKey();
+        if ($this->private_key === "") {
+            $this->public_key = RSAKey::toPublic($this->jwk)->toPEM();
+            $this->private_key = $this->jwk->toPEM();
+
+            $this->config->setAppValue("rds", "privatekey", $this->private_key);
+            $this->config->setAppValue("rds", "publickey", $this->public_key);
+        }
     }
 
     /**
@@ -123,8 +134,9 @@ class PageController extends Controller
                 "displayname" => $user->getDisplayName()
             ];
 
-            $jwt = JWT::encode($data, $this->private_key, 'RS256');
-            return $jwt;
+            $token = \Firebase\JWT\JWT::encode($data, $this->private_key, 'RS256');
+
+            return $token;
         });
     }
 
@@ -139,8 +151,7 @@ class PageController extends Controller
     {
         return $this->handleNotFound(function () {
             $data = [
-                "publickey" => $this->public_key,
-                "privatekey" => $this->private_key
+                "publickey" =>  $this->public_key
             ];
             return $data;
         });

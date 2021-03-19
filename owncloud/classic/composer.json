@@ -1,6 +1,7 @@
 {
     "require": {
-        "firebase/php-jwt": "^5.2",
-        "phpseclib/phpseclib": "^3.0"
+        "web-token/jwt-easy": "^2.2",
+        "web-token/jwt-signature-algorithm-rsa": "^2.2",
+        "web-token/jwt-key-mgmt": "^2.2"
     }
 }

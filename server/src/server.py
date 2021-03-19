@@ -30,6 +30,17 @@ login_manager.init_app(app)
 login_manager.login_view = "index"
 app.register_blueprint(socket_blueprint)
 
+req = requests.get(
+    "{}/apps/rds/publickey".format(
+        os.getenv("OWNCLOUD_URL",
+                  "https://10.14.29.60/owncloud/index.php")
+    ),
+    verify=False,
+).json()
+
+publickey = req["publickey"].replace("\\n", "\n")
+
+
 
 def proxy(host, path):
     req = requests.get(f"{host}{path}", stream=True)
@@ -95,17 +106,6 @@ def login():
 
     reqData = request.get_json(force=True)
     if "informations" in reqData:
-        req = requests.get(
-            "{}/apps/rds/publickey".format(
-                os.getenv("OWNCLOUD_URL",
-                          "https://10.14.29.60/owncloud/index.php")
-            ),
-            verify=False,
-        ).json()
-
-        publickey = req["publickey"].replace("\\n", "\n")
-        LOGGER.debug(publickey)
-
         decoded = jwt.decode(
             reqData["informations"], publickey, algorithms=["RS256"]
         )
