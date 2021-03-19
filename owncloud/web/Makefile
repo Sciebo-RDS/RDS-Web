@@ -15,18 +15,8 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 endef
 
 
-install:
+install: installgo installnpm
 	apt install tmux git
-
-	wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
-	tar -C /usr/local -xzf go1.16.2.linux-amd64.tar.gz
-	echo 'export PATH=$PATH:/usr/local/go/bin' >> $(HOME)/.bashrc
-
-	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-	$(HOME)/.nvm/nvm.sh install --lts
-	npm install -g yarn
-
-	echo '${NVM_SNIPPET}' >> $(HOME)/.bashrc
 
 	git clone https://github.com/owncloud/ocis.git
 	git clone https://github.com/owncloud/web.git
@@ -35,6 +25,17 @@ install:
 	yarn --cwd extension install 
 
 	echo -e '${SNIPPET}'
+
+installgo:
+	wget https://golang.org/dl/go1.16.2.linux-amd64.tar.gz
+	tar -C /usr/local -xzf go1.16.2.linux-amd64.tar.gz
+	echo 'export PATH=$PATH:/usr/local/go/bin' >> $(HOME)/.bashrc
+
+installnpm:
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+	$(HOME)/.nvm/nvm.sh install --lts
+	npm install -g yarn
+	echo '${NVM_SNIPPET}' >> $(HOME)/.bashrc
 
 start:
 	npm version
