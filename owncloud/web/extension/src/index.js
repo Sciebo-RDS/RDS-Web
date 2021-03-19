@@ -1,5 +1,4 @@
-
-import App from "../../../client/src/App.vue"
+import App from "./App.vue"
 
 function $gettext(msg) {
     return msg
@@ -11,12 +10,13 @@ const appInfo = {
     icon: "folder"
 }
 
-const routes = [
+const routes = [//right top action icon
     {
         path: "",
         name: "Hello",
         components: {
-            fullscreen: App,
+            //fullscreen: App,
+            app: App
         }
     }
 ]

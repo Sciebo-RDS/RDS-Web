@@ -3,13 +3,12 @@
     <div class="uk-flex">
       <oc-button @click="sayHi" variation="primary">Say it</oc-button>
     </div>
-    <h1 v-if="isMsgDisplayed">huhu Welcome to my extension!</h1>
+    <h1 v-if="isMsgDisplayed">Welcome to my extension!</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name:"Hello",
   data: () => ({
     isMsgDisplayed: false,
   }),

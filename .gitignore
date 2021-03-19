@@ -29,3 +29,5 @@ responses.json
 dist
 
 vendor
+owncloud/web/ocis
+owncloud/web/web
