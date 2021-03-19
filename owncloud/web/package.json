@@ -1,0 +1,19 @@
+{
+  "name": "extension",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "serve": "DEV=true rollup -c -w"
+  },
+  "devDependencies": {
+    "rollup": "^2.41.5",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-vue": "5",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "dependencies": {
+    "vuex": "^3.6.2"
+  }
+}

@@ -27,3 +27,5 @@ pnpm-debug.log*
 .pytest_cache
 responses.json
 dist
+
+vendor

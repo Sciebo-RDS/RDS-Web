@@ -1,22 +1,16 @@
-import Vue from 'vue'
 import GetTextPlugin from 'vue-gettext'
+import translations from './translations.json'
 
-// Default translations to english language
-import translations from '@/translations/en.json'
-
-Vue.use(GetTextPlugin, {
-    availableLanguages: {
-        en: 'English',
-        de: 'Deutsch'
-    },
-    defaultLanguage: 'en',
-    languageVmMixin: {
-        methods: {
-            merge(locale) {
-                Object.assign(translations, locale);
+export default {
+    install(Vue) {
+        Vue.use(GetTextPlugin, {
+            availableLanguages: {
+                en: 'English',
+                de: 'Deutsch'
             },
-        }
-    },
-    translations: translations,
-    silent: false,
-})
+            defaultLanguage: 'en',
+            translations: translations,
+            silent: true,
+        })
+    }
+}

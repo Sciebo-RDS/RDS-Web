@@ -18,6 +18,7 @@ import os
 import logging
 import uuid
 import os
+import jwt
 
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")))
 
@@ -36,11 +37,39 @@ def proxy(host, path):
 
 
 class User(UserMixin):
-    def __init__(self, id, userId, websocketId=None, token=None):
+    def __init__(self, id, userId=None, websocketId=None, token=None):
         super().__init__()
         self.id = id
-        self.userId = userId
         self.websocketId = websocketId
+        self.userId = userId
+        self.token = token
+
+        if userId is None:
+            headers = {
+                "Requesttoken": token,
+                "requesttoken": token,
+                "OCS-APIREQUEST": "True",
+                "Authorization": f"token {token}"
+            }
+            LOGGER.debug(headers)
+
+            req = requests.get(
+                "{}/ocs/v2.php/cloud/user?format=json".format(
+                    os.getenv("OWNCLOUD_URL",
+                              "https://10.14.29.60/owncloud/index.php")
+                ),
+                headers=headers,
+                verify=False,
+            )
+
+            LOGGER.debug(req.text)
+
+            if req.status_code == 200:
+                data = req.get_json(force=True)["ocs"]["data"]
+
+                self.userId = data["id"]
+                return
+            raise ValueError
 
 
 @app.route("/informations")
@@ -62,26 +91,44 @@ def login():
         else:
             "", 401
 
-    if "access_token" in request.args:
-        token = request.args["access_token"]
-        headers = {"Authorization": "Bearer {}".format(token)}
+    header = request.headers
+
+    reqData = request.get_json(force=True)
+    if "informations" in reqData:
         req = requests.get(
-            "{}/ocs/v2.php/cloud/user?format=json".format(
-                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud/index.php")
+            "{}/apps/rds/publickey".format(
+                os.getenv("OWNCLOUD_URL",
+                          "https://10.14.29.60/owncloud/index.php")
             ),
-            headers=headers,
             verify=False,
+        ).json()
+
+        publickey = req["publickey"].replace("\\n", "\n")
+        LOGGER.debug(publickey)
+
+        decoded = jwt.decode(
+            reqData["informations"], publickey, algorithms=["RS256"]
         )
 
-        if req.status_code == 200:
-            data = req.json()["ocs"]["data"]
+        user = User(
+            id=uuid.uuid4(), userId=decoded["username"]
+        )
+        user_store[user.get_id()] = user
+        login_user(user)
+
+        return "", 200
+
+    if "Authorization" in header:
+        try:
             user = User(
-                id=uuid.uuid4(), userId=data["id"], websocketId=None, token=token
+                id=uuid.uuid4(), token=header["Authorization"].replace("Bearer ", "").replace("token ", "")
             )
             user_store[user.get_id()] = user
             login_user(user)
 
             return "", 200
+        except Exception as e:
+            LOGGER.error(e, exc_info=True)
 
     return "", 401
 
@@ -101,34 +148,23 @@ def logout():
 @app.route("/", defaults={"path": "index.html"})
 @app.route("/<path:path>")
 def index(path):
+    LOGGER.debug(request.path)
     if development_mode and os.getenv("VUE_APP_SKIP_REDIRECTION", "False") == "True":
         LOGGER.debug("skip authentication")
         user = User(
-            id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID"), websocketId=None, token=None
+            id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID")
         )
         user_store[user.get_id()] = user
         login_user(user)
         return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
     if "access_token" in request.args:
-        token = request.args["access_token"]
-        headers = {"Authorization": "Bearer {}".format(token)}
-        req = requests.get(
-            "{}/ocs/v2.php/cloud/user?format=json".format(
-                os.getenv("CHECK_URL", "https://10.14.29.60/owncloud/index.php")
-            ),
-            headers=headers,
-            verify=False,
+        user = User(
+            id=uuid.uuid4(), token=request.args["access_token"]
         )
-
-        if req.status_code == 200:
-            data = req.json()["ocs"]["data"]
-            user = User(
-                id=uuid.uuid4(), userId=data["id"], websocketId=None, token=token
-            )
-            user_store[user.get_id()] = user
-            login_user(user)
-            return redirect("/")
+        user_store[user.get_id()] = user
+        login_user(user)
+        return redirect("/")
 
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:

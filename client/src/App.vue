@@ -3,10 +3,13 @@
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
 
-    <v-app-bar app flat class="d-lg-none">
-      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none"></v-app-bar-nav-icon>
-      <v-toolbar-title></v-toolbar-title>
-    </v-app-bar>
+      <v-app-bar app flat class="d-lg-none">
+        <v-app-bar-nav-icon
+          @click="drawer = !drawer"
+          class="d-lg-none"
+        ></v-app-bar-nav-icon>
+        <v-toolbar-title></v-toolbar-title>
+      </v-app-bar>
 
       <v-navigation-drawer v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
@@ -60,7 +63,6 @@
       <v-main>
         <v-container fluid> <router-view /> </v-container>
       </v-main>
-
     </v-app>
   </div>
 </template>
@@ -91,8 +93,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import Vue from "vue";
-import overlay from "@/components/Overlay.vue";
+import overlay from "./components/Overlay.vue";
 
 export default {
   props: {
@@ -129,21 +130,7 @@ export default {
     }
   },
   beforeMount: function () {
-    let language = this.getLanguage;
-
-    if (language == undefined) {
-      const ll_CC = navigator.language || navigator.userLanguage;
-      language = ll_CC.split("-", 1)[0];
-    }
-
-    if (!Object.prototype.hasOwnProperty.call(Vue.$translations, language)) {
-      import("@/translations/" + language + ".json").then((locale) => {
-        this.$language.merge(locale);
-        this.$language.current = language;
-      });
-    } else {
-      this.$language.current = language;
-    }
+    this.$config.language = this.getLanguage;
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
   },

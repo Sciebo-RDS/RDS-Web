@@ -5,7 +5,7 @@ import integrations from "./plugins/integration"
 import routes from './router'
 import vuetify from './plugins/vuetify';
 import customMethods from "./plugins/customMethods"
-import "@/translations"
+import translations from "@/translations"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App.vue'
@@ -15,6 +15,7 @@ Vue.use(Vuex)
 Vue.use(config)
 Vue.use(VueAxios, axios)
 Vue.use(integrations)
+Vue.use(translations)
 
 Vue.prototype.auth.login()
 

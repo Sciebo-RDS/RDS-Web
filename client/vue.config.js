@@ -15,6 +15,8 @@ module.exports = {
     'vuetify',
     'vue-oidc-client'
   ],
+  filenameHashing: false,
+  productionSourceMap: false,
   devServer: {
     proxy: 'http://localhost:8080'
   },
@@ -22,5 +24,8 @@ module.exports = {
     plugins: [
       new Dotenv(dotenvArgs)
     ]
+  },
+  chainWebpack: config => {
+    config.optimization.splitChunks(false)
   }
 }

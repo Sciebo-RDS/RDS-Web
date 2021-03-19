@@ -18,8 +18,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-
 export default {
   data: () => ({
     visible: false,
@@ -27,7 +25,7 @@ export default {
   computed: {
     text() {
       if (this.subtext === null) {
-        return Vue.prototype.$gettext("Service activation in progress");
+        return this.$gettext("Service activation in progress");
       }
       return this.subtext;
     },

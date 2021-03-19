@@ -8,7 +8,7 @@ script('rds', 'settings-admin');
 <div id="rdsSettings" class="section">
     <h2 class="app-name has-documentation"><?php p($l->t('Research Data Services')); ?></h2>
 
-    <a target="_blank" rel="noreferrer" class="icon-info" title="<?php p($l->t('Open documentation')); ?>" href="https://www.research-data-services.org/doc/getting-started/config/"></a>
+    <a target="_blank" rel="noreferrer" class="icon-info" title="<?php p($l->t('Open documentation')); ?>" href="https://www.research-data-services.org/doc/impl/plugins/owncloud/"></a>
 
     <form id="rds-settings">
         <p>

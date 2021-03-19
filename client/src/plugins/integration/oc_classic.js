@@ -1,8 +1,10 @@
 export default {
     install(Vue) {
         if (typeof OC !== "undefined") {
-            Vue.prototype.auth.loginMethods.push(async function () {
+            Vue.prototype.auth.prelogin.push(async function () {
                 try {
+                    // eslint-disable-next-line no-undef
+                    Vue.prototype.$http.defaults.headers.common['requesttoken'] = oc_requesttoken
                     let prom1 = new Promise(function (resolve, reject) {
                         let timer = setInterval(function () {
                             clearInterval(timer)
@@ -19,8 +21,17 @@ export default {
                     Vue.config.server = await prom1
                     Vue.config.socket.server = Vue.config.server
 
+                    return true
+                } catch {
+                    return false
+                }
+            })
+
+            Vue.prototype.auth.loginMethods.push(async function () {
+                try {
                     // eslint-disable-next-line no-undef
-                    await Vue.prototype.$http.post(`${Vue.config.server}/login`, { token: OC.requesttoken })
+                    let info = (await Vue.prototype.$http.get(OC.generateUrl("/apps/rds/informations"))).data
+                    await Vue.prototype.$http.post(`${Vue.config.server}/login`, { informations: info })
                     return true
                 } catch {
                     return false

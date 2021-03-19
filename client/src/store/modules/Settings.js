@@ -1,8 +1,13 @@
+const language = () => {
+    const ll_CC = navigator.language || navigator.userLanguage;
+    return ll_CC.split("-", 1)[0];
+}
+
 const getDefaultState = () => {
     return {
         darkMode: false,
         deviceMode: true,
-        language: "en",
+        language: language(),
         finishedWizard: false
     }
 }

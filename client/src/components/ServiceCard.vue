@@ -145,7 +145,6 @@ export default {
       }
     },
     removeAccess(service) {
-      console.log(service);
       this.$store.dispatch("removeService", service);
     },
   },

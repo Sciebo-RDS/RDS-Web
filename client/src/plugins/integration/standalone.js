@@ -8,7 +8,7 @@ export default {
 
             if (token !== undefined) {
                 try {
-                    await Vue.prototype.$http.post(`${Vue.config.server}/login`, { token: token, state: state })
+                    await Vue.prototype.$http.post(`${Vue.config.server}/login`, { access_token: token, state: state })
                     return true
                 } catch {
                     return false

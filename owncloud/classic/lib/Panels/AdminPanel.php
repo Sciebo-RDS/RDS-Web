@@ -12,34 +12,36 @@ use \OCA\RDS\Service\RDSService;
 
 class AdminPanel implements ISettings
 {
-
+    private $appName;
     /**
      * @var \OCA\OAuth2\Db\ClientMapper
      */
-    protected $clientMapper;
+    private $clientMapper;
     /**
      * @var IUserSession
      */
-    protected $userSession;
+    private $userSession;
 
     /**
      * @var IURLGenerator
      */
-    protected $urlGenerator;
+    private $urlGenerator;
 
     /**
      * @var UrlService
      */
-    protected $urlService;
+    private $urlService;
 
-    protected $rdsService;
+    private $rdsService;
 
     public function __construct(
+        $AppName,
         ClientMapper $clientMapper,
         IUserSession $userSession,
         IURLGenerator $urlGenerator,
         RDSService $rdsService
     ) {
+        $this->appName = $AppName;
         $this->clientMapper = $clientMapper;
         $this->userSession = $userSession;
         $this->urlGenerator = $urlGenerator;
@@ -58,7 +60,7 @@ class AdminPanel implements ISettings
     public function getPanel()
     {
         $userId = $this->userSession->getUser()->getUID();
-        $t = new Template('rds', 'settings-admin');
+        $t = new Template($this->appName, 'settings-admin');
         $t->assign('clients', $this->clientMapper->findByUser($userId));
         $t->assign('user_id', $userId);
         $t->assign('urlGenerator', $this->urlGenerator);

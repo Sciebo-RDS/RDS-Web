@@ -5,9 +5,16 @@ export default {
     install(Vue) {
         Vue.prototype.auth = {}
         Vue.prototype.auth.loginMethods = []
+        Vue.prototype.auth.prelogin = []
 
         Vue.use(oc_classic)
         Vue.use(standalone)
+
+        try {
+            Promise.all(Vue.prototype.auth.prelogin.map(fn => fn()))
+        } catch (error) {
+            console.error(error);
+        }
 
         Vue.prototype.auth.loggedIn = false
 

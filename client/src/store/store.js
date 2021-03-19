@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import createPersistedState from "vuex-persistedstate";
 import Settings from "./modules/Settings"
 import RDS from "./modules/RDS"
 
@@ -12,7 +11,7 @@ const store = new Vuex.Store({
         RDSStore: RDS,
         SettingsStore: Settings
     },
-    plugins: [createPersistedState()],
+    plugins: [],
     strict: process.env.NODE_ENV !== 'production'
 })
 

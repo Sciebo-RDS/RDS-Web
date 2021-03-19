@@ -6,7 +6,7 @@
     <summary>Integrates the RDS infrastructure into the ownCloud.</summary>
     <licence>AGPL</licence>
     <author>Peter Heiss</author>
-    <version>x.x</version>
+    <version>1.0</version>
     <namespace>RDS</namespace>
     <category>integration</category>
     <dependencies>
@@ -20,6 +20,12 @@
         <admin>https://www.research-data-services.org/doc/getting-started/k8s/</admin>
         <developer>https://www.research-data-services.org/doc/arc42/indroduction/</developer>
     </documentation>
+    <settings>
+        <admin>OCA\RDS\Panels\AdminPanel</admin>
+    </settings>
+     <settings-sections>
+        <admin>OCA\RDS\Panels\AdminSection</admin>
+    </settings-sections>
     <screenshot>https://www.research-data-services.org/images/oc-plugin-view-user-research-context.png</screenshot>
     <screenshot>https://www.research-data-services.org/images/oc-plugin-view-admin.png</screenshot>
 </info>
