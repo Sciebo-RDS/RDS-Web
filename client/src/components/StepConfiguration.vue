@@ -83,7 +83,20 @@ export default {
       return "mdi-checkbox-blank-outline";
     },
   },
+  beforeMount() {
+    function portHas(ports, servicename) {
+      for (const port of ports) {
+        if (port.port === servicename) {
+          return true;
+        }
+      }
+      return false;
+    }
 
+    this.selectedPorts = this.ports.filter((port) =>
+      portHas(this.project.portOut, port.servicename)
+    );
+  },
   methods: {
     filepath(project) {
       if (project.portIn.length > 0) {

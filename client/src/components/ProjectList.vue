@@ -19,7 +19,7 @@
   </v-row>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-expansion-panel-content__wrap {
   padding: 16px 24px 16px !important;
 }
