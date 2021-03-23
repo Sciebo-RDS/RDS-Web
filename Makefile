@@ -45,4 +45,4 @@ test:
 	npm --prefix ./client test && cd server && pipenv run pytest
 
 dev:
-	docker-compose -f owncloud/classic/docker-compose.yml up && sudo chown physicx:physicx owncloud/classic -R
+	docker-compose -f owncloud/classic/docker-compose.yml up; sudo chown physicx:physicx owncloud/classic -R

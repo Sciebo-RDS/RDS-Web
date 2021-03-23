@@ -30,7 +30,7 @@ export default {
             Vue.prototype.auth.loginMethods.push(async function () {
                 try {
                     // eslint-disable-next-line no-undef
-                    let info = (await Vue.prototype.$http.get(OC.generateUrl("/apps/rds/informations"))).data
+                    let info = (await Vue.prototype.$http.get(OC.generateUrl("/apps/rds/informations"))).data.jwt
                     await Vue.prototype.$http.post(`${Vue.config.server}/login`, { informations: info })
                     return true
                 } catch {

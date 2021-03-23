@@ -31,7 +31,7 @@ class HTTPRequest:
         self.url = url
         self.requestList = {}
 
-    def addRequest(self, key, url, method="get", function=None):
+    def addRequest(self, key, url, method="get", function=None, afterFunction=None):
         self.requestList[key] = {
             "url": url,
             "method": method,
@@ -48,30 +48,39 @@ class HTTPRequest:
         if isinstance(data, str):
             data = json.loads(data)
 
+        reqConf = self.requestList[key]
+
+        if reqConf["method"].lower() != "get" and reqConf["function"] is not None and not reqConf["function"].__name__.startswith("refresh"):
+            try:
+                data = reqConf["function"](data)
+            except:
+                pass
+
         try:
             data["userId"] = current_user.userId
         except:
-            data["userId"] = "admin"
+            data["userId"] = os.getenv("DEV_FLASK_USERID")
 
         data["url"] = self.url
-        reqConf = self.requestList[key]
 
         LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         url = reqConf["url"].format(**data)
         LOGGER.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
-            url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True")
+            url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True"
+        )
 
         LOGGER.debug(
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
         response = req.text
-
-        try:
-            response = json.dumps(reqConf["function"](json.loads(req.text)))
-        except:
-            pass
+        if reqConf["method"].lower() == "get" or reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
+            try:
+                response = json.dumps(
+                    reqConf["function"](json.loads(req.text)))
+            except:
+                pass
 
         return store(key, response)
 

@@ -1,6 +1,6 @@
 <?php
 style('rds', array('style', "app"));
-script('rds', array("vue", "app"));
+script('rds', array("app"));
 ?>
 
 <noscript>
@@ -9,6 +9,6 @@ script('rds', array("vue", "app"));
         continue.
     </strong>
 </noscript>
-<div>
+<div id="owncloud-rds-app">
     <div id="app"></div>
 </div>

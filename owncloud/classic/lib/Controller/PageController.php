@@ -136,7 +136,7 @@ class PageController extends Controller
 
             $token = \Firebase\JWT\JWT::encode($data, $this->private_key, 'RS256');
 
-            return $token;
+            return ["jwt" => $token];
         });
     }
 

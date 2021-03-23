@@ -16,6 +16,7 @@ Vue.use(config)
 Vue.use(VueAxios, axios)
 Vue.use(integrations)
 Vue.use(translations)
+Vue.use(store)
 
 Vue.prototype.auth.login()
 

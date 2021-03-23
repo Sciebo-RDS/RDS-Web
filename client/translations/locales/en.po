@@ -10,9 +10,9 @@ msgstr ""
 "Generated-By: easygettext\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:26
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:3
-msgid "(popup)"
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:32
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:9
+msgid "(opens a new window)"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:5
@@ -27,12 +27,12 @@ msgstr ""
 msgid "Add services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:49
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:55
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:47
 msgid "Are you sure?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:67
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:73
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:58
 msgid "Cancel"
 msgstr ""
@@ -74,14 +74,14 @@ msgstr ""
 msgid "Go to projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:25
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:2
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:26
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:3
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:27
 #: /home/physicx/Projects/rds-web/client/src/views/Wizard.vue:49
 msgid "Grant access"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/router/index.js:17
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:16
 msgid "Home"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgid ""
 "          ownCloud account, click the \"revoke button\"."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:46
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:52
 msgid "If you want to reuse this service, you need to add it again."
 msgstr ""
 
@@ -99,12 +99,16 @@ msgstr ""
 msgid "In this card, you manage your access to services via RDS."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/App.vue:112
+#: /home/physicx/Projects/rds-web/client/src/App.vue:124
 msgid "item"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/src/components/ServiceEditor.vue:3
 msgid "Manage your access to services"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/src/views/Projects.vue:13
+msgid "New project"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/src/components/CredentialsInput.vue:72
@@ -115,11 +119,11 @@ msgstr ""
 msgid "Permit RDS to access your ownCloud files."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/router/index.js:24
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:23
 msgid "Projects"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:60
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:66
 msgid "Remove %{ name }"
 msgstr ""
 
@@ -132,7 +136,7 @@ msgstr ""
 msgid "Remove access to RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:37
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:43
 msgid "Remove service"
 msgstr ""
 
@@ -149,7 +153,7 @@ msgstr ""
 msgid "Select All"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:29
+#: /home/physicx/Projects/rds-web/client/src/components/LanguageSelector.vue:28
 msgid "Select language"
 msgstr ""
 
@@ -157,11 +161,11 @@ msgstr ""
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:10
+#: /home/physicx/Projects/rds-web/client/src/components/Overlay.vue:8
 msgid "Service activation in progress"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/router/index.js:31
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:30
 msgid "Settings"
 msgstr ""
 
@@ -189,7 +193,7 @@ msgstr ""
 msgid "This will remove all services from RDS and all projects."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:41
+#: /home/physicx/Projects/rds-web/client/src/components/ServiceCard.vue:47
 msgid "This will remove your access to %{ servicename } from RDS."
 msgstr ""
 
@@ -212,11 +216,11 @@ msgstr ""
 msgid "Wait"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/App.vue:60
+#: /home/physicx/Projects/rds-web/client/src/App.vue:44
 msgid "Wait for login"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/src/router/index.js:38
+#: /home/physicx/Projects/rds-web/client/src/router/index.js:37
 msgid "Wizard"
 msgstr ""
 

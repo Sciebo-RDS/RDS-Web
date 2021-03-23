@@ -20,6 +20,12 @@ socket_blueprint = Blueprint("socket_blueprint", __name__)
 
 def refreshUserServices(data):
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+    return data
+
+
+def refreshProjects(data): 
+    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+    return data
 
 
 url = "https://sciebords-dev2.uni-muenster.de"
@@ -44,10 +50,13 @@ data = {
         ("getAllResearch", "{url}/user/{userId}", "get", parseAllResearch),
         ("getResearch",
          "{url}/user/{userId}/research/{researchId}", "get", parseResearch),
-        ("createResearch", "{url}/user/{userId}", "post"),
-        ("removeAllResearch", "{url}/user/{userId}", "delete"),
+        ("createResearch", "{url}/user/{userId}", "post", refreshProjects),
+        ("saveResearch",
+         "{url}/user/{userId}/research/{researchId}", "post", refreshProjects),
+        ("removeAllResearch", "{url}/user/{userId}",
+         "delete", refreshProjects),
         ("removeResearch",
-         "{url}/user/{userId}/research/{researchId}", "delete"),
+         "{url}/user/{userId}/research/{researchId}", "delete", refreshProjects),
         ("addImport",
          "{url}/user/{userId}/research/{researchId}/imports", "post", parsePortBack),
         ("addExport",
@@ -89,7 +98,7 @@ def exchangeCode(data):
     return req
 
 
-@ socketio.event
+@socketio.event
 def triggerSynchronization(json):
     httpManager.makeRequest("triggerFileSynchronization", data=json)
     httpManager.makeRequest("triggerMetadataSynchronization", data=json)
@@ -97,10 +106,9 @@ def triggerSynchronization(json):
 
 
 def authenticated_only(f):
-    @ functools.wraps(f)
+    @functools.wraps(f)
     def wrapped(*args, **kwargs):
         if not current_user.is_authenticated:
-            logout_user()
             disconnect()
         else:
             return f(*args, **kwargs)
@@ -108,7 +116,7 @@ def authenticated_only(f):
     return wrapped
 
 
-@ socketio.on("connect")
+@socketio.on("connect")
 def connected():
     LOGGER.info("connected")
 
@@ -118,21 +126,26 @@ def connected():
 
         emit("ServiceList", httpManager.makeRequest("getServicesList"))
         emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+        emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+
     else:
         logout_user()
         disconnect()
 
 
-@ socketio.on("disconnect")
+@socketio.on("disconnect")
 def disconnect():
     LOGGER.info("disconnected")
 
-    del clients[current_user.userId]
-    logout_user()
+    try:
+        del clients[current_user.userId]
+        logout_user()
+    except:
+        pass
 
 
-@ socketio.on("sendMessage")
-@ authenticated_only
+@socketio.on("sendMessage")
+@authenticated_only
 def handle_message(jsonData):
     LOGGER.info("got {}".format(jsonData))
     emit("getMessage", {"message": jsonData["message"][::-1]}, json=True)

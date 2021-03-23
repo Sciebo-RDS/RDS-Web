@@ -35,11 +35,10 @@ req = requests.get(
         os.getenv("OWNCLOUD_URL",
                   "https://10.14.29.60/owncloud/index.php")
     ),
-    verify=False,
+    verify=os.getenv("VERIFY_SSL", "False") == "True"
 ).json()
 
-publickey = req["publickey"].replace("\\n", "\n")
-
+publickey = req.get("publickey", "").replace("\\n", "\n")
 
 
 def proxy(host, path):
@@ -57,28 +56,27 @@ class User(UserMixin):
 
         if userId is None:
             headers = {
-                "Requesttoken": token,
-                "requesttoken": token,
-                "OCS-APIREQUEST": "True",
-                "Authorization": f"token {token}"
+                "Authorization": f"Bearer {token}"
             }
-            LOGGER.debug(headers)
 
             req = requests.get(
-                "{}/ocs/v2.php/cloud/user?format=json".format(
+                "{}/apps/rds/informations".format(
                     os.getenv("OWNCLOUD_URL",
                               "https://10.14.29.60/owncloud/index.php")
                 ),
                 headers=headers,
-                verify=False,
+                verify=os.getenv("VERIFY_SSL", "False") == "True",
             )
 
-            LOGGER.debug(req.text)
-
             if req.status_code == 200:
-                data = req.get_json(force=True)["ocs"]["data"]
+                text = req.json()["jwt"]
 
-                self.userId = data["id"]
+                data = jwt.decode(
+                    text, publickey, algorithms=["RS256"]
+                )
+                LOGGER.debug(data)
+
+                self.userId = data["username"]
                 return
             raise ValueError
 
@@ -97,15 +95,12 @@ def informations():
 @ app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        if current_user.is_authenticated:
-            return "", 200
-        else:
-            "", 401
+        return ("", 200) if current_user.is_authenticated else ("", 401)
 
     header = request.headers
 
     reqData = request.get_json(force=True)
-    if "informations" in reqData:
+    if publickey != "":
         decoded = jwt.decode(
             reqData["informations"], publickey, algorithms=["RS256"]
         )
@@ -120,6 +115,7 @@ def login():
 
     if "Authorization" in header:
         try:
+            # TODO: Add check for auth token against owncloud web
             user = User(
                 id=uuid.uuid4(), token=header["Authorization"].replace("Bearer ", "").replace("token ", "")
             )
@@ -148,7 +144,6 @@ def logout():
 @app.route("/", defaults={"path": "index.html"})
 @app.route("/<path:path>")
 def index(path):
-    LOGGER.debug(request.path)
     if development_mode and os.getenv("VUE_APP_SKIP_REDIRECTION", "False") == "True":
         LOGGER.debug("skip authentication")
         user = User(
@@ -158,13 +153,15 @@ def index(path):
         login_user(user)
         return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
-    if "access_token" in request.args:
+    try:
         user = User(
-            id=uuid.uuid4(), token=request.args["access_token"]
+            id=uuid.uuid4(), token=request.values["access_token"]
         )
         user_store[user.get_id()] = user
         login_user(user)
         return redirect("/")
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
 
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:

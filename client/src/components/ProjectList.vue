@@ -1,13 +1,16 @@
 <template>
   <v-row justify="center">
     <v-expansion-panels inset focusable>
-      <v-expansion-panel v-for="(project, i) in projects" :key="i">
+      <v-expansion-panel
+        v-for="project in filteredProjects"
+        :key="project.researchId"
+      >
         <v-expansion-panel-header>
-          Project {{ project.researchId + 1 }}
+          Project {{ project.researchIndex + 1 }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <ProjectSetting
-            @delete-project="$emit('delete-project', project.researchId)"
+            @delete-project="$emit('delete-project', project.researchIndex)"
             :project="project"
           />
         </v-expansion-panel-content>
@@ -32,6 +35,11 @@ import ProjectSetting from "./ProjectSetting";
 export default {
   components: {
     ProjectSetting,
+  },
+  computed: {
+    filteredProjects() {
+      return this.projects.filter((project) => project.status < 4);
+    },
   },
   props: {
     projects: Array,

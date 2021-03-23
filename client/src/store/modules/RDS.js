@@ -3,7 +3,7 @@ const getDefaultState = () => {
         lastMessage: "",
         userservicelist: [],
         servicelist: [],
-        researchlist: []
+        projectlist: []
     }
 }
 
@@ -14,12 +14,12 @@ export default {
     getters: {
         getUserServiceList: (state) => state.userservicelist,
         getServiceList: (state) => state.servicelist,
-        getResearchList: (state) => state.researchlist
+        getProjectlist: (state) => state.projectlist
     },
     mutations: {
         setUserServiceList: (state, payload) => { state.userservicelist = payload.servicelist },
         setServiceList: (state, payload) => { state.servicelist = payload.servicelist },
-        setResearchList: (state, payload) => { state.researchlist = payload.researchlist }
+        setProjectList: (state, payload) => { state.projectlist = payload.projectlist }
     },
     actions: {
         SOCKET_UserServiceList(context, state) {
@@ -35,10 +35,21 @@ export default {
                 })
             })
         },
-        SOCKET_ResearchList(context, state) {
-            context.commit('setResearchList', {
-                researchlist: state.list
+        SOCKET_ProjectList(context, state) {
+            context.commit('setProjectList', {
+                projectlist: JSON.parse(state)
             })
+        },
+        createProject() {
+            this._vm.$socket.client.emit("createResearch");
+        },
+        saveProject(context, data) {
+            data.researchId = data.id
+            this._vm.$socket.client.emit("saveResearch", data);
+        },
+        removeProject(context, data) {
+            data.researchId = data.id
+            this._vm.$socket.client.emit("removeResearch", data);
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {
@@ -50,9 +61,9 @@ export default {
                 context.dispatch("SOCKET_ServiceList", { list: response })
             });
         },
-        requestResearchList(context) {
+        requestProjectList(context) {
             this._vm.$socket.client.emit("getAllResearch", (response) => {
-                context.dispatch("SOCKET_ResearchList", { list: JSON.parse(response) })
+                context.dispatch("SOCKET_ProjectList", { list: JSON.parse(response) })
             });
         },
         exchangeCode(context, data) {

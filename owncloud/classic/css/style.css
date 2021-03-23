@@ -9,3 +9,8 @@
 .icon-rds-research-white {
   background-image: url("../img/research-white.svg");
 }
+
+
+#owncloud-rds-app .v-navigation-drawer {
+  padding-top: 45px;
+}

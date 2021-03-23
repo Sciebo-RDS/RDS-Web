@@ -11,7 +11,7 @@
         <v-toolbar-title></v-toolbar-title>
       </v-app-bar>
 
-      <v-navigation-drawer v-model="drawer" app bottom>
+      <v-navigation-drawer id="v-navigation-drawer" v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
           <v-container>
             <v-row no-gutters align="center">
