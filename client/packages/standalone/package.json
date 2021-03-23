@@ -1,0 +1,8 @@
+{
+    "name": "standalone",
+    "version": "1.0.0",
+  
+    "dependencies": {
+      "codebase": "1.0.0"
+    }
+  }

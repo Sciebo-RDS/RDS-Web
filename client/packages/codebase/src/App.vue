@@ -96,6 +96,7 @@ import { mapGetters } from "vuex";
 import overlay from "./components/Overlay.vue";
 
 export default {
+  name: "App",
   props: {
     server: { type: String, default: null },
   },

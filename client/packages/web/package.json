@@ -1,11 +1,14 @@
 {
-  "name": "extension",
+  "name": "web",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "build": "rollup -c",
     "serve": "DEV=true rollup -c -w"
+  },
+  "dependencies": {
+    "codebase": "1.0.0"
   },
   "devDependencies": {
     "rollup": "^2.41.5",

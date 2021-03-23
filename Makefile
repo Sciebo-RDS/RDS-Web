@@ -1,6 +1,7 @@
 install:
 	apt install gettext
 	cd client
+	npm install -g yarn
 	npm --prefix ./client install
 	npm --prefix ./client install --only=dev
 
@@ -23,26 +24,26 @@ lint:
 	pipenv run black .
 
 build:
-	npm --prefix ./client run build
+	yarn --prefix ./client workspaces build
 
 buildweb:
 	npm --prefix ./client run ocweb
-	cat client/dist/app.css >> owncloud/web/src/app.css
-	cat client/dist/app.umd.min.js >> owncloud/web/src/app.umd.min.js
+	cat client/dist/app.css >> client/packages/web/src/app.css
+	cat client/dist/app.umd.min.js >> client/packages/web/src/app.umd.min.js
 
 buildoc:
-	sudo chown physicx:physicx owncloud/classic -R
+	sudo chown physicx:physicx client/packages/classic -R
 	npm --prefix ./client run occlassic
-	echo '$$(function () {' > owncloud/classic/js/app.js
-	cat client/dist/js/app.js >> owncloud/classic/js/app.js
-	cat client/dist/css/app.css >> owncloud/classic/css/app.css
+	echo '$$(function () {' > client/packages/classic/js/app.js
+	cat client/packages/classic/dist/js/app.js >> client/packages/classic/js/app.js
+	cat client/dist/css/app.css >> client/packages/classic/css/app.css
 	echo "});" >> owncloud/classic/js/app.js
 
 hotreload:
-	tmux new-session "cd client && while true; do npm run serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;  
+	tmux new-session "cd client && while true; do yarn workspace codebase run serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;  
 
 test:
-	npm --prefix ./client test && cd server && pipenv run pytest
+	npm --cwd ./client test && cd server && pipenv run pytest
 
 dev:
-	docker-compose -f owncloud/classic/docker-compose.yml up; sudo chown physicx:physicx owncloud/classic -R
+	docker-compose -f client/dev/docker-compose.yml up

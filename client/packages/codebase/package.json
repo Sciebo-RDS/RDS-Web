@@ -1,19 +1,15 @@
 {
-  "name": "rds",
-  "version": "0.1.0",
+  "name": "codebase",
+  "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "sideEffects": false,
   "scripts": {
-    "serve": "yarn workspace codebase run serve",
-    "build": "yarn workspaces build",
-    "standalone": "yarn workspace standalone run build",
-    "classic": "yarn workspace classic run build",
-    "web": "yarn workspace web run build",
-    "test:unit": "yarn workspace codebase run test --setupTestFrameworkScriptFile=./tests/setup.js",
+    "serve": "vue-cli-service serve --port 8085",
+    "build": "vue-cli-service build --mode production src/build.js",
+    "test:unit": "vue-cli-service test:unit --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",
+    "localize-compile": "vue-gettext-cli compile --locales en de --combined",
+    "localize-extract": "vue-gettext-cli extract --locales en de",
     "test": "npm run test:unit"
   },
   "dependencies": {

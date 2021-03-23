@@ -14,6 +14,7 @@ export default {
   }),
   methods: {
     sayHi() {
+      this.showMe();
       this.isMsgDisplayed = true;
     },
   },

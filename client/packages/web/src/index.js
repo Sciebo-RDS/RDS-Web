@@ -1,8 +1,11 @@
 import App from "./App.vue"
+import test from "./plugins/test"
 
 function $gettext(msg) {
     return msg
 }
+
+Vue.use(test)
 
 const appInfo = {
     name: "Hello World",
