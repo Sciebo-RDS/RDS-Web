@@ -1,5 +1,5 @@
 <?php
-style('rds', array('style', "app"));
+style('rds', array('style', "css", "app"));
 script('rds', array("app"));
 ?>
 
