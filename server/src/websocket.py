@@ -18,14 +18,12 @@ LOGGER = logging.getLogger()
 socket_blueprint = Blueprint("socket_blueprint", __name__)
 
 
-def refreshUserServices(data):
+def refreshUserServices():
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
-    return data
 
 
-def refreshProjects(data): 
+def refreshProjects():
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-    return data
 
 
 url = "https://sciebords-dev2.uni-muenster.de"

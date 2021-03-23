@@ -75,12 +75,15 @@ class HTTPRequest:
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
         response = req.text
-        if reqConf["method"].lower() == "get" or reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
+        if reqConf["method"].lower() == "get":
             try:
                 response = json.dumps(
                     reqConf["function"](json.loads(req.text)))
             except:
                 pass
+
+        if reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
+            reqConf["function"]()
 
         return store(key, response)
 
