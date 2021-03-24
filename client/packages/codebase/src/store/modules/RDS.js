@@ -51,6 +51,14 @@ export default {
             data.researchId = data.id
             this._vm.$socket.client.emit("removeResearch", data);
         },
+        addPortOut(context, data) {
+            data.researchId = data.id
+            this._vm.$socket.client.emit("addExport", data)
+        },
+        removePortOut(context, data) {
+            data.researchId = data.id
+            this._vm.$socket.client.emit("removeExport", data)
+        },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {
                 context.dispatch("SOCKET_UserServiceList", { list: response })

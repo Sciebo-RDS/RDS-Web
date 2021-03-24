@@ -116,6 +116,46 @@ export default {
     alert(msg) {
       alert(msg);
     },
+    savePorts(research) {
+      function filterPortsWhichNotContained(ports, filterports) {
+        let ports = [];
+        for (const port of ports) {
+          let found = false;
+          for (const newPort of filterports) {
+            if (port.port == newPort.port) {
+              found = true;
+            }
+          }
+          if (!found) {
+            ports.push(port);
+          }
+        }
+      }
+
+      function applyFnOnPorts(ports, fn) {
+        for (const port of ports) {
+          fn(research, port);
+        }
+      }
+
+      applyFnOnPorts(
+        filterPortsWhichNotContained(research.portOut, this.selectedPorts),
+        this.removePort
+      );
+
+      applyFnOnPorts(
+        filterPortsWhichNotContained(this.selectedPorts, research.portOut),
+        this.addPort
+      );
+    },
+    addPort(research, port) {
+      port.researchId = research.researchIndex;
+      this.$store.dispatch("addPortOut", port);
+    },
+    removePort(research, port) {
+      port.researchId = research.researchIndex;
+      this.$store.dispatch("removePortOut", port);
+    },
   },
   props: ["project"],
 };
