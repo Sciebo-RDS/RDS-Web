@@ -1,4 +1,4 @@
-import App from "./App.vue"
+import { App } from "codebase"
 import test from "./plugins/test"
 
 function $gettext(msg) {

@@ -4,7 +4,7 @@ import Projects from "@/views/Projects.vue"
 import Settings from "@/views/Settings.vue"
 import Wizard from "@/views/Wizard.vue"
 
-const routes = [
+let routes = [
   {
     path: '/',
     name: "Home",
@@ -53,6 +53,7 @@ export default {
     })
 
     Vue.prototype.$routers = router
+    routes.router = router
   },
   routes
 }

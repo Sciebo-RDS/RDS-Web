@@ -5,6 +5,6 @@
         "codebase": "1.0.0"
     },
     "scripts": {
-        "build": "vue-cli-service build --mode production --name rds"
+        "build": "vue-cli-service build --mode production --name rds && cp -ru php dist"
     }
 }
