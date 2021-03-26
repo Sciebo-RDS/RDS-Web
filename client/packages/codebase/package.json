@@ -1,8 +1,9 @@
 {
-  "name": "codebase",
+  "name": "@rds/codebase",
   "version": "1.0.0",
   "private": true,
   "sideEffects": false,
+  "main": "src/main.js",
   "scripts": {
     "test:unit": "vue-cli-service test:unit --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",

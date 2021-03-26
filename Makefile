@@ -39,11 +39,37 @@ buildoc:
 	cat client/dist/css/app.css >> client/packages/classic/css/app.css
 	echo "});" >> owncloud/classic/js/app.js
 
-hotreload:
-	tmux new-session "cd client && while true; do yarn workspace codebase run serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;  
-
 test:
-	npm --cwd ./client test && cd server && pipenv run pytest
+	npm --prefix ./client test && cd server && pipenv run pytest
 
-dev:
-	docker-compose -f client/dev/docker-compose.yml up
+web:
+	yarn --cwd ./client workspace web run build
+	cp -ru ./client/packages/web/dist ./client/dev/web
+	@tmux new-session -d -s ocis "cd ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
+		 split-window -h "yarn --cwd web serve"\;\
+		 split-window -h "yarn --cwd extension serve"
+	@echo "Wait 20s for server startup to kill web"
+	@sleep 20
+	@tmux new-session -d "cd ocis/ocis && go run cmd/ocis/main.go kill web"
+	@echo "Done. Open https://localhost:9200 with your browser."
+	@echo 'If you want to close the server, execute "make stop" and close everything.'
+
+classic:
+	yarn --cwd ./client workspace classic run build
+	cp -ru ./client/packages/classic/dist ./client/packages/classic/php
+	docker-compose -f client/dev/docker-compose.yml up -d
+	tmux new-session -d -s classic "cd server && while true; do pipenv run python starter.py; done" \;
+
+standalone:
+	docker-compose -f client/dev/docker-compose.yml up -d
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
+	@echo Wait for 20 Seconds to boot everything up.
+	@sleep 20
+	docker exec -it dev_owncloud_1 /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
+	@echo Start on http://localhost:8080
+
+stop:
+	docker-compose -f client/dev/docker-compose.yml down
+	tmux kill-session -t ocis || true
+	tmux kill-session -t classic || true
+	tmux kill-session -t standalone || true

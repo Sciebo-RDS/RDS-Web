@@ -17,7 +17,7 @@
             <v-row no-gutters align="center">
               <v-col>
                 <v-avatar class="mb-4" color="green darken-3" size="64">
-                  <v-img src="@/assets/sciebo.png" />
+                  <v-img :src="require('./assets/sciebo.png')" />
                 </v-avatar>
               </v-col>
               <v-col>
@@ -112,7 +112,6 @@ export default {
   data() {
     return {
       drawer: null,
-      views: this.$router.options.routes,
       model: null,
       overlayText: null,
     };
@@ -124,8 +123,12 @@ export default {
       isDarkMode: "isDarkMode",
       getLanguage: "getLanguage",
     }),
+    views() {
+      return this.$router.options.routes;
+    },
   },
   beforeCreate() {
+    this.auth.login();
     if (!this.$store.getters.isWizardFinished) {
       this.$router.push({ name: "Wizard" });
     }

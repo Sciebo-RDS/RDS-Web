@@ -1,4 +1,4 @@
-import { App } from "codebase"
+import { App } from "@rds/codebase"
 import test from "./plugins/test"
 
 function $gettext(msg) {

@@ -1,8 +1,8 @@
 {
-    "name": "classic",
+    "name": "@rds/classic",
     "version": "1.0.0",
     "dependencies": {
-        "codebase": "1.0.0"
+        "codebase": "*"
     },
     "scripts": {
         "build": "vue-cli-service build --mode production --name rds && cp -ru php dist"

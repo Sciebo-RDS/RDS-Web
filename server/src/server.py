@@ -155,7 +155,8 @@ def index(path):
 
     try:
         user = User(
-            id=uuid.uuid4(), token=request.values["access_token"]
+            id=uuid.uuid4(),
+            token=request.args["access_token"]
         )
         user_store[user.get_id()] = user
         login_user(user)

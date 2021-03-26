@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@rds/web",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "serve": "DEV=true rollup -c -w"
   },
   "dependencies": {
-    "codebase": "1.0.0"
+    "codebase": "*"
   },
   "devDependencies": {
     "rollup": "^2.41.5",

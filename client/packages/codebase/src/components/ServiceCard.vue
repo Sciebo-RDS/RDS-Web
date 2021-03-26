@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import CredentialsInput from "@/components/CredentialsInput";
+import CredentialsInput from "./CredentialsInput";
 
 export default {
   components: { CredentialsInput },

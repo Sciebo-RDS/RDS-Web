@@ -7,7 +7,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "serve": "yarn workspace codebase run serve",
+    "serve": "yarn workspace @rds/standalone run serve",
     "build": "yarn workspaces build",
     "standalone": "yarn workspace standalone run build",
     "classic": "yarn workspace classic run build",

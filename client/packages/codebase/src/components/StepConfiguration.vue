@@ -118,7 +118,7 @@ export default {
     },
     savePorts(research) {
       function filterPortsWhichNotContained(ports, filterports) {
-        let ports = [];
+        let distinctPorts = [];
         for (const port of ports) {
           let found = false;
           for (const newPort of filterports) {
@@ -127,9 +127,10 @@ export default {
             }
           }
           if (!found) {
-            ports.push(port);
+            distinctPorts.push(port);
           }
         }
+        return distinctPorts;
       }
 
       function applyFnOnPorts(ports, fn) {

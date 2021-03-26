@@ -1,8 +1,8 @@
 import VueRouter from 'vue-router'
-import Home from "@/views/Home.vue"
-import Projects from "@/views/Projects.vue"
-import Settings from "@/views/Settings.vue"
-import Wizard from "@/views/Wizard.vue"
+import Home from "../views/Home.vue"
+import Projects from "../views/Projects.vue"
+import Settings from "../views/Settings.vue"
+import Wizard from "../views/Wizard.vue"
 
 let routes = [
   {
@@ -45,7 +45,7 @@ export default {
 
     for (let index = 0; index < routes.length; index++) {
       const route = routes[index];
-      route.title = titles[Home];
+      route.title = titles[route.name];
     }
 
     const router = new VueRouter({
@@ -53,7 +53,6 @@ export default {
     })
 
     Vue.prototype.$routers = router
-    routes.router = router
   },
   routes
 }

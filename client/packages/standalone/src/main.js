@@ -1,23 +1,22 @@
-import { App, config, integrations, translations, store, routes } from "codebase"
-
+import rds from "@rds/codebase"
 import Vue from 'vue'
-import vuetify from './plugins/vuetify';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuex from 'vuex';
 
+Vue.use(rds)
 Vue.use(Vuex)
-Vue.use(config)
 Vue.use(VueAxios, axios)
-Vue.use(integrations)
-Vue.use(translations)
-Vue.use(store)
+Vue.use(rds.integrations)
+Vue.use(rds.translations)
+Vue.use(rds.store)
 
-Vue.prototype.auth.login()
-
-Vue.use(customMethods)
-let router = routes.router
+const routes = rds.routes
+const store = rds.store
+const vuetify = rds.vuetify
+const App = rds.App
 Vue.use(routes)
+const router = Vue.prototype.$routers
 
 new Vue({
     router,
