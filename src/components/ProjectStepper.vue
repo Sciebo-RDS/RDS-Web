@@ -97,6 +97,15 @@
   </v-stepper>
 </template>
 
+<style scoped>
+/*.v-stepper__header {
+  box-shadow: none;
+} 
+.v-stepper {
+  box-shadow: none;
+}*/
+</style>
+
 <script>
 import StepConfiguration from "./StepConfiguration"
 import StepPublish from "./StepPublish"
