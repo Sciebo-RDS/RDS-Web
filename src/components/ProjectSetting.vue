@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- white in production-->
-        <v-container class="grey lighten-5">
+        <v-container class="white">
             <v-row>
                 <v-col>
                     <ProjectStepper :project="project" />
@@ -10,7 +10,7 @@
             
             <v-row align-content="end" justify="space-around">
                 <v-col cols="auto" class="mr-auto"/>
-                <v-col cols="auto">
+                <v-col v-if="project.status != '3' && project.status != '4'" cols="auto">
                     <v-btn tile color="error" @click="onDelete(project.researchId)">delete project</v-btn>
                 </v-col>
             </v-row>
