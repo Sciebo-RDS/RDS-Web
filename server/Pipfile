@@ -12,6 +12,7 @@ python-dotenv = "*"
 jwt = "*"
 flask-cors = "*"
 pyjwt = "*"
+flask-session = "*"
 
 [dev-packages]
 black = "==20.8b1"

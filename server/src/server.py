@@ -20,7 +20,7 @@ import uuid
 import os
 import jwt
 
-CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")))
+CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -95,36 +95,44 @@ def informations():
 @ app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return ("", 200) if current_user.is_authenticated else ("", 401)
-
-    header = request.headers
+        return ("", 200) if (current_user.is_authenticated) else ("", 401)
 
     reqData = request.get_json(force=True)
+    LOGGER.debug("reqdata: {}".format(reqData))
+
+    user = None
     if publickey != "":
-        decoded = jwt.decode(
-            reqData["informations"], publickey, algorithms=["RS256"]
-        )
+        try:
+            decoded = jwt.decode(
+                reqData["informations"], publickey, algorithms=["RS256"]
+            )
 
-        user = User(
-            id=uuid.uuid4(), userId=decoded["username"]
-        )
-        user_store[user.get_id()] = user
-        login_user(user)
+            user = User(
+                id=uuid.uuid4(),
+                userId=decoded["username"]
+            )
+        except Exception as e:
+            LOGGER.error(e, exc_info=True)
 
-        return "", 200
-
-    if "Authorization" in header:
+    if "Authorization" in request.headers:
         try:
             # TODO: Add check for auth token against owncloud web
             user = User(
-                id=uuid.uuid4(), token=header["Authorization"].replace("Bearer ", "").replace("token ", "")
+                id=uuid.uuid4(),
+                token=request.headers["Authorization"].replace(
+                    "Bearer ", "").replace("token ", "")
             )
-            user_store[user.get_id()] = user
-            login_user(user)
-
-            return "", 200
         except Exception as e:
             LOGGER.error(e, exc_info=True)
+
+    if user is not None:
+        user_store[user.get_id()] = user
+        login_user(user)
+        LOGGER.info("logged? {}".format(current_user.is_authenticated))
+
+        LOGGER.debug(user_store)
+
+        return "", 201
 
     return "", 401
 

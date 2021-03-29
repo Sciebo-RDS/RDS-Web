@@ -8,11 +8,16 @@
     "serve": "DEV=true rollup -c -w"
   },
   "dependencies": {
-    "codebase": "*"
+    "@rds/codebase": "*"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
+    "@rollup/plugin-image": "^2.0.6",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.1",
     "rollup": "^2.41.5",
     "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-styles": "^3.14.1",
     "rollup-plugin-vue": "5",
     "vue-template-compiler": "^2.6.12"
   }

@@ -7,7 +7,6 @@ import Vuex from 'vuex';
 Vue.use(rds)
 Vue.use(Vuex)
 Vue.use(VueAxios, axios)
-Vue.use(rds.integrations)
 Vue.use(rds.translations)
 Vue.use(rds.store)
 

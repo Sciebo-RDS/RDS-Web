@@ -30,7 +30,7 @@
 </style>
 
 <script>
-import ProjectSetting from "./ProjectSetting";
+import ProjectSetting from "./ProjectSetting.vue";
 
 export default {
   components: {

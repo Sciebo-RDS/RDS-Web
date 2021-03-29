@@ -74,7 +74,7 @@ data = {
 httpManager = parseDict(data, socketio=socketio)
 
 
-def exchangeCode(data):
+def exchangeCodeData(data):
     body = {
         'servicename': "port-owncloud",
         'code': data["code"],
@@ -96,16 +96,16 @@ def exchangeCode(data):
     return req
 
 
-@socketio.event
-def triggerSynchronization(json):
-    httpManager.makeRequest("triggerFileSynchronization", data=json)
-    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
-    httpManager.makeRequest("finishResearch", data=json)
-
-
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
+        LOGGER.info("logged? {}, {}, {}".format(
+            current_user.is_authenticated, args, kwargs))
+
+        emit("LoginStatus", json.dumps({
+            "status": current_user.is_authenticated
+        }))
+
         if not current_user.is_authenticated:
             disconnect()
         else:
@@ -114,21 +114,23 @@ def authenticated_only(f):
     return wrapped
 
 
+@socketio.event("triggerSynchronization")
+@authenticated_only
+def triggerSynchronization(json):
+    httpManager.makeRequest("triggerFileSynchronization", data=json)
+    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
+    httpManager.makeRequest("finishResearch", data=json)
+
+
 @socketio.on("connect")
+@authenticated_only
 def connected():
-    LOGGER.info("connected")
+    current_user.websocketId = request.sid
+    clients[current_user.userId] = current_user
 
-    if current_user.is_authenticated:
-        current_user.websocketId = request.sid
-        clients[current_user.userId] = current_user
-
-        emit("ServiceList", httpManager.makeRequest("getServicesList"))
-        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
-        emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-
-    else:
-        logout_user()
-        disconnect()
+    emit("ServiceList", httpManager.makeRequest("getServicesList"))
+    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
 
 @socketio.on("disconnect")
@@ -136,10 +138,11 @@ def disconnect():
     LOGGER.info("disconnected")
 
     try:
-        del clients[current_user.userId]
-        logout_user()
-    except:
-        pass
+        LOGGER.debug("LOGOUT")
+        #logout_user()
+        #del clients[current_user.userId]
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
 
 
 @socketio.on("sendMessage")
@@ -180,7 +183,7 @@ def credentials(jsonData):
 def exchangeCode(jsonData):
     jsonData = json.loads(jsonData)
 
-    req = exchangeCode(jsonData)
+    req = exchangeCodeData(jsonData)
     LOGGER.debug(req.text)
 
     # update userserviceslist on client

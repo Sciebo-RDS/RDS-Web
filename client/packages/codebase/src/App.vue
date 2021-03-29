@@ -24,7 +24,7 @@
                 <div
                   :class="[
                     'text-h6',
-                    auth.loggedIn ? 'primary--text' : 'error--text',
+                    $socket.connected ? 'primary--text' : 'error--text',
                   ]"
                   v-text="'Sciebo RDS'"
                 />

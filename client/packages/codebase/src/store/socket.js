@@ -10,7 +10,8 @@ export default {
             reconnectionDelay: 3000,
             maxReconnectionAttempts: Infinity,
             transports: ["websocket"],
-            autoConnect: false
+            autoConnect: false,
+            withCredentials: true
         });
 
         Vue.use(VueSocketIO, ioInstance, {

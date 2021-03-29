@@ -9,10 +9,10 @@
   "scripts": {
     "serve": "yarn workspace @rds/standalone run serve",
     "build": "yarn workspaces build",
-    "standalone": "yarn workspace standalone run build",
-    "classic": "yarn workspace classic run build",
-    "web": "yarn workspace web run build",
-    "test:unit": "yarn workspace codebase run test --setupTestFrameworkScriptFile=./tests/setup.js",
+    "standalone": "yarn workspace @rds/standalone run build",
+    "classic": "yarn workspace @rds/classic run build",
+    "web": "yarn workspace @rds/web run build",
+    "test:unit": "yarn workspace @rds/codebase run test --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",
     "test": "npm run test:unit"
   },

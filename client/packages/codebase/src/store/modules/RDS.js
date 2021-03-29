@@ -1,6 +1,5 @@
 const getDefaultState = () => {
     return {
-        lastMessage: "",
         userservicelist: [],
         servicelist: [],
         projectlist: []

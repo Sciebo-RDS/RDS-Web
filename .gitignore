@@ -31,3 +31,4 @@ dist
 vendor
 owncloud/web/ocis
 owncloud/web/web
+flask_session

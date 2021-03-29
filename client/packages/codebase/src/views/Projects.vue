@@ -38,7 +38,7 @@
 
 <script>
 /*import Header from '../components/Header'*/
-import ProjectList from "../components/ProjectList";
+import ProjectList from "../components/ProjectList.vue";
 import { mapGetters } from "vuex";
 
 export default {

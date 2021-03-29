@@ -105,7 +105,7 @@
 
 <script>
 import { mapState } from "vuex";
-import CredentialsInput from "../components/CredentialsInput";
+import CredentialsInput from "../components/CredentialsInput.vue";
 
 export default {
   data: () => ({

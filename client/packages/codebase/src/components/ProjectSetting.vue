@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ProjectStepper from "./ProjectStepper"
+import ProjectStepper from "./ProjectStepper.vue"
 export default {
     components: {
         ProjectStepper

@@ -33,7 +33,7 @@ export default {
                     } else {
                         if (!Vue.config.skipRedirect) {
                             if (Vue.config.redirectUrl === undefined) {
-                                Vue.$http.get("/informations").then((response) => {
+                                Vue.$http.get(`${Vue.config.server}/informations`).then((response) => {
                                     Vue.config.redirectUrl = response.redirectUrl
                                     Vue.prototype.$config.redirectUrl = Vue.config.redirectUrl
                                     window.location = Vue.config.redirectUrl

@@ -3,7 +3,6 @@ import requests
 import os
 import json
 from flask_login import current_user
-from .app import store, cache
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -85,7 +84,7 @@ class HTTPRequest:
         if reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
             reqConf["function"]()
 
-        return store(key, response)
+        return response
 
 
 class HTTPManager:
