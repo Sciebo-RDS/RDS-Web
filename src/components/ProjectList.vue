@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-      <v-expansion-panels inset focusable>
+      <v-expansion-panels inset focusable multiple v-model="panel">
       <v-expansion-panel
         v-for="(project,i) in projects"
         :key="i"
@@ -39,12 +39,15 @@ import ProjectSetting from './ProjectSetting'
 import ProjectStatusChip from './ProjectStatusChip'
 
 export default {
+  data () {
+  },
   components: {
     ProjectSetting,
     ProjectStatusChip
     },
     props: {
       projects: Array,
+      panel: Array
     },
     methods: {
     }

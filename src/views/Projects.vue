@@ -1,7 +1,31 @@
 <template>
   <v-main style="padding: 0px">
-    <ProjectList @delete-project="deleteProject" :projects="projects"  />
+    <ProjectList @delete-project="deleteProject" :projects="projects" :panel="panel" />
     <!-- put this into its own component -->
+    <v-card-text style="position: fixed; z-index: 1000; bottom: 70px; width: auto; right: 5px;">
+        <v-fab-transition>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-show="true"
+              color="error"
+              dark
+              absolute
+              top
+              right
+              fab
+              @click="collapseProjects"
+              v-bind="attrs"
+              v-on="on"
+            >
+          
+            <v-icon>mdi-arrow-collapse</v-icon>
+          </v-btn>
+          </template>
+            <span><translate>Collapse all</translate></span>
+        </v-tooltip>
+        </v-fab-transition>
+      </v-card-text>
     <v-card-text style="position: fixed; z-index: 1000; bottom: 5px; width: auto; right: 5px;">
         <v-fab-transition>
           <v-tooltip top>
@@ -121,6 +145,7 @@ export default {
         userId: "admin",
       },
     ],
+    panel: []
   }),
   methods: {
     deleteProject(id) {
@@ -156,6 +181,9 @@ export default {
         status: 4,
         userId: "admin",
       })
+      },
+      collapseProjects () {
+        this.panel = [];
       }
     },
 };
