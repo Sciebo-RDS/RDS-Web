@@ -5,7 +5,14 @@
         v-for="(project,i) in projects"
         :key="i"
         >
-        <v-expansion-panel-header> Project {{ project.researchId+1 }} </v-expansion-panel-header>
+        <v-expansion-panel-header> 
+        <v-row>
+          <v-col cols="auto">
+          Project {{ project.researchId+1 }}
+          </v-col>
+          <ProjectStatusChip v-bind:status="project.status"/>
+          </v-row>
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <ProjectSetting @delete-project="$emit('delete-project', project.researchId)" :project=project></ProjectSetting>
         </v-expansion-panel-content>
@@ -29,10 +36,12 @@
 
 <script>
 import ProjectSetting from './ProjectSetting'
+import ProjectStatusChip from './ProjectStatusChip'
 
 export default {
   components: {
-    ProjectSetting
+    ProjectSetting,
+    ProjectStatusChip
     },
     props: {
       projects: Array,

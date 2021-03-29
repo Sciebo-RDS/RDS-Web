@@ -64,7 +64,7 @@ export default {
         ],
         researchId: 0,
         researchIndex: 0,
-        status: 1,
+        status: 3,
         userId: "admin",
       },
       {
@@ -89,7 +89,7 @@ export default {
         ],
         researchId: 1,
         researchIndex: 1,
-        status: 1,
+        status: 0,
         userId: "admin",
       },
       {
@@ -153,7 +153,7 @@ export default {
         ],
         researchId: this.projects.length,
         researchIndex: 0,
-        status: 1,
+        status: 4,
         userId: "admin",
       })
       }
