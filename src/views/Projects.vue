@@ -1,7 +1,16 @@
 <template>
   <v-main style="padding: 0px">
-    <ProjectList @delete-project="deleteProject" :projects="projects" :panel="panel" />
-    <!-- put this into its own component -->
+    <!-- move this into header bar-->
+    <v-layout column align-end wrap>
+    <v-switch
+      v-model="showAll"
+      inset
+      label="show past projects"
+    ></v-switch>
+    </v-layout>
+    <ProjectList v-if="this.showAll" @delete-project="deleteProject" :projects="projects" :panel="panel" />
+    <ProjectList v-else @delete-project="deleteProject" :projects="activeProjects" :panel="panel" />
+    <!-- put these into their own components -->
     <v-card-text style="position: fixed; z-index: 1000; bottom: 70px; width: auto; right: 5px;">
         <v-fab-transition>
           <v-tooltip top>
@@ -145,8 +154,14 @@ export default {
         userId: "admin",
       },
     ],
-    panel: []
+    panel: [],
+    showAll: false
   }),
+  computed: {
+    activeProjects() {
+      return this.projects.filter( project => project.status < 3);
+    }
+  },
   methods: {
     deleteProject(id) {
       this.projects = this.projects.filter((projects) => projects.researchId !== id)
@@ -184,7 +199,7 @@ export default {
       },
       collapseProjects () {
         this.panel = [];
-      }
+      },
     },
 };
 </script>
