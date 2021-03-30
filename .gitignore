@@ -21,3 +21,14 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+/.env
+.env.production
+
+.pytest_cache
+responses.json
+dist
+
+vendor
+owncloud/web/ocis
+owncloud/web/web
+flask_session

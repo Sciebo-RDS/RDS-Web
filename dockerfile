@@ -1,16 +1,24 @@
 FROM node:15.8-alpine3.10 AS web
-RUN apk add gettext make
+WORKDIR /app
+RUN apk add gettext
+COPY /client/package.json /client/package-lock.json ./
 RUN npm install
-WORKDIR /web
-COPY . .
-RUN make l10n-compile
+COPY /client .
 RUN npm run build
 
 FROM python:3.8-alpine
 WORKDIR /app
-COPY ./requirements.txt .
+RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++
+RUN mkdir -p /run/nginx
+RUN mkdir -p /var/lib/nginx/tmp
+COPY ./server/requirements.txt .
+RUN pip install setuptools wheel setuptools-rust
 RUN pip install -r requirements.txt
-COPY --from=web /web/dist ./dist
-COPY ./server.py ./websocket.py /dist/
+RUN pip install gunicorn
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=web /app/dist /usr/share/nginx/html
+COPY ./server/starter.py .
+COPY ./server/src ./src
 
-ENTRYPOINT [ "python", "server.py" ]
+CMD gunicorn --worker-class eventlet -w 1 -b 0.0.0.0:5000 starter:app --log-level debug --daemon && \
+    nginx -g 'daemon off;'
