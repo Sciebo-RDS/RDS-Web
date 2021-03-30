@@ -1,0 +1,6 @@
+[submodule "client/dev/ocis"]
+	path = client/dev/ocis
+	url = https://github.com/owncloud/ocis.git
+[submodule "client/dev/web"]
+	path = client/dev/web
+	url = https://github.com/owncloud/web.git
