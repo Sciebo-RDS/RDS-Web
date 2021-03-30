@@ -16,13 +16,18 @@ This application needs different software for different integrations.
 - [docker](https://docs.docker.com/get-docker/).
 
 ### Webfrontend
-- npm (best option through [nvm](https://github.com/nvm-sh/nvm#install--update-script))
-- yarn
+- npm lts (best option through [nvm](https://github.com/nvm-sh/nvm#install--update-script) `nvm install --lts`)
+- yarn `npm install yarn`
 - gettext
+
+All nodejs dependencies can be installed through `yarn install` in `/client`.
 
 ### Classic
 - [php composer](https://getcomposer.org/download/)
 - [docker](https://docs.docker.com/get-docker/).
+
+Composer package file can be found in `/client/packages/classic/php/composer.json`.
+Docker-compose file can be found in `/client/dev/docker-compose.yml`.
 
 ### OC Web
 - [go](https://golang.org/dl/)
