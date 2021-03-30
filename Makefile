@@ -27,7 +27,7 @@ build:
 	yarn --prefix ./client workspaces build
 
 test:
-	npm --prefix ./client test && cd server && pipenv run pytest
+	yarn --cwd ./client test && cd server && cd server && pipenv run pytest
 
 web:
 	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\

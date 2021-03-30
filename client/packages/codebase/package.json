@@ -5,11 +5,10 @@
   "sideEffects": false,
   "main": "src/main.js",
   "scripts": {
-    "test:unit": "vue-cli-service test:unit --setupTestFrameworkScriptFile=./tests/setup.js",
+    "test": "vue-cli-service test --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",
     "localize-compile": "vue-gettext-cli compile --locales en de --combined",
-    "localize-extract": "vue-gettext-cli extract --locales en de",
-    "test": "npm run test:unit"
+    "localize-extract": "vue-gettext-cli extract --locales en de"
   },
   "dependencies": {
     "axios": "^0.21.1",
