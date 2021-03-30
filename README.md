@@ -32,10 +32,11 @@ Docker-compose file can be found in `/client/dev/docker-compose.yml`.
 ### OC Web
 - [go](https://golang.org/dl/)
 
-
-If you use ubuntu, you can use for some dependencies `make install` in root.
+Run `git submodule update --init --recursive` to pull ocis and web servercode for 
 
 ## Project setup
+
+If you use ubuntu, you can use for some dependencies `make install` in root.
 
 ### Client setup
 ```bash
