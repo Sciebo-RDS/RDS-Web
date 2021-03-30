@@ -26,7 +26,7 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" height="200px"></v-card>
+        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
 
         <v-btn text @click="e1 = 1"> Back </v-btn>
 
@@ -48,9 +48,18 @@
   </v-stepper>
 </template>
 
+<style scoped>
+/*.v-stepper__header {
+  box-shadow: none;
+} 
+.v-stepper {
+  box-shadow: none;
+}*/
+</style>
+
 <script>
-import StepConfiguration from "./StepConfiguration.vue";
-import StepPublish from "./StepPublish.vue";
+import StepConfiguration from "./StepConfiguration";
+import StepPublish from "./StepPublish";
 
 export default {
   components: {
