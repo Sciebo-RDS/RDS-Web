@@ -1,36 +1,52 @@
 # rds-web
 
-The application to get RDS into the new OC Web interface.
+The application to get RDS into the new OC Web, the old OC Classic and a standalone interface.
 
 ## Dependencies
 
-This application needs pipenv and npm (best option through nvm).
+This application needs pipenv, npm (best option through nvm), yarn, gettext, make, [go](https://golang.org/dl/), tmux, git and [docker](https://docs.docker.com/get-docker/).
 
 ```
 pip install pipenv
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-nvm install node
+nvm install --lts
+npm install yarn
 ```
 
+If you use ubuntu, you can use for some dependencies `make install` in root.
+
 ## Project setup
+
+### Client setup
+```bash
+cd client
+yarn install
 ```
-npm install
+
+### Server setup
+```bash
+cd server
 pipenv install
 ```
 
 ### hot-reloads for development
+
+#### standalone
 ```
-npm run serve
-pipenv run python websocket.py
+make standalone
 ```
 
-If you have installed `tmux` and `make`, you can use the following command to create the server and client hot reload for development.
+#### classic
 ```
-make hotreload
+make classic
 ```
-After that, your server will be reachable under `localhost:8080` and the frontend under `localhost:8085`.
 
-Beware: For testing or using, you need access to a working RDS instance.
+#### web
+```
+make web
+```
+
+Beware: For testing or using, you need access to a [working RDS instance](https://www.research-data-services.org/doc/getting-started/k8s/).
 
 ### Run tests
 
@@ -40,7 +56,7 @@ Runs the tests for vue and python after each other. If the first one fails, then
 make test
 ```
 
-### Compiles and minifies for production
+### Compiles and minifies for production in standalone
 We use docker to create containers. This will build a single server, which serves the frontend under port 8080.
 This can be build with the following command, which will be stored in the local container storage under the name "rds-web".
 
