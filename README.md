@@ -4,14 +4,29 @@ The application to get RDS into the new OC Web, the old OC Classic and a standal
 
 ## Dependencies
 
-This application needs pipenv, npm (best option through nvm), yarn, gettext, make, [go](https://golang.org/dl/), tmux, git and [docker](https://docs.docker.com/get-docker/).
+This application needs different software for different integrations.
 
-```
-pip install pipenv
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
-nvm install --lts
-npm install yarn
-```
+### All
+- make
+- tmux
+- git
+
+### Server
+- pipenv
+- [docker](https://docs.docker.com/get-docker/).
+
+### Webfrontend
+- npm (best option through [nvm](https://github.com/nvm-sh/nvm#install--update-script))
+- yarn
+- gettext
+
+### Classic
+- [php composer](https://getcomposer.org/download/)
+- [docker](https://docs.docker.com/get-docker/).
+
+### OC Web
+- [go](https://golang.org/dl/)
+
 
 If you use ubuntu, you can use for some dependencies `make install` in root.
 
