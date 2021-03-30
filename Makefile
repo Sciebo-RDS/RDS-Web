@@ -30,9 +30,11 @@ test:
 	yarn --cwd ./client test && cd server && cd server && pipenv run pytest
 
 web:
+	docker-compose -f client/dev/docker-compose.yml up -d
 	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
 		 split-window -h "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve"
+	tmux new-session -d -s standalone "cd server && while true; do pipenv run python starter.py; done" \;
 	@echo "Wait 20s for server startup to kill web"
 	@sleep 20
 	tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"
@@ -69,4 +71,4 @@ stop:
 	tmux kill-session -t ocis || true
 	tmux kill-session -t classic || true
 	tmux kill-session -t standalone || true
-	sudo chown $(USER):$(USER) client -R
+	sudo chown -R $(shell id -un):$(shell id -gn) client
