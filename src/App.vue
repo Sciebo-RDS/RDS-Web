@@ -6,6 +6,11 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
     </v-system-bar>-->
 
+    <v-app-bar app flat>
+      <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none"></v-app-bar-nav-icon>
+      <v-toolbar-title></v-toolbar-title>
+    </v-app-bar>
+
       <v-navigation-drawer v-model="drawer" app bottom>
         <v-sheet class="flex-direction row pa-4">
           <v-container fill-height
@@ -39,25 +44,9 @@
       </v-navigation-drawer>
 
       <v-main>
-        <v-container fluid> <router-view /> </v-container
-      ></v-main>
+        <v-container fluid> <router-view /> </v-container>
+      </v-main>
 
-      <v-card-text style="position: fixed; bottom: 0px" class="d-xl-none">
-        <v-fab-transition>
-          <v-btn
-            v-show="true"
-            color="pink"
-            dark
-            absolute
-            top
-            right
-            fab
-            @click="drawer = !drawer"
-          >
-            <v-icon>mdi-menu</v-icon>
-          </v-btn>
-        </v-fab-transition>
-      </v-card-text>
     </v-app>
   </div>
 </template>
