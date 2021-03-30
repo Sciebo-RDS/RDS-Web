@@ -1,4 +1,4 @@
-import { App } from "@rds/codebase"
+import App from "./App.vue"
 import test from "./plugins/test"
 
 function $gettext(msg) {
@@ -24,6 +24,7 @@ const routes = [//right top action icon
     }
 ]
 
+
 const navItems = [//left sidebar
     {
         name: "Hello",
@@ -34,6 +35,7 @@ const navItems = [//left sidebar
         }
     }
 ]
+
 
 export default {
     appInfo,

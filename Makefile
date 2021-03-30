@@ -30,13 +30,12 @@ test:
 	npm --prefix ./client test && cd server && pipenv run pytest
 
 web:
-	yarn --cwd ./client web
-	@tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
+	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
 		 split-window -h "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve"
 	@echo "Wait 20s for server startup to kill web"
 	@sleep 20
-	@tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"
+	tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"
 	@echo "Done. Open https://localhost:9200 with your browser."
 	@echo 'If you want to close the server, execute "make stop" and close everything.'
 
