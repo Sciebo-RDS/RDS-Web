@@ -31,6 +31,16 @@ test:
 
 web:
 	docker-compose -f client/dev/docker-compose.yml up -d
+	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web serve"\;\
+		 split-window -h "yarn --cwd ./client workspace @rds/web serve"
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
+	@echo "Open https://localhost:9200 with your browser."
+	@echo 'If you want to close the server, execute "make stop" and close everything.'
+
+ocis:
+	@echo "This is currently not tested!"
+	@echo "Cancel with ctrl+c"
+	@sleep 5
 	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
 		 split-window -h "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve"

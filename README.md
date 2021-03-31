@@ -41,6 +41,35 @@ Run `git submodule update --init --recursive` to pull ocis and web servercode.
 If you use ubuntu, you can use for some dependencies `make install` in root.
 Otherwise, please follow the steps.
 
+### Notices
+
+First, you should think about, what you want to develope. You have the choice of:
+- standalone
+- owncloud classic
+- owncloud Web
+
+`standalone` means, you will be redirected to an oauth server, which handles the login and redirects back, so the user only sees the RDS App in whole. The application does not have any access to informations about the user except the oauth2 access token. This problem will be handled through the rds backend server.
+
+`owncloud classic` means, that the old frontend of owncloud will be used for integration. This is the easierst form of integration, because the standalone app can be loaded and initialized in the same context as the user runs the frontend. Here we will use a jwt for authentication, which will be evaluated on the rds server side.
+
+`owncloud web` is the new standard of owncloud, which implements all extension in vue. This comes with a lot of new problems, so we handle this with an iframe. The communication between the 2 separate windows will be through the event bus of the browser. Here we will use a jwt for authentication, too.
+
+If you have make your choice (you can also choose all three, but then you have to make all steps for e.g. you have to generate 2 clients in your oauth server).
+
+#### Ports
+
+In the following sections, you read a lot about ports. Here you have an overview, which port comes from which service.
+
+| Port | Description                                                                            |
+| ---- | -------------------------------------------------------------------------------------- |
+| 8000 | Owncloud classic                                                                       |
+| 8080 | Python Backend Server, which manages login for websocket and proxy for vue dev server. |
+| 8082 | OC Web extension vue dev server, which manages the integration of RDS into OC Web.     |
+| 8085 | Vue dev Server for RDS Standalone App                                                  |
+| 9100 | new owncloud web vue dev server                                                        |
+| 9200 | ocis frontend, which proxies requests to port 9100 (currently not used)                |
+
+
 ### Configuration
 
 We use the dotenv mechanic to provide a simple interface for configuration, which is compatible with the environment workflow of docker and kubernetes. So please configure the .env file to your needs.
@@ -62,14 +91,14 @@ The fields are:
 
 The `VUE_APP_REDIRECTION_URL` and `OWNCLOUD_OAUTH_CLIENT_SECRET` fields can only be set up correctly, when you start up the corresponding oauth backend before. So you have to start the backends and configure the `.env` file properly. After this, you can stop everything and can use the receipts in the corresponding sections for use.
 
-
 For easier access, you should start only the owncloud backend with the following commands and enable the `oauth2` and `rds` app and add a new oauth2 path in the settings, which is described [here](https://doc.owncloud.com/server/admin_manual/installation/apps_management_installation.html), [here](https://doc.owncloud.com/server/admin_manual/configuration/server/security/oauth2.html#installation) and [here](https://www.research-data-services.org/doc/impl/plugins/owncloud/).
 
 ```bash
 docker-compose -f client/dev/docker-compose.yml up -d
 ```
 
-Now open the url `http://localhost:8000` in your favourite browser and enable and setup all needed apps. After this, you have all informations to configure the `.env` correctly. Now, you can continue with the setup.
+Now open the url `http://localhost:8000` in your favourite browser and enable and setup all needed apps. For oauth, you will need one client for domain `http://localhost:9100/oidc-callback.html`, when you want to develope for OC Web. If you want to develope for standalone, you will need a client for domain `localhost:8080`.
+After this, you have all informations to configure the `.env` correctly. Now, you can continue with the setup.
 
 Remind: If you delete all docker-resources (e.g. with `docker system prune --volumes`), you have to do all steps before again to get valid values for `.env` file.
 
@@ -87,7 +116,7 @@ cp client/dev/web/config/config.json.sample-oc10 client/dev/web/config/config.js
 vi client/dev/web/config/config.json
 ```
 
-In the `config.json`, you have to specify your owncloud classic backend (in docker-compose specified with `localhost:8000`, you access it before in your browser) and set our clientId, which you generate previously in oauth2 app inside of your owncloud classic instance.
+In the `config.json`, you have to specify your owncloud classic backend (in docker-compose specified with `localhost:8000`, you access it before in your browser) and set your clientId, which you generate previously in oauth2 app inside of your owncloud classic instance. This is also described [here](https://owncloud.dev/clients/web/backend-oc10/). When you want to change the config.php of the owncloud classic backend, you can get this done with `docker exec -it dev_owncloud_1 /bin/bash -c vi config/config.php`.
 
 Beware: You have to change the port from `8080` to `8000` in the fields `url` and `authUrl`.
 Then, you have to add our RDS application in `external_apps` field. Copy the following code snippet and add it to the array.
