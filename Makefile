@@ -34,7 +34,7 @@ web:
 	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
 		 split-window -h "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve"
-	tmux new-session -d -s standalone "cd server && while true; do pipenv run python starter.py; done" \;
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
 	@echo "Wait 20s for server startup to kill web"
 	@sleep 20
 	tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"

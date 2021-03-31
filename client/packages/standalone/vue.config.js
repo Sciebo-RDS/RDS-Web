@@ -1,8 +1,8 @@
 const Dotenv = require('dotenv-webpack');
 const envPath = function () {
   return (!process.env.NODE_ENV || (process.env.NODE_ENV === 'development')) ?
-    '../.env' :
-    `../.env.${process.env.NODE_ENV}`;
+    '../../../.env' :
+    `../../../.env.${process.env.NODE_ENV}`;
 }
 
 const dotenvArgs = {

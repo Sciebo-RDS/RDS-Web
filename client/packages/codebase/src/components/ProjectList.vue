@@ -30,8 +30,8 @@
 </style>
 
 <script>
-import ProjectSetting from "./ProjectSetting";
-import ProjectStatusChip from "./ProjectStatusChip";
+import ProjectSetting from "./ProjectSetting.vue";
+import ProjectStatusChip from "./ProjectStatusChip.vue";
 
 export default {
   components: {

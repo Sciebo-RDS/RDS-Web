@@ -8,9 +8,27 @@ function $gettext(msg) {
 Vue.use(test)
 
 const appInfo = {
-    name: "Hello World",
-    id: "hello-world",
-    icon: "folder"
+    name: "RDS",
+    id: "rds",
+    icon: "search",
+    extensions: [
+        {
+            extension: '',
+            routeName: 'rds-new-project',
+            newFileMenu: {
+                menuTitle($gettext) {
+                    return $gettext('Create RDS project...')
+                }
+            },
+            routes: [
+                'files-personal',
+                'files-favorites',
+                'files-shared-with-others',
+                'files-shared-with-me',
+                'files-public-list'
+            ]
+        },
+    ]
 }
 
 const routes = [//right top action icon

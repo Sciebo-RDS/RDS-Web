@@ -1,6 +1,10 @@
 import Vue from "rollup-plugin-vue"
 import path from "path"
 import serve from "rollup-plugin-serve"
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import nodePolyfills from 'rollup-plugin-node-polyfills';
+import replace from '@rollup/plugin-replace';
 
 const dev = process.env.DEV === "true"
 
@@ -13,6 +17,19 @@ export default {
     },
     plugins: [
         Vue(),
+        replace({
+            preventAssignment: true,
+            'process.env.NODE_ENV': JSON.stringify(dev ? 'production' : "development"),
+        }),
+        nodePolyfills(),
+        nodeResolve({ browser: true, preferBuiltins: true }),
+        commonjs({
+            include: [
+                "node_modules",
+                "node_modules/**",
+                "node_modules/**/*"
+            ]
+        }),
         dev && serve({
             contentBase: ["dist"],
             port: 8082

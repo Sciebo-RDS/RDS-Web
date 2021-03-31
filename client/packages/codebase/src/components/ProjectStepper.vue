@@ -58,8 +58,8 @@
 </style>
 
 <script>
-import StepConfiguration from "./StepConfiguration";
-import StepPublish from "./StepPublish";
+import StepConfiguration from "./StepConfiguration.vue";
+import StepPublish from "./StepPublish.vue";
 
 export default {
   components: {

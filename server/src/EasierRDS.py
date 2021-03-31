@@ -38,9 +38,6 @@ class HTTPRequest:
         }
 
     def makeRequest(self, key, data=None):
-        if os.getenv("DEV_FLASK_USE_JSON", "False") == "True":
-            return cache[key]
-
         if data is None:
             data = {}
 

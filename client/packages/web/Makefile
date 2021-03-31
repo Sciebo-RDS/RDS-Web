@@ -22,7 +22,6 @@ install: installgo installnpm
 	git clone https://github.com/owncloud/web.git
 
 	yarn --cwd web install
-	yarn --cwd extension install 
 
 	echo -e '${SNIPPET}'
 

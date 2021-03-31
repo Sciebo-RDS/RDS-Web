@@ -18,14 +18,15 @@ module.exports = {
   filenameHashing: false,
   productionSourceMap: false,
   devServer: {
-    proxy: 'http://localhost:8080'
+    proxy: 'http://localhost:8082'
   },
   configureWebpack: {
     plugins: [
       new Dotenv(dotenvArgs)
-    ]
+    ],
   },
   chainWebpack: config => {
     config.optimization.splitChunks(false)
-  }
+  },
+  publicPath: "/apps/rds"
 }
