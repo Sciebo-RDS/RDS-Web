@@ -81,6 +81,27 @@ yarn --cwd client install
 yarn --cwd client/dev/web install
 ```
 
+Now, you have to configure the OC Web server
+```bash
+cp client/dev/web/config/config.json.sample-oc10 client/dev/web/config/config.json
+vi client/dev/web/config/config.json
+```
+
+In the `config.json`, you have to specify your owncloud classic backend (in docker-compose specified with `localhost:8000`, you access it before in your browser) and set our clientId, which you generate previously in oauth2 app inside of your owncloud classic instance.
+
+Beware: You have to change the port from `8080` to `8000` in the fields `url` and `authUrl`.
+Then, you have to add our RDS application in `external_apps` field. Copy the following code snippet and add it to the array.
+
+```javascript
+{
+    "id": "rds",
+    "path": "http://localhost:8082/index.js",
+    "config": {
+        "url": "http://localhost:8085"
+    }
+}
+```
+
 If you use the owncloud classic backend, you will need to install the php dependencies, too.
 ```bash
 composer install --working-dir=client/packages/classic/php 
