@@ -1,5 +1,6 @@
 import oc_classic from "./oc_classic";
 import standalone from "./standalone";
+import oc_web from "./oc_web"
 
 export default {
     install(Vue) {
@@ -7,6 +8,7 @@ export default {
         Vue.prototype.auth.loginMethods = []
         Vue.prototype.auth.prelogin = []
 
+        Vue.use(oc_web)
         Vue.use(oc_classic)
         Vue.use(standalone)
 
@@ -33,7 +35,7 @@ export default {
                     } else {
                         if (!Vue.config.skipRedirect) {
                             if (Vue.config.redirectUrl === undefined) {
-                                Vue.$http.get(`${Vue.config.server}/informations`).then((response) => {
+                                Vue.$http.get(`${Vue.config.server}/api/1.0/informations`).then((response) => {
                                     Vue.config.redirectUrl = response.redirectUrl
                                     Vue.prototype.$config.redirectUrl = Vue.config.redirectUrl
                                     window.location = Vue.config.redirectUrl

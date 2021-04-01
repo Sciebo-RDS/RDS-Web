@@ -27,12 +27,14 @@ export default {
   computed: {
     ...mapGetters(["getToken"]),
     config() {
-      console.log(this.$store.state.apps);
-      const { url = "http://localhost:8085" } =
+      const {
+        url = "http://localhost:8085",
+        server = this.$store.state.config.server,
+      } =
         this.$store.state.apps.fileEditors.find(
           (editor) => editor.app === "rds"
         ).config || {};
-      return { url };
+      return { url, server };
     },
     iframeSource() {
       const query = queryString.stringify({
@@ -43,9 +45,27 @@ export default {
     rdsWindow() {
       return this.$refs.rdsEditor.contentWindow;
     },
+    headers() {
+      return new Headers({
+        Authorization: "Bearer " + this.getToken,
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/json",
+      });
+    },
   },
   methods: {
     ...mapActions(["showMessage"]),
+    error(error) {
+      console.log(response);
+      this.showMessage({
+        title: this.$gettext("The rds could not be loaded…"),
+        desc: error,
+        status: "danger",
+        autoClose: {
+          enabled: true,
+        },
+      });
+    },
   },
   mounted() {
     this.loading = false;
@@ -56,7 +76,28 @@ export default {
         var payload = JSON.parse(event.data);
         switch (payload.event) {
           case "init":
-            this.loading = false;
+            let url = `${this.config.server}/index.php/apps/rds/api/1.0/informations`;
+            fetch(url, { headers: this.headers })
+              .then((response) => {
+                if (response.ok) {
+                  return response.text();
+                }
+
+                throw new Error(`${response.status} ${response.statusText}`);
+              })
+              .then((resp) => {
+                this.rdsWindow.postMessage(
+                  JSON.stringify({
+                    event: "informations",
+                    data: resp,
+                  }),
+                  "*"
+                );
+              })
+              .catch((error) => {
+                this.loading = true;
+                this.error(error);
+              });
             break;
         }
       }

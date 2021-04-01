@@ -103,7 +103,8 @@ def authenticated_only(f):
             current_user.is_authenticated, args, kwargs))
 
         emit("LoginStatus", json.dumps({
-            "status": current_user.is_authenticated
+            "status": current_user.is_authenticated,
+            "user": current_user.userId
         }))
 
         if not current_user.is_authenticated:
@@ -139,7 +140,7 @@ def disconnect():
 
     try:
         LOGGER.debug("LOGOUT")
-        #logout_user()
+        # logout_user()
         #del clients[current_user.userId]
     except Exception as e:
         LOGGER.error(e, exc_info=True)

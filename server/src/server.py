@@ -31,7 +31,7 @@ login_manager.login_view = "index"
 app.register_blueprint(socket_blueprint)
 
 req = requests.get(
-    "{}/apps/rds/publickey".format(
+    "{}/apps/rds/api/1.0/publickey".format(
         os.getenv("OWNCLOUD_URL",
                   "https://10.14.29.60/owncloud/index.php")
     ),
@@ -42,7 +42,7 @@ publickey = req.get("publickey", "").replace("\\n", "\n")
 
 
 def proxy(host, path):
-    req = requests.get(f"{host}{path}", stream=True)
+    req = requests.get(f"{host}{path}", stream=True, timeout=1)
     return Response(stream_with_context(req.iter_content(chunk_size=1024)), content_type=req.headers['content-type'])
 
 
@@ -60,7 +60,7 @@ class User(UserMixin):
             }
 
             req = requests.get(
-                "{}/apps/rds/informations".format(
+                "{}/apps/rds/api/1.0/informations".format(
                     os.getenv("OWNCLOUD_URL",
                               "https://10.14.29.60/owncloud/index.php")
                 ),
@@ -114,17 +114,6 @@ def login():
         except Exception as e:
             LOGGER.error(e, exc_info=True)
 
-    if "Authorization" in request.headers:
-        try:
-            # TODO: Add check for auth token against owncloud web
-            user = User(
-                id=uuid.uuid4(),
-                token=request.headers["Authorization"].replace(
-                    "Bearer ", "").replace("token ", "")
-            )
-        except Exception as e:
-            LOGGER.error(e, exc_info=True)
-
     if user is not None:
         user_store[user.get_id()] = user
         login_user(user)
@@ -159,7 +148,6 @@ def index(path):
         )
         user_store[user.get_id()] = user
         login_user(user)
-        return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
     try:
         user = User(
@@ -181,7 +169,10 @@ def index(path):
             LOGGER.debug("path: {}".format(request.path))
             return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
-        return app.send_static_file(path)
+        #return app.send_static_file(path)
+
+    if os.getenv("VUE_APP_SKIP_REDIRECTION", "False") == "True":
+        return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
     return redirect(
         os.getenv("VUE_APP_REDIRECTION_URL")

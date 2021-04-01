@@ -8,10 +8,10 @@ const config = {
     skipRedirect: (process.env.VUE_APP_SKIP_REDIRECTION || "False") === "True" //disables the redirection
 }
 
-export { config }
 export default {
     config,
     install: function (Vue) {
+        console.log(config.socket.server)
         for (const [key, value] of Object.entries(config)) {
             Vue.config[key] = value
         }
