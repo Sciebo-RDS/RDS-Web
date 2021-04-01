@@ -24,7 +24,7 @@ For webfrontend, you need:
 - yarn `npm install yarn`
 - gettext
 
-All nodejs dependencies can be installed through `yarn install` in folder `/client`.
+All nodejs dependencies can be installed through `yarn --cwd client install`.
 
 If you want to change the classic integration, you need the following software aswell:
 - [php composer](https://getcomposer.org/download/)
