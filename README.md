@@ -2,6 +2,8 @@
 
 The application to get RDS into the new OC Web, the old OC Classic and a standalone interface.
 
+*This application currently only supports the classic backend, which is written in php. Not the ocis backend in golang!*
+
 ## Dependencies
 
 This application needs different software for different integrations.
@@ -80,14 +82,14 @@ vi .env
 ```
 
 The fields are:
-| name                           | description                                                                                                    |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| `VUE_APP_REDIRECTION_URL`      | Url for redirection for oauth2 workflow.                                                                       |
-| `VUE_APP_SKIP_REDIRECTION`     | If you want to use an integration, you don't want to be redirected through webserver or vue app automatically. |
-| `OWNCLOUD_OAUTH_CLIENT_SECRET` | Secret token for oauth2.                                                                                       |
-| `VERIFY_SSL`                   | For production-use set this to `True`, otherwise no ssl verification.                                          |
-| `DEV_FLASK_DEBUG`              | If this is true, the `DEV_FLASK_USERID` name will be used for test purpose.                                    |
-| `FLASK_ORIGINS`                | This hosts will be enabled in CORS.                                                                            |
+| name                           | description                                                                                                                      |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `VUE_APP_REDIRECTION_URL`      | Url for redirection for oauth2 workflow.                                                                                         |
+| `VUE_APP_SKIP_REDIRECTION`     | If you want to use an integration. Set this true, the webserver and vue app will redirect you to oauth login form automatically. |
+| `OWNCLOUD_OAUTH_CLIENT_SECRET` | Secret token for oauth2.                                                                                                         |
+| `VERIFY_SSL`                   | For production-use set this to `True`, otherwise no ssl verification.                                                            |
+| `DEV_FLASK_DEBUG`              | If this is true, the `DEV_FLASK_USERID` name will be used for test purpose.                                                      |
+| `FLASK_ORIGINS`                | This hosts will be enabled in CORS.                                                                                              |
 
 The `VUE_APP_REDIRECTION_URL` and `OWNCLOUD_OAUTH_CLIENT_SECRET` fields can only be set up correctly, when you start up the corresponding oauth backend before. So you have to start the backends and configure the `.env` file properly. After this, you can stop everything and can use the receipts in the corresponding sections for use.
 
