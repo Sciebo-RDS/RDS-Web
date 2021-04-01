@@ -55,7 +55,6 @@ export default {
   created() {
     getConfig()
       .then((config) => {
-        console.log("huhu");
         this.config = config;
         this.loading = false;
       })
