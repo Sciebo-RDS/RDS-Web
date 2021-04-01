@@ -11,21 +11,22 @@ import Vuex from 'vuex';
 import vuetify from './plugins/vuetify.js';
 
 const vuet = vuetify.vuetify
+
 function install(Vue) {
-  Vue.use(Vuex)
-  Vue.use(config)
-  axios.defaults.withCredentials = true;
-  Vue.use(VueAxios, axios)
-  Vue.use(vuetify)
-  Vue.use(customMethods)
-  Vue.use(integrations)
+    Vue.use(Vuex)
+    Vue.use(config)
+    axios.defaults.withCredentials = true;
+    Vue.use(VueAxios, axios)
+    Vue.use(vuetify)
+    Vue.use(customMethods)
+    Vue.use(integrations)
 }
 
 export default {
-  install,
-  App: App,
-  routes: routes,
-  store: store,
-  translations: translations,
-  vuetify: vuet
+    install,
+    App: App,
+    routes: routes,
+    store: store,
+    translations: translations,
+    vuetify: vuet
 }

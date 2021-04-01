@@ -51,6 +51,42 @@ export default {
     error(error) {
       console.log(error);
     },
+    sendLocationToWindow(projectId, location) {
+      this.rdsWindow.postMessage(
+        JSON.stringify({
+          event: "folderLocationSelected",
+          data: {
+            projectId: projectId,
+            location: location,
+          },
+        }),
+        "*"
+      );
+    },
+    sendInformationsToWindow() {
+      const url = OC.generateUrl("/apps/rds/api/1.0/informations");
+      fetch(url, { headers: this.headers })
+        .then((response) => {
+          if (response.ok) {
+            return response.text();
+          }
+
+          throw new Error(`${response.status} ${response.statusText}`);
+        })
+        .then((resp) => {
+          this.rdsWindow.postMessage(
+            JSON.stringify({
+              event: "informations",
+              data: resp,
+            }),
+            "*"
+          );
+        })
+        .catch((error) => {
+          this.loading = true;
+          this.error(error);
+        });
+    },
   },
   created() {
     getConfig()
@@ -71,28 +107,21 @@ export default {
         var payload = JSON.parse(event.data);
         switch (payload.event) {
           case "init":
-            const url = OC.generateUrl("/apps/rds/api/1.0/informations");
-            fetch(url, { headers: this.headers })
-              .then((response) => {
-                if (response.ok) {
-                  return response.text();
-                }
-
-                throw new Error(`${response.status} ${response.statusText}`);
-              })
-              .then((resp) => {
-                this.rdsWindow.postMessage(
-                  JSON.stringify({
-                    event: "informations",
-                    data: resp,
-                  }),
-                  "*"
-                );
-              })
-              .catch((error) => {
-                this.loading = true;
-                this.error(error);
-              });
+            sendInformationsToWindow();
+            break;
+          case "showFilePicker":
+            // TODO show FilePicker, take a look in old plugin for fileDialog
+            let location = "";
+            OC.dialogs.filepicker(
+              t("files", "Choose source folder"),
+              function (targetPath, type) {
+                location = targetPath.trim();
+                sendLocationToWindow(payload.data.projectId, location);
+              },
+              false,
+              "httpd/unix-directory",
+              true
+            );
             break;
         }
       }

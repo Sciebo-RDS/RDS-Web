@@ -10,7 +10,7 @@
               >1. Which folder do you want to publish?</v-card-subtitle
             >
             <v-card-actions
-              ><v-btn @click="alert('this will open a file browser')"
+              ><v-btn @click="togglePicker"
                 >Select Folder</v-btn
               ></v-card-actions
             >
@@ -98,10 +98,21 @@ export default {
     );
   },
   methods: {
+    togglePicker() {
+      this.showFilePicker(this.project.projectId, this.filepath(this.project));
+    },
     filepath(project) {
-      if (project.portIn.length > 0) {
-        return project.portIn[0].properties.customProperties.filepath;
+      if (project.portIn.length == 0) {
+        // TODO add port-owncloud default to project!
+        // FIXME add port-owncloud, when creating a new project. Not here!
+        return "";
       }
+
+      const service = this.getService(project.portIn, "port-owncloud");
+      if (service !== undefined) {
+        return service.properties.customProperties.filepath;
+      }
+
       return "";
     },
     toggle() {

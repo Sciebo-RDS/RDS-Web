@@ -1,6 +1,5 @@
-import oc_classic from "./oc_classic";
 import standalone from "./standalone";
-import oc_web from "./oc_web"
+import embed from "./embed.js"
 
 export default {
     install(Vue) {
@@ -8,19 +7,16 @@ export default {
         Vue.prototype.auth.loginMethods = []
         Vue.prototype.auth.prelogin = []
 
-        Vue.use(oc_web)
-        Vue.use(oc_classic)
-        Vue.use(standalone)
-
-        try {
-            Promise.all(Vue.prototype.auth.prelogin.map(fn => fn()))
-        } catch (error) {
-            console.error(error);
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('embed')) {
+            Vue.use(embed)
+        } else {
+            Vue.use(standalone)
         }
 
         Vue.prototype.auth.loggedIn = false
 
-        Vue.prototype.auth.login = function () {
+        Vue.prototype.auth.login = function() {
             // First check, if we have already a session
             Vue.prototype.$http.get(`${Vue.config.server}/login`).then(() => {
                 Vue.prototype.auth.loggedIn = true

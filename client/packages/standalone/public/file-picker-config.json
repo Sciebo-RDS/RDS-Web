@@ -1,0 +1,10 @@
+{
+    "server": "http://localhost:8080",
+    "openIdConnect": {
+        "metadata_url": "http://localhost:8080/.well-known/openid-configuration",
+        "authority": "http://localhost:8000/index.php/apps/oauth2/authorize",
+        "client_id": "AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq",
+        "response_type": "code",
+        "scope": "openid profile email"
+    }
+}

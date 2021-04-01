@@ -1,7 +1,6 @@
-
 export default {
     install(Vue) {
-        Vue.prototype.auth.loginMethods.push(async function () {
+        Vue.prototype.auth.loginMethods.push(async function() {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get("access_token")
             const state = urlParams.get("state")
@@ -17,5 +16,9 @@ export default {
             return false
         })
 
+        Vue.prototype.showFilePicker = function(projectId) {
+            // TODO: Show the filePicker component in overlay or sth. Vue events maybe?
+            // Can we find a solution, where this approach does not appear in embed version?
+        }
     }
 }

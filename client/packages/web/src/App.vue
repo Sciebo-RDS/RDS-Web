@@ -99,6 +99,20 @@ export default {
                 this.error(error);
               });
             break;
+          case "showFilePicker":
+            // TODO show FilePicker
+            let location = "";
+            this.rdsWindow.postMessage(
+              JSON.stringify({
+                event: "folderLocationSelected",
+                data: {
+                  projectId: payload.data.projectId,
+                  location: location,
+                },
+              }),
+              "*"
+            );
+            break;
         }
       }
     });
