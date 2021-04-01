@@ -56,11 +56,8 @@ classic:
 	echo '$$(function () {' > ./client/packages/classic/php/js/app.js
 	cat ./client/packages/classic/dist/js/app.js >> ./client/packages/classic/php/js/app.js
 	echo "});" >> ./client/packages/classic/php/js/app.js
-	cp -u ./client/packages/classic/dist/css/app.css ./client/packages/classic/php/css/app.css
-	cp -u ./client/packages/classic/dist/img/* ./client/packages/classic/php/img
-	cp -ru ./client/packages/classic/dist/fonts ./client/packages/classic/php/css/
 	docker-compose -f client/dev/docker-compose.yml up -d
-	tmux new-session -d -s classic "cd server && while true; do pipenv run python starter.py; done" \;
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
 	@echo Wait for 20 Seconds to boot everything up.
 	@sleep 20
 	docker exec -it dev_owncloud_1 /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"

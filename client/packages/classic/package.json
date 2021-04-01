@@ -2,10 +2,10 @@
     "name": "@rds/classic",
     "version": "1.0.0",
     "main": "src/main.js",
-    "dependencies": {
-        "@rds/codebase": "*"
-    },
     "scripts": {
         "build": "vue-cli-service build --mode production --name app"
+    },
+    "devDependencies": {
+        "owncloud-design-system": "^4.2.0"
     }
 }

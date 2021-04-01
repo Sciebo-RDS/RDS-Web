@@ -1,6 +1,6 @@
 <?php
-style('rds', array('style', "app"));
-script('rds', array("app"));
+script('rds', array("vue", "app"));
+style('rds', array('style'));
 ?>
 
 <noscript>

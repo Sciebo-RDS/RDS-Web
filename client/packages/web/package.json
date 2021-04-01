@@ -7,9 +7,6 @@
     "build": "rollup -c",
     "serve": "DEV=true rollup -c -w"
   },
-  "dependencies": {
-    "@rds/codebase": "*"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",

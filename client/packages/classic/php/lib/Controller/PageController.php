@@ -74,6 +74,8 @@ class PageController extends Controller
         $policy->addAllowedConnectDomain("http://localhost:8080");
         $policy->addAllowedConnectDomain("ws://localhost:8080");
         $policy->addAllowedFontDomain("https://fonts.gstatic.com");
+        $policy->addAllowedScriptDomain('http://localhost:8080');
+        $policy->addAllowedFrameDomain('http://localhost:8080');
         \OC::$server->getContentSecurityPolicyManager()->addDefaultPolicy($policy);
 
         $userId = $this->userSession->getUser()->getUID();
