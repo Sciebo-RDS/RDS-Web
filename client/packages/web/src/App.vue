@@ -100,8 +100,8 @@ export default {
               });
             break;
           case "showFilePicker":
-            // TODO show FilePicker
             let location = "";
+            // TODO show FilePicker
             this.rdsWindow.postMessage(
               JSON.stringify({
                 event: "folderLocationSelected",

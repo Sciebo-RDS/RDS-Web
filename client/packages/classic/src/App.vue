@@ -110,7 +110,6 @@ export default {
             sendInformationsToWindow();
             break;
           case "showFilePicker":
-            // TODO show FilePicker, take a look in old plugin for fileDialog
             let location = "";
             OC.dialogs.filepicker(
               t("files", "Choose source folder"),
