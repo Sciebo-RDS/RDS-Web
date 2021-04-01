@@ -40,6 +40,7 @@ export default {
             })
         },
         setLocation(context, data) {
+            // TODO get and remove port-owncloud first and add it with new location!
             this._vm.$socket.client.emit("setLocation", data);
         },
         createProject() {
