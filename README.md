@@ -162,7 +162,7 @@ pipenv install
 
 For easier access, we provide a makefile in root folder.
 
-Beware: For testing or using, you need access to a [working RDS instance](https://www.research-data-services.org/doc/getting-started/k8s/).
+**Beware: For development and production, you need access to a [working RDS instance](https://www.research-data-services.org/doc/getting-started/k8s/). For example through VPN with `openconnect` to an already existing one or use minikube for smaller test environments.**
 
 If you want to start the environment for standalone, use the `standalone` receipt.
 ```bash
