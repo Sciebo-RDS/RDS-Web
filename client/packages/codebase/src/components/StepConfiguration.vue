@@ -14,7 +14,9 @@
                 >Select Folder</v-btn
               ></v-card-actions
             >
-            <v-card-subtitle style="padding-top: 0px"
+            <v-card-subtitle
+              style="padding-top: 0px"
+              v-if="filepath(project) !== ``"
               >Current Folder: {{ filepath(project) }}</v-card-subtitle
             >
           </v-card>
