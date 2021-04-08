@@ -1,5 +1,5 @@
 import config from "./config.js"
-import store from "./store/index.js"
+import store from "./store.js"
 import integrations from "./plugins/integration/index.js"
 import routes from './router/index.js'
 import customMethods from "./plugins/customMethods.js"
@@ -14,6 +14,7 @@ const vuet = vuetify.vuetify
 
 function install(Vue) {
     Vue.use(Vuex)
+    Vue.use(store)
     Vue.use(config)
     axios.defaults.withCredentials = true;
     Vue.use(VueAxios, axios)
@@ -26,7 +27,7 @@ export default {
     install,
     App: App,
     routes: routes,
-    store: store,
+    store: store.store,
     translations: translations,
     vuetify: vuet
 }
