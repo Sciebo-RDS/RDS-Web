@@ -54,10 +54,10 @@ export default {
     sendLocationToWindow(projectId, location) {
       this.rdsWindow.postMessage(
         JSON.stringify({
-          event: "folderLocationSelected",
+          event: "filePathSelected",
           data: {
             projectId: projectId,
-            location: location,
+            filePath: location,
           },
         }),
         "*"
@@ -89,33 +89,23 @@ export default {
     },
   },
   created() {
-    getConfig()
-      .then((config) => {
-        this.config = config;
-        this.loading = false;
-      })
-      .catch(() => {
-        this.config = {
-          url: "http://localhost:8085",
-          server: "http://localhost:8085",
-        };
-        this.loading = false;
-      });
+    getConfig(this).then(() => (this.loading = false));
 
     window.addEventListener("message", (event) => {
       if (event.data.length > 0) {
+        console.log("got event:", event.data);
         var payload = JSON.parse(event.data);
         switch (payload.event) {
           case "init":
-            sendInformationsToWindow();
+            this.sendInformationsToWindow();
             break;
           case "showFilePicker":
             let location = "";
             OC.dialogs.filepicker(
               t("files", "Choose source folder"),
-              function (targetPath, type) {
+              (targetPath, type) => {
                 location = targetPath.trim();
-                sendLocationToWindow(payload.data.projectId, location);
+                this.sendLocationToWindow(payload.data.projectId, location);
               },
               false,
               "httpd/unix-directory",
