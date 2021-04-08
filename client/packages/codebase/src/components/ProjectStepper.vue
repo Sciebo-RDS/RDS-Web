@@ -26,7 +26,12 @@
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <v-card
+          class="d-flex flex-column justify-center mb-12"
+          min-height="500px"
+        >
+          <StepMetadataEditor :project="project" />
+        </v-card>
 
         <v-btn text @click="e1 = 1"> Back </v-btn>
 
@@ -60,11 +65,13 @@
 <script>
 import StepConfiguration from "./StepConfiguration.vue";
 import StepPublish from "./StepPublish.vue";
+import StepMetadataEditor from "./StepMetadataEditor.vue";
 
 export default {
   components: {
     StepConfiguration,
     StepPublish,
+    StepMetadataEditor,
   },
   data() {
     return {
