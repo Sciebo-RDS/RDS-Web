@@ -21,15 +21,9 @@ export default {
             preventAssignment: true,
             'process.env.NODE_ENV': JSON.stringify(dev ? 'production' : "development"),
         }),
+        commonjs(),
         nodePolyfills(),
         nodeResolve({ browser: true, preferBuiltins: true }),
-        commonjs({
-            include: [
-                "node_modules",
-                "node_modules/**",
-                "node_modules/**/*"
-            ]
-        }),
         dev && serve({
             contentBase: ["dist"],
             port: 8082
