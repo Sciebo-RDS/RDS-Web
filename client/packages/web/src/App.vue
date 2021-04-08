@@ -13,6 +13,22 @@
       ref="rdsEditor"
       :src="iframeSource"
     />
+    <oc-modal
+      v-if="showFilePicker"
+      icon="search"
+      title="Select a folder"
+      button-cancel-text="Decline"
+      button-confirm-text="Accept"
+      class="oc-mb-l uk-position-relative"
+    >
+      <template v-slot:content>
+        <file-picker
+          ref="filePicker"
+          variation="location"
+          bearerToken="getToken"
+        />
+      </template>
+    </oc-modal>
   </div>
 </template>
 
@@ -21,8 +37,12 @@ import queryString from "querystring";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  components: {
+    FilePicker: require("@ownclouders/file-picker").default,
+  },
   data: () => ({
     loading: true,
+    showFilePicker: false,
   }),
   computed: {
     ...mapGetters(["getToken"]),
@@ -30,11 +50,13 @@ export default {
       const {
         url = "http://localhost:8085",
         server = this.$store.state.config.server,
+        autosave = false,
+        describo = "http://localhost:8100",
       } =
         this.$store.state.apps.fileEditors.find(
           (editor) => editor.app === "rds"
         ).config || {};
-      return { url, server };
+      return { url, server, autosave, describo };
     },
     iframeSource() {
       const query = queryString.stringify({
@@ -66,14 +88,50 @@ export default {
         },
       });
     },
-  },
-  mounted() {
-    this.loading = false;
-  },
-  created() {
-    window.addEventListener("message", (event) => {
+    load(filePath) {
+      this.$client.files
+        .getFileContents(filePath, { resolveWithResponseObject: true })
+        .then((resp) => {
+          this.rdsWindow.postMessage(
+            JSON.stringify({
+              action: "load",
+              xml: resp.body,
+              autosave: this.config.autosave,
+            }),
+            "*"
+          );
+        })
+        .catch((error) => {
+          this.error(error);
+        });
+    },
+    save(filePath, payload) {
+      this.$client.files
+        .putFileContents(filePath, payload.xml, {
+          previousEntityTag: this.currentETag,
+        })
+        .then((resp) => {
+          this.currentETag = resp.ETag;
+          this.rdsWindow.postMessage(
+            JSON.stringify({
+              action: "status",
+              modified: false,
+            }),
+            "*"
+          );
+        })
+        .catch((error) => {
+          this.error(error);
+        });
+    },
+    exit() {
+      window.close();
+    },
+    eventloop(event) {
       if (event.data.length > 0) {
-        var payload = JSON.parse(event.data);
+        let payload = JSON.parse(event.data);
+        let data = payload.data;
+
         switch (payload.event) {
           case "init":
             let url = `${this.config.server}/index.php/apps/rds/api/1.0/informations`;
@@ -100,22 +158,55 @@ export default {
               });
             break;
           case "showFilePicker":
-            let location = "";
-            // TODO show FilePicker
+            const item = this.$refs.filePicker;
+
+            item.addEventListener("selectResources", (event) => {
+              this.showFilePicker = false;
+              let location = event.detail[0];
+              this.rdsWindow.postMessage(
+                JSON.stringify({
+                  event: "filePathSelected",
+                  data: {
+                    projectId: payload.data.projectId,
+                    filePath: location,
+                  },
+                }),
+                "*"
+              );
+            });
+            this.showFilePicker = true;
+            break;
+          case "load":
             this.rdsWindow.postMessage(
               JSON.stringify({
-                event: "folderLocationSelected",
+                event: "loaded",
                 data: {
-                  projectId: payload.data.projectId,
-                  location: location,
+                  projectId: data.projectId,
+                  filePath: data.filePath,
+                  fileData: this.load(data.filePath),
                 },
               }),
               "*"
             );
             break;
+          case "save":
+            this.save(data.filePath, data.fileData);
+            break;
+          case "exit":
+            this.exit();
+            break;
         }
       }
-    });
+    },
+  },
+  mounted() {
+    this.loading = false;
+  },
+  created() {
+    window.addEventListener("message", this.eventloop);
+  },
+  beforeDestroy() {
+    window.removeEventListener("message", this.eventloop);
   },
 };
 </script>
