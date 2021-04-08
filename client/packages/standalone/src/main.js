@@ -19,7 +19,7 @@ const App = rds.App
 Vue.use(routes)
 const router = Vue.prototype.$routers
 
-new Vue({
+const app = new Vue({
     router,
     store,
     vuetify,
