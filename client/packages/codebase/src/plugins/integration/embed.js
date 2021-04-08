@@ -1,5 +1,7 @@
 export default {
     install(Vue) {
+        let parWindow = window.parent;
+
         //Vue.prototype.auth.prelogin.push(async function () {})
         let prom1 = new Promise(function(resolve, reject) {
             let timer = setInterval(function() {
@@ -24,9 +26,12 @@ export default {
                                     reject(resp)
                                 })
                             break;
-                        case "folderLocationSelected":
+                        case "filePathSelected":
                             let data = payload.data;
-                            Vue.prototype.$store.dispatch("setLocation", { projectId: data.projectId, location: data.location })
+                            Vue.prototype.$store.dispatch("setLocation", {
+                                projectId: data.projectId,
+                                filePath: data.filePath
+                            })
                             break;
                     }
                 }
@@ -34,17 +39,17 @@ export default {
         })
 
         Vue.prototype.auth.loginMethods.push(async function() {
-            window.parent.postMessage(JSON.stringify({
+            parWindow.postMessage(JSON.stringify({
                 event: "init"
             }), "*")
         })
 
         Vue.prototype.showFilePicker = function(projectId, location) {
-            window.parent.postMessage(JSON.stringify({
+            parWindow.postMessage(JSON.stringify({
                 event: "showFilePicker",
                 data: {
                     projectId: projectId,
-                    location: location
+                    filePath: location
                 }
             }), "*")
         }
