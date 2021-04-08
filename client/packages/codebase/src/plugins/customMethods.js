@@ -28,7 +28,7 @@ export default {
 
         Vue.prototype.getService = function(arr, servicename) {
             for (const el of arr) {
-                if (el.servicename === servicename) return el;
+                if (el.port === servicename) return el;
             }
             return undefined
         }
