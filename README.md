@@ -9,32 +9,40 @@ The application to get RDS into the new OC Web, the old OC Classic and a standal
 This application needs different software for different integrations.
 
 For all, you need:
-- make
-- tmux
-- git
+```
+make
+tmux
+git
+```
 
 For the server backend (owncloud classic and rds), you need:
-- pipenv
-- [docker](https://docs.docker.com/get-docker/).
+```
+pipenv
+[docker](https://docs.docker.com/get-docker/)
+[php composer](https://getcomposer.org/download/)
+```
 
-*Docker-compose file can be found in `/client/dev/docker-compose.yml`*
+*Docker-compose file can be found in `/client/dev/docker-compose.yml`.*
+*Composer package file can be found in `/client/packages/classic/php/composer.json`.*
+
 
 For webfrontend, you need:
-- npm lts (best option through [nvm](https://github.com/nvm-sh/nvm#install--update-script) `nvm install --lts`)
-- yarn `npm install yarn`
-- gettext
+```
+npm lts
+yarn
+gettext
+```
 
+Best option for npm is [nvm](https://github.com/nvm-sh/nvm#install--update-script) `nvm install --lts`)
+Yarn is needed, because of the workspace feature `npm install yarn`.
 All nodejs dependencies can be installed through `yarn --cwd client install`.
-
-If you want to change the classic integration, you need the following software aswell:
-- [php composer](https://getcomposer.org/download/)
-
-Composer package file can be found in `/client/packages/classic/php/composer.json`.
 
 ## Notice
 
 In `/client/dev/ocis` you can find the sourcecode for ocis. Currently, we do not develope our software for this backend, so we only use the owncloud classic backend. But for further development, this sourcecode will be needed. For this software, we will need the following software:
-- [go](https://golang.org/dl/)
+```
+[golang](https://golang.org/dl/)
+```
 
 Run `git submodule update --init --recursive` to pull ocis and web servercode.
 
@@ -48,7 +56,7 @@ Otherwise, please follow the steps.
 First, you should think about, what you want to develope. You have the choice of:
 - standalone
 - owncloud classic
-- owncloud Web
+- owncloud web
 
 `standalone` means, you will be redirected to an oauth server, which handles the login and redirects back, so the user only sees the RDS App in whole. The application does not have any access to informations about the user except the oauth2 access token. This problem will be handled through the rds backend server.
 
