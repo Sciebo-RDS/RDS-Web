@@ -86,7 +86,9 @@ vi .env
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | OWNCLOUD_URL                 | The url to your owncloud instance.                                                                                        | http://localhost:8000                                                                                                |
 | OWNCLOUD_OAUTH_CLIENT_SECRET | The client secret for your oauth provider.                                                                                | XYZ                                                                                                                  |
-| EMBED_MODE                   | Set this to True, if you want to use the app in embed mode. False means standalone mode.                                  | True                                                                                                                 |
+| EMBED_MODE                   | Set this to True, if you want to use the app in embed mode. False means standalone mode.                                  |
+| True                         |
+| RDS_INSTALLATION_DOMAIN      | Set this URL to your RDS backend installation. If this is not available for server, you will get authentication errors.   | http://localhost:9900                                                                                                |
 | FLASK_ORIGINS                | Set here all origins from requests can come. Otherwise it will be rejected through CORS.                                  | ["http://localhost:8080", "http://localhost:8085", "http://localhost:8000", "http://localhost:9100"]                 |
 | VUE_APP_REDIRECTION_URL      | Set this URL for redirection in vue app, client-side. Deprecated                                                          | http://localhost:8000/apps/oauth2/authorize?response_type=token&client_id=`<ABC>`&redirect_uri=http://localhost:8080 |
 | REDIRECTION_URL              | Set this URL for redirection on serverside through http statuscode 302.                                                   | http://localhost:8000/apps/oauth2/authorize?response_type=token&client_id=`<ABC>`&redirect_uri=http://localhost:8080 |
@@ -162,7 +164,7 @@ pipenv install
 
 For easier access, we provide a makefile in root folder.
 
-**Beware: For development and production, you need access to a [working RDS instance](https://www.research-data-services.org/doc/getting-started/k8s/). For example through VPN with `openconnect` to an already existing one or use minikube for smaller test environments.**
+**Beware: For development and production, you need access to a working RDS instance. For example through VPN with `openconnect` or a ssh tunnel `ssh -L 1443:<your-k8s-rds-installation>:443 <jumphost>.<institution>` to an already existing one or use minikube for smaller test environments. [See this guide for more](https://www.research-data-services.org/doc/getting-started/k8s/).**
 
 If you want to start the environment for standalone, use the `standalone` receipt.
 ```bash
