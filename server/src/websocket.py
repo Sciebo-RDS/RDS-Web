@@ -191,3 +191,22 @@ def exchangeCode(jsonData):
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
 
     return req.status_code < 300
+
+
+@socketio.event
+@authenticated_only
+def changePorts(jsonData):
+    """
+    return {
+        researchID: researchID,
+        import: {
+            add: {{name: "port-owncloud", filepath:"/photosForschung/"}},
+        },
+        export: {
+            add: [{name: "port-zenodo"} ],
+            remove: ["port-reva", "port-osf"],
+            change: [{name: "port-owncloud", filepath:"/photosForschung/"}, {name: "port-zenodo", projectId:"12345"}]
+        }
+    }"""
+
+    return jsonData
