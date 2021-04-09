@@ -27,6 +27,7 @@
             <v-card-text>
               <v-select
                 v-model="selectedPorts"
+                @change="emitChanges"
                 :items="ports"
                 :item-text="(item) => parseServicename(item.servicename)"
                 :item-value="(item) => item"
@@ -81,7 +82,7 @@ export default {
       if (this.selectAllPorts) return "mdi-close-box";
       if (this.selectSomePorts) return "mdi-minus-box";
       return "mdi-checkbox-blank-outline";
-    },
+    }
   },
   beforeMount() {
     function portHas(ports, servicename) {
@@ -93,11 +94,47 @@ export default {
       return false;
     }
 
-    this.selectedPorts = this.ports.filter((port) =>
+    this.userPorts = this.selectedPorts = this.ports.filter((port) =>
       portHas(this.project.portOut, port.servicename)
     );
   },
   methods: {
+    computeChanges(){
+      let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut())
+      let strippedAddOut = this.computeStrippedOut(this.computeAddOut())
+      
+      let changes = {
+        'researchID' : this.project['researchId'],
+        'import': {
+          'add': [],
+          'remove': [],
+          'change': []
+        },
+        'export': {
+          'add': strippedAddOut,
+          'remove': strippedRemoveOut,
+          'change': []
+        }
+      }
+      return changes
+    },
+    computeRemoveOut() {
+      return this.userPorts.filter(i => !this.selectedPorts.includes(i))
+    },
+    computeAddOut() {
+      return this.selectedPorts.filter(i => !this.userPorts.includes(i))
+    },
+    computeStrippedOut(pOut){
+      let strippedOut = []
+      for (let i of pOut){
+        strippedOut.push({'servicename' : i.servicename})
+      }
+      return strippedOut
+    },
+    emitChanges(){
+      let payload = this.computeChanges()
+      this.$emit('changePorts', payload)
+    },
     filepath(project) {
       if (project.portIn.length > 0) {
         return project.portIn[0].properties.customProperties.filepath;
@@ -116,6 +153,7 @@ export default {
     alert(msg) {
       alert(msg);
     },
+    /* deprecated
     savePorts(research) {
       function filterPortsWhichNotContained(ports, filterports) {
         let distinctPorts = [];
@@ -156,7 +194,7 @@ export default {
     removePort(research, port) {
       port.researchId = research.researchIndex;
       this.$store.dispatch("removePortOut", port);
-    },
+    },*/
   },
   props: ["project"],
 };
