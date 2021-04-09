@@ -16,7 +16,7 @@ export default {
 
         Vue.prototype.auth.loggedIn = false
 
-        Vue.prototype.auth.login = function() {
+        Vue.prototype.auth.login = function () {
             // First check, if we have already a session
             Vue.prototype.$http.get(`${Vue.config.server}/login`).then(() => {
                 Vue.prototype.auth.loggedIn = true
