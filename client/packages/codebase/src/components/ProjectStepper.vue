@@ -17,12 +17,12 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card class="mb-12" height="auto" flat>
-          <StepConfiguration :project="project" />
+          <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
 
         <v-btn text disabled> Back </v-btn>
 
-        <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
+        <v-btn color="primary" @click="[e1 = 2, sendChanges()]"> Continue </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="2">
@@ -77,12 +77,19 @@ export default {
     return {
       e1: 1,
     };
+    changes: {}
   },
   props: ["project"],
   methods: {
     alert(msg) {
       alert(msg);
     },
+    receiveChanges(pChanges) {
+      this.changes = pChanges
+    },
+    sendChanges() {
+      this.$store.dispatch("changePorts", this.changes)
+    }
   },
 };
 </script>

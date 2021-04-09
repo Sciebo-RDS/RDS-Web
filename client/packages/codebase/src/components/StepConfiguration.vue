@@ -29,6 +29,7 @@
             <v-card-text>
               <v-select
                 v-model="selectedPorts"
+                @change="emitChanges"
                 :items="ports"
                 :item-text="(item) => parseServicename(item.servicename)"
                 :item-value="(item) => item"
@@ -96,7 +97,7 @@ export default {
       return false;
     }
 
-    this.selectedPorts = this.ports.filter((port) =>
+    this.userPorts = this.selectedPorts = this.ports.filter((port) =>
       portHas(this.project.portOut, port.servicename)
     );
 
@@ -123,6 +124,42 @@ export default {
     togglePicker() {
       this.showFilePicker(this.project.projectId, this.currentFilePath);
     },
+    computeChanges() {
+      let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut());
+      let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
+
+      let changes = {
+        researchID: this.project["researchId"],
+        import: {
+          add: [],
+          remove: [],
+          change: [],
+        },
+        export: {
+          add: strippedAddOut,
+          remove: strippedRemoveOut,
+          change: [],
+        },
+      };
+      return changes;
+    },
+    computeRemoveOut() {
+      return this.userPorts.filter((i) => !this.selectedPorts.includes(i));
+    },
+    computeAddOut() {
+      return this.selectedPorts.filter((i) => !this.userPorts.includes(i));
+    },
+    computeStrippedOut(pOut) {
+      let strippedOut = [];
+      for (let i of pOut) {
+        strippedOut.push({ servicename: i.servicename });
+      }
+      return strippedOut;
+    },
+    emitChanges() {
+      let payload = this.computeChanges();
+      this.$emit("changePorts", payload);
+    },
     filepath(project) {
       if (project.portIn.length == 0) {
         // TODO add port-owncloud default to project!
@@ -148,47 +185,6 @@ export default {
     },
     alert(msg) {
       alert(msg);
-    },
-    savePorts(research) {
-      function filterPortsWhichNotContained(ports, filterports) {
-        let distinctPorts = [];
-        for (const port of ports) {
-          let found = false;
-          for (const newPort of filterports) {
-            if (port.port == newPort.port) {
-              found = true;
-            }
-          }
-          if (!found) {
-            distinctPorts.push(port);
-          }
-        }
-        return distinctPorts;
-      }
-
-      function applyFnOnPorts(ports, fn) {
-        for (const port of ports) {
-          fn(research, port);
-        }
-      }
-
-      applyFnOnPorts(
-        filterPortsWhichNotContained(research.portOut, this.selectedPorts),
-        this.removePort
-      );
-
-      applyFnOnPorts(
-        filterPortsWhichNotContained(this.selectedPorts, research.portOut),
-        this.addPort
-      );
-    },
-    addPort(research, port) {
-      port.researchId = research.researchIndex;
-      this.$store.dispatch("addPortOut", port);
-    },
-    removePort(research, port) {
-      port.researchId = research.researchIndex;
-      this.$store.dispatch("removePortOut", port);
     },
   },
   props: ["project"],
