@@ -17,7 +17,7 @@
             <v-card-subtitle
               style="padding-top: 0px"
               v-if="filepath(project) !== ``"
-              >Current Folder: {{ filepath(project) }}</v-card-subtitle
+              >Current Folder: {{ currentFilePath }}</v-card-subtitle
             >
           </v-card>
         </v-col>
@@ -68,6 +68,7 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     selectedPorts: [],
+    currentFilePath: "",
   }),
   computed: {
     ...mapGetters({
@@ -98,10 +99,29 @@ export default {
     this.selectedPorts = this.ports.filter((port) =>
       portHas(this.project.portOut, port.servicename)
     );
+
+    this.currentFilePath = this.filepath(this.project);
+    window.addEventListener("message", this.eventloop);
+  },
+  beforeDestroy() {
+    window.removeEventListener("message", this.eventloop);
   },
   methods: {
+    eventloop(event) {
+      if (event.data.length > 0) {
+        var payload = JSON.parse(event.data);
+        switch (payload.event) {
+          case "filePathSelected":
+            let data = payload.data;
+            if (data.projectId == this.project.projectId) {
+              this.currentFilePath = data.filePath;
+            }
+            break;
+        }
+      }
+    },
     togglePicker() {
-      this.showFilePicker(this.project.projectId, this.filepath(this.project));
+      this.showFilePicker(this.project.projectId, this.currentFilePath);
     },
     filepath(project) {
       if (project.portIn.length == 0) {
