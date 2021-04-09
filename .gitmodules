@@ -12,3 +12,6 @@
 	path = client/dev/describo-online
 	url = https://github.com/Arkisto-Platform/describo-online
 	branch = reva_auth
+[submodule "client/dev/reva"]
+	path = client/dev/reva
+	url = https://github.com/cs3org/reva
