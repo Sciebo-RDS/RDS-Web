@@ -200,7 +200,7 @@ def changePorts(jsonData):
     return {
         researchID: researchID,
         import: {
-            add: {{name: "port-owncloud", filepath:"/photosForschung/"}},
+            add: [{name: "port-owncloud", filepath:"/photosForschung/"}],
         },
         export: {
             add: [{name: "port-zenodo"} ],
@@ -208,5 +208,68 @@ def changePorts(jsonData):
             change: [{name: "port-owncloud", filepath:"/photosForschung/"}, {name: "port-zenodo", projectId:"12345"}]
         }
     }"""
+    jsonData = json.loads(jsonData)
+    researchId = jsonData["researchID"]
+
+    user = current_user.userId
+    urlResearch = os.getenv(
+        "CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research")
+
+    def transformPorts(type, portList):
+        data = []
+        for port in portList[type]:
+            obj = {
+                "port": port["name"],
+                "properties": [
+                    {
+                        "portType": "filestorage",
+                        "value": "True"
+                    }
+                ]
+            }
+            if "filepath" in port:
+                obj["properties"].append({
+                    "portType": "customProperties",
+                    "value": {
+                        "key": "filepath",
+                        "value": port["filepath"]
+                    }
+                })
+            if "projectId" in port:
+                obj["properties"].append({
+                    "portType": "customProperties",
+                    "value": {
+                        "key": "projectId",
+                        "value": port["projectId"]
+                    }
+                })
+            data.append(obj)
+        return data
+
+    for method in ["add", "change"]:
+        requests.post(f"{urlResearch}/user/{user}/research/{researchId}/imports",
+                      json=transformPorts(method, jsonData["import"]))
+        requests.post(f"{urlResearch}/user/{user}/research/{researchId}/exports",
+                      json=transformPorts(method, jsonData["export"]))
+
+    def getIdPortListForRemoval(portList):
+        """Get Id Port list
+        Works only with remove command.
+        """
+        portList = []
+        for portType in ["imports", "exports"]:
+            ports = requests.get(
+                f"{urlResearch}/user/{user}/research/{researchId}/{portType}").json
+            for port in ports:
+                for givenPort in portList:
+                    if port.port == givenPort:
+                        portList.append((portType, port.id))
+                        break
+        return portList
+
+    for t in ["import", "export"]:
+        for portType, portId in getIdPortListForRemoval(jsonData[t]["remove"]):
+            requests.delete(
+                f"{urlResearch}/user/{user}/research/{researchId}/{portType}/{portId}")
 
     return jsonData
