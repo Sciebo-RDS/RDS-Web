@@ -1,12 +1,16 @@
 <template>
-  <v-progress-circular indeterminate color="primary" v-if="loading" />
-  <iframe
-    v-else
-    ref="describoWindow"
-    :src="iframeSource"
-    height="500px"
-    style="border: 0px"
-  ></iframe>
+  <div class="text-xs-center">
+    <v-progress-circular indeterminate color="primary" v-if="loading" />
+    <iframe
+      v-show="!loading"
+      ref="describoWindow"
+      :src="iframeSource"
+      height="500px"
+      width="100%"
+      style="border: 0px;"
+      :onload="(loading = false)"
+    ></iframe>
+  </div>
 </template>
 
 <script>
@@ -15,7 +19,7 @@ import queryString from "querystring";
 export default {
   props: ["project"],
   data: () => ({
-    loading: false,
+    loading: true,
   }),
   computed: {
     editor() {
@@ -105,5 +109,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
