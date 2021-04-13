@@ -82,3 +82,4 @@ stop:
 	tmux kill-session -t classic || true
 	tmux kill-session -t standalone || true
 	sudo chown -R $(shell id -un):$(shell id -gn) client
+	docker-compose -f client/dev/describo-online/docker-compose.yml down || true
