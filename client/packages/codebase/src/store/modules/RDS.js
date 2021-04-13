@@ -49,11 +49,11 @@ export default {
             this._vm.$socket.client.emit("createResearch");
         },
         saveProject(context, data) {
-            data.researchId = data.id
+            data.researchIndex = data.id
             this._vm.$socket.client.emit("saveResearch", data);
         },
         removeProject(context, data) {
-            data.researchId = data.id
+            data.researchIndex = data.id
             this._vm.$socket.client.emit("removeResearch", data);
         },
         changePorts(context, data) {
