@@ -104,7 +104,7 @@ export default {
       let strippedAddOut = this.computeStrippedOut(this.computeAddOut())
       
       let changes = {
-        'researchID' : this.project['researchId'],
+        'researchIndex' : this.project['researchIndex'],
         'import': {
           'add': [],
           'remove': [],
