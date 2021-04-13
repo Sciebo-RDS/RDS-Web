@@ -85,7 +85,7 @@ export default {
       if (this.selectAllPorts) return "mdi-close-box";
       if (this.selectSomePorts) return "mdi-minus-box";
       return "mdi-checkbox-blank-outline";
-    },
+    }
   },
   beforeMount() {
     function portHas(ports, servicename) {
@@ -129,7 +129,7 @@ export default {
       let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
 
       let changes = {
-        researchID: this.project["researchId"],
+        researchIndex: this.project["researchIndex"],
         import: {
           add: [],
           remove: [],
