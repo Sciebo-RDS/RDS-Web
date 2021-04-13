@@ -51,7 +51,7 @@ ocis:
 	@echo "Done. Open https://localhost:9200 with your browser."
 	@echo 'If you want to close the server, execute "make stop" and close everything.'
 
-classic:
+classic: describo
 	yarn --cwd ./client classic
 	echo '$$(function () {' > ./client/packages/classic/php/js/app.js
 	cat ./client/packages/classic/dist/js/app.js >> ./client/packages/classic/php/js/app.js
@@ -72,6 +72,9 @@ standalone:
 	docker exec -it dev_owncloud_1 /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
 	@echo Warning!!! You have to create a new oauth2 url and enter it in root .env file and configure RDS properly.
 	@echo Start on http://localhost:8000
+
+describo:
+	docker-compose -f client/dev/describo-online/docker-compose.yml up -d
 
 stop:
 	docker-compose -f client/dev/docker-compose.yml down || true

@@ -214,3 +214,19 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Client Localization
+
+We are using `vue-gettext-cli` for the localization of our client app. You can find a tutorial on their [github page](https://github.com/Polyconseil/vue-gettext#use-the-component-or-the-directive). With the following command, every localizaton will be find in the client source code.
+
+```bash
+make l10n-extract
+```
+
+After the extraction, you can change the placeholders in folder `/client/packages/codebase/translations/locales` in any needed language (currently configured: englisch (default), german). Now, you need to compile it for loading with the following command:
+
+```bash
+make l10n-compile
+```
+
+Now, you have to build and distribute your client app again. In our case, it will be published through a docker container.

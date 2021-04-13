@@ -4,13 +4,13 @@
       <v-expansion-panel v-for="(project, i) in projects" :key="i">
         <v-expansion-panel-header>
           <v-row>
-            <v-col cols="auto"> Project {{ project.researchId + 1 }} </v-col>
+            <v-col cols="auto"> Project {{ project.researchIndex + 1 }} </v-col>
             <ProjectStatusChip v-bind:status="project.status" />
           </v-row>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <ProjectSetting
-            @delete-project="$emit('delete-project', project.researchId)"
+            @delete-project="$emit('delete-project', project.researchIndex)"
             :project="project"
           ></ProjectSetting>
         </v-expansion-panel-content>

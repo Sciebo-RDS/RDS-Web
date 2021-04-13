@@ -108,42 +108,6 @@ export default {
     window.removeEventListener("message", this.eventloop);
   },
   methods: {
-    computeChanges(){
-      let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut())
-      let strippedAddOut = this.computeStrippedOut(this.computeAddOut())
-      
-      let changes = {
-        'researchIndex' : this.project['researchIndex'],
-        'import': {
-          'add': [],
-          'remove': [],
-          'change': []
-        },
-        'export': {
-          'add': strippedAddOut,
-          'remove': strippedRemoveOut,
-          'change': []
-        }
-      }
-      return changes
-    },
-    computeRemoveOut() {
-      return this.userPorts.filter(i => !this.selectedPorts.includes(i))
-    },
-    computeAddOut() {
-      return this.selectedPorts.filter(i => !this.userPorts.includes(i))
-    },
-    computeStrippedOut(pOut){
-      let strippedOut = []
-      for (let i of pOut){
-        strippedOut.push({'servicename' : i.servicename})
-      }
-      return strippedOut
-    },
-    emitChanges(){
-      let payload = this.computeChanges()
-      this.$emit('changePorts', payload)
-    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
@@ -159,6 +123,42 @@ export default {
     },
     togglePicker() {
       this.showFilePicker(this.project.projectId, this.currentFilePath);
+    },
+    computeChanges() {
+      let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut());
+      let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
+
+      let changes = {
+        researchIndex: this.project["researchIndex"],
+        import: {
+          add: [],
+          remove: [],
+          change: [],
+        },
+        export: {
+          add: strippedAddOut,
+          remove: strippedRemoveOut,
+          change: [],
+        },
+      };
+      return changes;
+    },
+    computeRemoveOut() {
+      return this.userPorts.filter((i) => !this.selectedPorts.includes(i));
+    },
+    computeAddOut() {
+      return this.selectedPorts.filter((i) => !this.userPorts.includes(i));
+    },
+    computeStrippedOut(pOut) {
+      let strippedOut = [];
+      for (let i of pOut) {
+        strippedOut.push({ servicename: i.servicename });
+      }
+      return strippedOut;
+    },
+    emitChanges() {
+      let payload = this.computeChanges();
+      this.$emit("changePorts", payload);
     },
     filepath(project) {
       if (project.portIn.length == 0) {
