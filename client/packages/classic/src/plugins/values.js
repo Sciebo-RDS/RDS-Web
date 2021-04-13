@@ -23,8 +23,8 @@ function getConfig(context) {
         })
         .catch(() => {
             context.config = {
-                url: "http://localhost:8085",
-                server: "http://localhost:8085"
+                url: "http://localhost:8080",
+                server: "http://localhost:8080"
             };
         });
     return prom
