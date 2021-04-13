@@ -1,5 +1,6 @@
 <template>
     <div>
+        <template v-if="project.status < 3">
         <v-container>
             <v-row>
                 <v-col>
@@ -14,6 +15,27 @@
                 </v-col>
             </v-row>
         </v-container>
+        </template>
+        <template v-else-if="project.status == 3">
+            <v-card>
+                <v-card-title>
+                    Researchindex : {{ project.researchIndex }}
+                </v-card-title>
+                <v-card-subtitle>
+                    this is a published project
+                </v-card-subtitle>
+            </v-card>
+        </template>
+        <template v-else-if="project.status == 4">
+            <v-card>
+                <v-card-title>
+                    Researchindex : {{ project.researchIndex }}
+                </v-card-title>
+                <v-card-subtitle>
+                    this is a deleted project
+                </v-card-subtitle>
+            </v-card>
+        </template>
     </div>
 </template>
 
