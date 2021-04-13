@@ -59,6 +59,9 @@ export default {
         changePorts(context, data) {
             this._vm.$socket.client.emit("changePorts", JSON.stringify(data))
         },
+        triggerSynchronization(context, data){
+            this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data))
+        },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {
                 context.dispatch("SOCKET_UserServiceList", { list: response })

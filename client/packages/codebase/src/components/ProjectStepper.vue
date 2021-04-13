@@ -45,7 +45,7 @@
 
         <v-btn text @click="e1 = 2"> Back </v-btn>
 
-        <v-btn color="success" @click="alert('Publishing project...')">
+        <v-btn color="success" @click="publishProject">
           Publish
         </v-btn>
       </v-stepper-content>
@@ -89,6 +89,9 @@ export default {
     },
     sendChanges() {
       this.$store.dispatch("changePorts", this.changes)
+    },
+    publishProject() {
+      this.$store.dispatch("triggerSynchronization", {'researchIndex' : this.project["researchIndex"]})
     }
   },
 };
