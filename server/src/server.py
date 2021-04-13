@@ -9,7 +9,7 @@ from flask_login import (
     logout_user,
     current_user,
 )
-from .app import app, socketio, user_store, development_mode
+from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
 from .websocket import socket_blueprint, exchangeCode
 import json
 import requests
@@ -85,9 +85,8 @@ class User(UserMixin):
 def informations():
     data = {}
 
-    redirectUrl = os.getenv("VUE_APP_REDIRECTION_URL")
-    if redirectUrl is not None:
-        data["redirectUrl"] = redirectUrl
+    if redirect_url is not None:
+        data["redirectUrl"] = redirect_url
 
     return json.dumps(data)
 
@@ -141,7 +140,7 @@ def logout():
 @app.route("/", defaults={"path": "index.html"})
 @app.route("/<path:path>")
 def index(path):
-    if development_mode and os.getenv("VUE_APP_SKIP_REDIRECTION", "False") == "True":
+    if use_embed_mode and use_predefined_user:
         LOGGER.debug("skip authentication")
         user = User(
             id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID")
@@ -165,15 +164,15 @@ def index(path):
             exchangeCode(request.args)
             return render_template("exchangeCode.html")
 
-        if development_mode:
+        if use_proxy:
             LOGGER.debug("path: {}".format(request.path))
             return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
-        #return app.send_static_file(path)
+        # return app.send_static_file(path)
 
-    if os.getenv("VUE_APP_SKIP_REDIRECTION", "False") == "True":
+    if use_proxy:
         return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
 
     return redirect(
-        os.getenv("VUE_APP_REDIRECTION_URL")
+        redirect_url
     )

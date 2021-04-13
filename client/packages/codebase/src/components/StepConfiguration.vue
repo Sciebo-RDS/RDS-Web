@@ -10,12 +10,14 @@
               >1. Which folder do you want to publish?</v-card-subtitle
             >
             <v-card-actions
-              ><v-btn @click="alert('this will open a file browser')"
+              ><v-btn @click="togglePicker"
                 >Select Folder</v-btn
               ></v-card-actions
             >
-            <v-card-subtitle style="padding-top: 0px"
-              >Current Folder: {{ filepath(project) }}</v-card-subtitle
+            <v-card-subtitle
+              style="padding-top: 0px"
+              v-if="filepath(project) !== ``"
+              >Current Folder: {{ currentFilePath }}</v-card-subtitle
             >
           </v-card>
         </v-col>
@@ -67,6 +69,7 @@ import { mapGetters } from "vuex";
 export default {
   data: () => ({
     selectedPorts: [],
+    currentFilePath: "",
   }),
   computed: {
     ...mapGetters({
@@ -97,6 +100,12 @@ export default {
     this.userPorts = this.selectedPorts = this.ports.filter((port) =>
       portHas(this.project.portOut, port.servicename)
     );
+
+    this.currentFilePath = this.filepath(this.project);
+    window.addEventListener("message", this.eventloop);
+  },
+  beforeDestroy() {
+    window.removeEventListener("message", this.eventloop);
   },
   methods: {
     computeChanges(){
@@ -135,10 +144,34 @@ export default {
       let payload = this.computeChanges()
       this.$emit('changePorts', payload)
     },
-    filepath(project) {
-      if (project.portIn.length > 0) {
-        return project.portIn[0].properties.customProperties.filepath;
+    eventloop(event) {
+      if (event.data.length > 0) {
+        var payload = JSON.parse(event.data);
+        switch (payload.event) {
+          case "filePathSelected":
+            let data = payload.data;
+            if (data.projectId == this.project.projectId) {
+              this.currentFilePath = data.filePath;
+            }
+            break;
+        }
       }
+    },
+    togglePicker() {
+      this.showFilePicker(this.project.projectId, this.currentFilePath);
+    },
+    filepath(project) {
+      if (project.portIn.length == 0) {
+        // TODO add port-owncloud default to project!
+        // FIXME add port-owncloud, when creating a new project. Not here!
+        return "";
+      }
+
+      const service = this.getService(project.portIn, "port-owncloud");
+      if (service !== undefined) {
+        return service.properties.customProperties.filepath;
+      }
+
       return "";
     },
     toggle() {

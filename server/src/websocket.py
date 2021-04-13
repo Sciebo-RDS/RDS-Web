@@ -26,7 +26,7 @@ def refreshProjects():
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
 
-url = "https://sciebords-dev2.uni-muenster.de"
+url = os.getenv("RDS_INSTALLATION_DOMAIN")
 
 data = {
     os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [

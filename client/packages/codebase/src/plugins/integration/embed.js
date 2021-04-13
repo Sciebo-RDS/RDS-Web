@@ -1,5 +1,8 @@
 export default {
     install(Vue) {
+        let parWindow = window.parent;
+        const self = this;
+
         //Vue.prototype.auth.prelogin.push(async function () {})
         let prom1 = new Promise(function (resolve, reject) {
             let timer = setInterval(function () {
@@ -10,7 +13,6 @@ export default {
             window.addEventListener("message", (event) => {
                 if (event.data.length > 0) {
                     var payload = JSON.parse(event.data);
-                    console.log(payload)
                     switch (payload.event) {
                         case "informations":
                             let info = JSON.parse(payload.data).jwt
@@ -21,7 +23,7 @@ export default {
                                 },
                                 (resp) => {
                                     clearInterval(timer)
-                                    console.log(resp)
+                                    reject(resp)
                                 })
                             break;
                     }
@@ -30,10 +32,19 @@ export default {
         })
 
         Vue.prototype.auth.loginMethods.push(async function () {
-            window.parent.postMessage(JSON.stringify({
+            parWindow.postMessage(JSON.stringify({
                 event: "init"
-            }),
-                "*")
+            }), "*")
         })
+
+        Vue.prototype.showFilePicker = function (projectId, location) {
+            parWindow.postMessage(JSON.stringify({
+                event: "showFilePicker",
+                data: {
+                    projectId: projectId,
+                    filePath: location
+                }
+            }), "*")
+        }
     }
 }

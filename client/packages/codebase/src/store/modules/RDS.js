@@ -39,6 +39,12 @@ export default {
                 projectlist: JSON.parse(state)
             })
         },
+        setLocation(context, data) {
+            // TODO get and remove port-owncloud first and add it with new location!
+            const location = data.filePath
+            const projectId = data.projectId
+            this._vm.$socket.client.emit("setLocation", data);
+        },
         createProject() {
             this._vm.$socket.client.emit("createResearch");
         },
