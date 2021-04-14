@@ -129,8 +129,12 @@ export default {
   },
   beforeCreate() {
     this.auth.login();
-    if (!this.$store.getters.isWizardFinished) {
-      this.$router.push({ name: "Wizard" });
+    const routeName = "Wizard";
+    if (
+      !this.$store.getters.isWizardFinished &&
+      this.$route.name !== routeName
+    ) {
+      this.$router.push({ name: routeName });
     }
   },
   beforeMount: function () {
