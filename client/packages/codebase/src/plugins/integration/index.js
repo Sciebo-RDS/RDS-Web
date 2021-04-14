@@ -24,7 +24,7 @@ export default {
             }).catch(() => {
                 //if not, execute all loginMethods
                 Vue.prototype.auth.loggedIn = false
-                Promise.all(Vue.prototype.auth.loginMethods.map(fn => fn())).then((results) => {
+                Promise.all(Vue.prototype.auth.loginMethods).then((results) => {
                     if (results.includes(true)) {
                         Vue.prototype.auth.loggedIn = true
                         Vue.prototype.$socket.client.open()

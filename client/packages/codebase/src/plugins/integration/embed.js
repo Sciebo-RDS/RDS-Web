@@ -1,10 +1,8 @@
 export default {
     install(Vue) {
         let parWindow = window.parent;
-        const self = this;
 
-        //Vue.prototype.auth.prelogin.push(async function () {})
-        let prom1 = new Promise(function (resolve, reject) {
+        let initProm = new Promise(function (resolve, reject) {
             let timer = setInterval(function () {
                 clearInterval(timer)
                 reject(new Error('no value through response'))
@@ -31,11 +29,17 @@ export default {
             });
         })
 
-        Vue.prototype.auth.loginMethods.push(async function () {
+        Vue.prototype.auth.loginMethods.push(new Promise((resolve, reject) => {
             parWindow.postMessage(JSON.stringify({
                 event: "init"
             }), "*")
-        })
+
+            initProm.then(() => {
+                resolve(true)
+            }).catch(() => {
+                resolve(false)
+            })
+        }))
 
         Vue.prototype.showFilePicker = function (projectId, location) {
             parWindow.postMessage(JSON.stringify({
