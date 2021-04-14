@@ -43,7 +43,7 @@
               :to="item.path"
               v-show="
                 !$store.getters.isWizardFinished != !item.hide ||
-                item.name == 'Home'
+                  item.name == 'Home'
               "
             >
               <v-list-item-icon>
@@ -66,7 +66,6 @@
     </v-app>
   </div>
 </template>
-
 
 <style lang="scss" scoped>
 #app {
@@ -101,7 +100,7 @@ export default {
     server: { type: String, default: null },
   },
   sockets: {
-    connect: function () {
+    connect: function() {
       console.log("socket connected");
     },
     disconnect() {
@@ -137,7 +136,7 @@ export default {
       this.$router.push({ name: routeName });
     }
   },
-  beforeMount: function () {
+  beforeMount: function() {
     this.$config.language = this.getLanguage;
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
