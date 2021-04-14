@@ -85,7 +85,7 @@ export default {
       if (this.selectAllPorts) return "mdi-close-box";
       if (this.selectSomePorts) return "mdi-minus-box";
       return "mdi-checkbox-blank-outline";
-    }
+    },
   },
   beforeMount() {
     function portHas(ports, servicename) {
@@ -172,7 +172,7 @@ export default {
         return service.properties.customProperties.filepath;
       }
 
-      return "";
+      return this.currentFilePath;
     },
     toggle() {
       this.$nextTick(() => {
