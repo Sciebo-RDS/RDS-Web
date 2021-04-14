@@ -118,8 +118,6 @@ def login():
         login_user(user)
         LOGGER.info("logged? {}".format(current_user.is_authenticated))
 
-        LOGGER.debug(user_store)
-
         return "", 201
 
     return "", 401
