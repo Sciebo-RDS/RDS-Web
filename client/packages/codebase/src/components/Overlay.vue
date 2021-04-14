@@ -20,11 +20,11 @@
 <script>
 export default {
   data: () => ({
-    visible: false,
+    visible: true,
   }),
   computed: {
     text() {
-      if (this.subtext === null) {
+      if (this.subtext === undefined) {
         return this.$gettext("Service activation in progress");
       }
       return this.subtext;
@@ -33,10 +33,10 @@ export default {
   props: {
     subtext: {
       type: String,
-      default: null,
+      default: undefined,
     },
   },
-  mounted() {
+  beforeCreate() {
     this.$root.$on("showoverlay", () => {
       this.show();
     });

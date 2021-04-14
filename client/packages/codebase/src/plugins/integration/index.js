@@ -6,6 +6,7 @@ export default {
         Vue.prototype.auth = {}
         Vue.prototype.auth.loginMethods = []
         Vue.prototype.auth.prelogin = []
+        Vue.prototype.auth.isLoading = true
 
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('embed')) {
@@ -16,28 +17,29 @@ export default {
 
         Vue.prototype.auth.loggedIn = false
 
+        function loggedIn() {
+            Vue.prototype.$socket.$subscribe('connect', () => {
+                disableLoadingIndicator()
+                Vue.prototype.$socket.$unsubscribe('connect');
+            });
+            Vue.prototype.auth.loggedIn = true
+            Vue.prototype.$socket.client.open()
+        }
+
+        function disableLoadingIndicator() {
+            Vue.prototype.auth.isLoading = false
+        }
+
         Vue.prototype.auth.login = function () {
             // First check, if we have already a session
             Vue.prototype.$http.get(`${Vue.config.server}/login`).then(() => {
-                Vue.prototype.auth.loggedIn = true
-                Vue.prototype.$socket.client.open()
+                loggedIn()
             }).catch(() => {
                 //if not, execute all loginMethods
                 Vue.prototype.auth.loggedIn = false
                 Promise.all(Vue.prototype.auth.loginMethods).then((results) => {
                     if (results.includes(true)) {
-                        Vue.prototype.auth.loggedIn = true
-                        Vue.prototype.$socket.client.open()
-                    } else {
-                        if (!Vue.config.skipRedirect) {
-                            if (Vue.config.redirectUrl === undefined) {
-                                Vue.$http.get(`${Vue.config.server}/api/1.0/informations`).then((response) => {
-                                    Vue.config.redirectUrl = response.redirectUrl
-                                    Vue.prototype.$config.redirectUrl = Vue.config.redirectUrl
-                                    window.location = Vue.config.redirectUrl
-                                })
-                            }
-                        }
+                        loggedIn()
                     }
                 })
             })

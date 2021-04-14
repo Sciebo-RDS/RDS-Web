@@ -2,7 +2,6 @@
   <div>
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
-
       <v-app-bar app flat class="d-lg-none">
         <v-app-bar-nav-icon
           @click="drawer = !drawer"
@@ -45,6 +44,7 @@
                 !$store.getters.isWizardFinished != !item.hide ||
                   item.name == 'Home'
               "
+              :disabled="auth.isLoading"
             >
               <v-list-item-icon>
                 <v-icon v-text="item.icon" />
@@ -136,22 +136,21 @@ export default {
       this.$router.push({ name: routeName });
     }
   },
-  beforeMount: function() {
+  beforeMount() {
+    this.overlayText = this.$gettext("initialization...");
+
+    this.$root.$emit("showoverlay");
+    var checkLoginStatus = setInterval(() => {
+      this.$root.$emit("showoverlay");
+      if (!this.auth.isLoading) {
+        clearInterval(checkLoginStatus);
+        this.overlayText = undefined;
+        this.$root.$emit("hideoverlay");
+      }
+    }, 500);
     this.$config.language = this.getLanguage;
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
-  },
-  mounted() {
-    this.overlayText = this.$gettext("Wait for login");
-
-    var checkLoginStatus = setInterval(() => {
-      this.$emit("showoverlay");
-      if (this.auth.loggedIn) {
-        clearInterval(checkLoginStatus);
-        this.overlayText = null;
-        this.$emit("hideoverlay");
-      }
-    }, 500);
   },
 };
 </script>
