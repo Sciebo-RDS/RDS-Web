@@ -164,14 +164,10 @@ def index(path):
             exchangeCode(request.args)
             return render_template("exchangeCode.html")
 
+    if use_embed_mode:
         if use_proxy:
-            LOGGER.debug("path: {}".format(request.path))
             return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
-
-        # return app.send_static_file(path)
-
-    if use_proxy:
-        return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
+        return app.send_static_file(path)
 
     return redirect(
         redirect_url
