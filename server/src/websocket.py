@@ -210,6 +210,9 @@ def changePorts(jsonData):
                 {name: "port-zenodo", projectId:"12345"}]
         }
     }"""
+    if jsonData is None:
+        return
+
     jsonData = json.loads(jsonData)
     researchIndex = jsonData["researchIndex"]
 
