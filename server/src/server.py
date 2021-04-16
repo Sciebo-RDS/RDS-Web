@@ -146,7 +146,7 @@ def index(path):
         user_store[user.get_id()] = user
         login_user(user)
 
-    try:
+    if "access_token" in request.args:
         user = User(
             id=uuid.uuid4(),
             token=request.args["access_token"]
@@ -154,15 +154,13 @@ def index(path):
         user_store[user.get_id()] = user
         login_user(user)
         return redirect("/")
-    except Exception as e:
-        LOGGER.error(e, exc_info=True)
 
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:
             exchangeCode(request.args)
             return render_template("exchangeCode.html")
 
-    if use_embed_mode:
+    if use_embed_mode or current_user.is_authenticated:
         if use_proxy:
             return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
         return app.send_static_file(path)
