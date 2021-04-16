@@ -18,16 +18,14 @@ export default {
         Vue.prototype.auth.loggedIn = false
 
         function loggedIn() {
-            Vue.prototype.$socket.$subscribe('connect', () => {
-                disableLoadingIndicator()
-                Vue.prototype.$socket.$unsubscribe('connect');
-            });
             Vue.prototype.auth.loggedIn = true
             Vue.prototype.$socket.client.open()
+            Vue.prototype.$socket.client.on('connect', disableLoadingIndicator);
         }
 
         function disableLoadingIndicator() {
             Vue.prototype.auth.isLoading = false
+            Vue.prototype.$socket.client.off('connect', disableLoadingIndicator);
         }
 
         Vue.prototype.auth.login = function () {
