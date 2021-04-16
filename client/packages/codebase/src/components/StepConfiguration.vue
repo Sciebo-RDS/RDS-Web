@@ -23,9 +23,9 @@
         </v-col>
         <v-col>
           <v-card flat>
-            <v-card-subtitle
-              >2. Which Services do you want to publish to?</v-card-subtitle
-            >
+            <v-card-subtitle>
+              2. Which Services do you want to publish to?
+            </v-card-subtitle>
             <v-card-text>
               <v-select
                 v-model="selectedPorts"
