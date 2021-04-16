@@ -22,8 +22,16 @@
 });
 
 use OCP\Util;
+
 $eventDispatcher = \OC::$server->getEventDispatcher();
-$eventDispatcher->addListener('OCA\Files::loadAdditionalScripts', function(){
-    Util::addScript('rds', 'fileActions' );
+$eventDispatcher->addListener('OCA\Files::loadAdditionalScripts', function () {
+    $policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
+    $url = parse_url(\OC::$server->getConfig()->getAppValue("rds", "cloudURL"));
+    $policy->addAllowedConnectDomain($url["scheme"] . "://" . $url["host"] . ":" . $url["port"]);
+    $policy->addAllowedConnectDomain(str_replace($url["scheme"], "http", "ws") . "://" . $url["host"] . ":" . $url["port"]);
+    \OC::$server->getContentSecurityPolicyManager()->addDefaultPolicy($policy);
+
+    Util::addScript('rds', "socket.io.min");
+    Util::addScript('rds', 'fileActions');
     Util::addStyle("rds", "style");
 });

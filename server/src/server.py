@@ -96,14 +96,18 @@ def login():
     if request.method == "GET":
         return ("", 200) if (current_user.is_authenticated) else ("", 401)
 
-    reqData = request.get_json(force=True)
+    try:
+        reqData = request.form
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
+        reqData = request.get_json(force=True)
     LOGGER.debug("reqdata: {}".format(reqData))
 
     user = None
     if publickey != "":
         try:
             decoded = jwt.decode(
-                reqData["informations"], publickey, algorithms=["RS256"]
+                reqData.get("informations", ""), publickey, algorithms=["RS256"]
             )
 
             user = User(
