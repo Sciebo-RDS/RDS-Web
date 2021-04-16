@@ -16,7 +16,7 @@
             >
             <v-card-subtitle
               style="padding-top: 0px"
-              v-if="filepath(project) !== ``"
+              v-if="!!filepath(project) || !!currentFilePath"
               >Current Folder: {{ currentFilePath }}</v-card-subtitle
             >
           </v-card>
