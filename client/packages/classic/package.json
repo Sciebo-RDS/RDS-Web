@@ -6,6 +6,6 @@
         "build": "vue-cli-service build --mode production --name app"
     },
     "dependencies": {
-        "owncloud-design-system": "^4.2.0"
+        "owncloud-design-system": "^1.9.0"
     }
 }

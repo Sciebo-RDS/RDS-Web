@@ -34,7 +34,7 @@ web:
 	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve" || true
 	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || true
-	@echo "Open https://localhost:9100 with your browser."
+	@echo "Open http://localhost:9100 with your browser."
 	@echo 'If you want to close the server, execute "make stop" and close everything.'
 
 ocis:
@@ -48,7 +48,7 @@ ocis:
 	@echo "Wait 20s for server startup to kill web"
 	@sleep 20
 	tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"
-	@echo "Done. Open https://localhost:9200 with your browser."
+	@echo "Done. Open http://localhost:9200 with your browser."
 	@echo 'If you want to close the server, execute "make stop" and close everything.'
 
 classic: describo
