@@ -97,10 +97,10 @@ def login():
         return ("", 200) if (current_user.is_authenticated) else ("", 401)
 
     try:
-        reqData = request.form
+        reqData = request.get_json()
     except Exception as e:
         LOGGER.error(e, exc_info=True)
-        reqData = request.get_json(force=True)
+        reqData = request.form
     LOGGER.debug("reqdata: {}".format(reqData))
 
     user = None
@@ -167,6 +167,8 @@ def index(path):
     if use_embed_mode or current_user.is_authenticated:
         if use_proxy:
             return proxy(os.getenv("DEV_WEBPACK_DEV_SERVER_HOST"), request.path)
+
+    if use_embed_mode:
         return app.send_static_file(path)
 
     return redirect(
