@@ -30,7 +30,9 @@
               <v-select
                 v-model="selectedPorts"
                 @change="emitChanges"
-                :items="ports"
+                :items="
+                  ports.filter((i) => i['servicename'] !== 'port-owncloud')
+                "
                 :item-text="(item) => parseServicename(item.servicename)"
                 :item-value="(item) => item"
                 :label="$gettext('Select your Services')"
@@ -85,7 +87,7 @@ export default {
       if (this.selectAllPorts) return "mdi-close-box";
       if (this.selectSomePorts) return "mdi-minus-box";
       return "mdi-checkbox-blank-outline";
-    }
+    },
   },
   beforeMount() {
     function portHas(ports, servicename) {
