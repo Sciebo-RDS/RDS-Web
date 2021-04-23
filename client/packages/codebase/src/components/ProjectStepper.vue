@@ -78,9 +78,8 @@ export default {
   data() {
     return {
       e1: 1,
+      changes: {},
     };
-    changes: {
-    }
   },
   props: ["project"],
   methods: {
@@ -91,7 +90,10 @@ export default {
       this.changes = pChanges;
     },
     sendChanges() {
-      this.$store.dispatch("changePorts", this.changes);
+      if (!!Object.keys(this.changes).length) {
+        this.$store.dispatch("changePorts", this.changes);
+        this.changes = {};
+      }
     },
     publishProject() {
       let indexObject = {
