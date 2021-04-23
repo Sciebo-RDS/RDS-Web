@@ -19,10 +19,11 @@
         <v-card class="mb-12" height="auto" flat>
           <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
-
         <v-btn text disabled> Back </v-btn>
-
-        <v-btn color="primary" @click="[(e1 = 2), sendChanges()]">
+        <v-btn v-if="configurationLockState" disabled>
+          Continue
+        </v-btn>
+        <v-btn v-else color="primary" @click="[(e1 = 2), sendChanges()]">
           Continue
         </v-btn>
       </v-stepper-content>
@@ -79,15 +80,34 @@ export default {
     return {
       e1: 1,
       changes: {},
+      configurationLockState: this.getInitialConfigurationLockState(),
     };
   },
   props: ["project"],
   methods: {
+    getInitialConfigurationLockState() {
+      if (this.project.portOut.length !== 0) {
+        return false;
+      }
+      return true;
+    },
+    setConfigurationLock(pChanges) {
+      let numberOfSelectedPorts =
+        this.project.portOut.length +
+        pChanges["export"]["add"].length -
+        pChanges["export"]["remove"].length;
+      if (numberOfSelectedPorts !== 0) {
+        this.configurationLockState = false;
+      } else {
+        this.configurationLockState = true;
+      }
+    },
     alert(msg) {
       alert(msg);
     },
     receiveChanges(pChanges) {
       this.changes = pChanges;
+      this.setConfigurationLock(pChanges);
     },
     sendChanges() {
       if (!!Object.keys(this.changes).length) {
