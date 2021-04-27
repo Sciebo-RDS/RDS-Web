@@ -129,11 +129,11 @@ export default {
     computeChanges() {
       let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut());
       let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
-
+      let importAdd = this.setOwncloudIfInputDoesNotExists();
       let changes = {
         researchIndex: this.project["researchIndex"],
         import: {
-          add: [],
+          add: importAdd,
           remove: [],
           change: [],
         },
@@ -158,17 +158,21 @@ export default {
       }
       return strippedOut;
     },
+    setOwncloudIfInputDoesNotExists() {
+      let add = [];
+      if (this.project.portIn.length == 0) {
+        add = [{ servicename: "port-owncloud", filepath: "/photosForschung/" }];
+      }
+      return add;
+    },
     emitChanges() {
       let payload = this.computeChanges();
       this.$emit("changePorts", payload);
     },
     filepath(project) {
       if (project.portIn.length == 0) {
-        // TODO add port-owncloud default to project!
-        // FIXME add port-owncloud, when creating a new project. Not here!
         return "";
       }
-
       const service = this.getService(project.portIn, "port-owncloud");
       if (service !== undefined) {
         return service.properties.customProperties.filepath;
