@@ -80,10 +80,13 @@ export default {
     return {
       e1: 1,
       changes: {},
-      configurationLockState: this.getInitialConfigurationLockState(),
+      configurationLockState: false,
     };
   },
   props: ["project"],
+  beforeMount() {
+    this.configurationLockState = this.getInitialConfigurationLockState();
+  },
   methods: {
     getInitialConfigurationLockState() {
       if (this.project.portOut.length !== 0) {
