@@ -210,6 +210,9 @@ def changePorts(jsonData):
                 {name: "port-zenodo", projectId:"12345"}]
         }
     }"""
+    if jsonData is None:
+        return
+
     jsonData = json.loads(jsonData)
     researchIndex = jsonData["researchIndex"]
 
@@ -225,15 +228,13 @@ def changePorts(jsonData):
                 "properties": []
             }
 
-            # TODO: add fileStorage
-            obj["properties"].append(
-                {
-                    "portType": "metadata",
-                    "value": True
-                }
-            )
-
             if "filepath" in port:
+                obj["properties"].append(
+                    {
+                        "portType": "fileStorage",
+                        "value": True
+                    }
+                )
                 obj["properties"].append({
                     "portType": "customProperties",
                     "value": [{
@@ -241,6 +242,14 @@ def changePorts(jsonData):
                         "value": port["filepath"]
                     }]
                 })
+            else:
+                obj["properties"].append(
+                    {
+                        "portType": "metadata",
+                        "value": True
+                    }
+                )
+
             if "projectId" in port:
                 obj["properties"].append({
                     "portType": "customProperties",
