@@ -35,11 +35,11 @@
 <script>
 import queryString from "querystring";
 import { mapGetters, mapActions } from "vuex";
-import FilePicker from '@ownclouders/file-picker'
+import FilePicker from "@ownclouders/file-picker";
 
 export default {
   components: {
-    FilePicker
+    FilePicker,
   },
   data: () => ({
     loading: true,
