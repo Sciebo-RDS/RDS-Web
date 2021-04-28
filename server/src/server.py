@@ -1,6 +1,5 @@
 from flask_cors import CORS
-from flask import Response, stream_with_context
-from flask import render_template, request, redirect, url_for
+from flask import Response, stream_with_context, session, render_template, request, redirect, url_for
 from flask_login import (
     LoginManager,
     login_user,
@@ -114,6 +113,8 @@ def login():
                 id=uuid.uuid4(),
                 userId=decoded["name"]
             )
+
+            session["informations"] = decoded
         except Exception as e:
             LOGGER.error(e, exc_info=True)
 
