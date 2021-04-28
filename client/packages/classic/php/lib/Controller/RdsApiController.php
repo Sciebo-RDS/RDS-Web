@@ -96,12 +96,40 @@ class RdsApiController extends ApiController
      */
     public function informations()
     {
+        function my_server_url()
+        {
+            $server_name = $_SERVER['SERVER_NAME'];
+
+            if (!in_array($_SERVER['SERVER_PORT'], [80, 443])) {
+                $port = ":$_SERVER[SERVER_PORT]";
+            } else {
+                $port = '';
+            }
+
+            if (!empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on' || $_SERVER['HTTPS'] == '1')) {
+                $scheme = 'https';
+            } else {
+                $scheme = 'http';
+            }
+            return $scheme . '://' . $server_name . $port;
+        }
+
         return $this->handleNotFound(function () {
             $user = \OC::$server->getUserSession()->getUser();
             $data = [
                 "email" => $user->getEMailAddress(),
-                "username" => $user->getUserName(),
-                "displayname" => $user->getDisplayName()
+                "name" => $user->getUserName(),
+                "displayName" => $user->getDisplayName(),
+                "accountId" => $user->getAccountId(),
+                "UID" => $user->getUID(),
+                "lastLogin" => $user->getLastLogin(),
+                "home" => $user->getHome(),
+                "avatarImage" => $user->getAvatarImage($user),
+                "quota" => $user->getQuota(),
+                "searchTerms" => $user->getSearchTerms(),
+                "webdav_type" => "owncloud",
+                "webdav" => my_server_url() . "/remote.php/webdav",
+                "access_token" => "",
             ];
 
             $token = \Firebase\JWT\JWT::encode($data, $this->private_key, 'RS256');

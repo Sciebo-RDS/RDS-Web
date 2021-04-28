@@ -112,7 +112,7 @@ def login():
 
             user = User(
                 id=uuid.uuid4(),
-                userId=decoded["username"]
+                userId=decoded["name"]
             )
         except Exception as e:
             LOGGER.error(e, exc_info=True)
