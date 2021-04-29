@@ -15,3 +15,6 @@
 [submodule "client/dev/reva"]
 	path = client/dev/reva
 	url = https://github.com/cs3org/reva
+[submodule "client/dev/file-picker"]
+	path = client/dev/file-picker
+	url = https://github.com/owncloud/file-picker.git
