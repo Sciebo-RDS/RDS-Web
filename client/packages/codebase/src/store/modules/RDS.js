@@ -2,7 +2,8 @@ const getDefaultState = () => {
     return {
         userservicelist: [],
         servicelist: [],
-        projectlist: []
+        projectlist: [],
+        sessionID: null
     }
 }
 
@@ -13,12 +14,14 @@ export default {
     getters: {
         getUserServiceList: (state) => state.userservicelist,
         getServiceList: (state) => state.servicelist,
-        getProjectlist: (state) => state.projectlist
+        getProjectlist: (state) => state.projectlist,
+        getSessionId: (state) => state.sessionID
     },
     mutations: {
         setUserServiceList: (state, payload) => { state.userservicelist = payload.servicelist },
         setServiceList: (state, payload) => { state.servicelist = payload.servicelist },
-        setProjectList: (state, payload) => { state.projectlist = payload.projectlist }
+        setProjectList: (state, payload) => { state.projectlist = payload.projectlist },
+        setSessionId: (state, payload) => { state.sessionID = payload.sessionID }
     },
     actions: {
         SOCKET_UserServiceList(context, state) {
@@ -38,6 +41,14 @@ export default {
             context.commit('setProjectList', {
                 projectlist: JSON.parse(state)
             })
+        },
+        SOCKET_SessionId(context, state) {
+            context.commit('setSessionId', {
+                sessionID: state
+            })
+        },
+        requestSessionId() {
+            this._vm.$socket.client.emit("requestSessionId")
         },
         setLocation(context, data) {
             // TODO get and remove port-owncloud first and add it with new location!

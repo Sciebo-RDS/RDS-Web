@@ -1,11 +1,16 @@
 import os
 import requests
 from flask import session
+import logging
+
+LOGGER = logging.getLogger()
 
 
 def getSessionId(access_token):
     informations = session["informations"]
-    informations["access_token"] = access_token
+
+    if not informations["access_token"]:
+        informations["access_token"] = access_token
 
     payload = {
         "email": informations["email"],
@@ -22,7 +27,8 @@ def getSessionId(access_token):
 
     req = requests.post(
         os.getenv("DESCRIBO_API_ENDPOINT"),
-        payload,
+        json=payload,
         headers=headers
     )
+
     return req.json().get("sessionId")

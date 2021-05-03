@@ -31,6 +31,7 @@ export default {
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
+        sid: this.$store.getters.getSessionId,
       });
       return `${this.$config.describo}?${query}`;
     },

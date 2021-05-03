@@ -134,6 +134,7 @@ def connected():
     emit("ServiceList", httpManager.makeRequest("getServicesList"))
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+    requestSessionId()
 
 
 @socketio.on("disconnect")
@@ -302,11 +303,12 @@ def changePorts(jsonData):
 
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
+
 @socketio.event
 def requestSessionId():
     token = json.loads(httpManager.makeRequest(
         "getServiceForUser", {
             "servicename": "port-owncloud"
         }
-    ))["access_token"]
+    ))["data"]["access_token"]
     emit("SessionId", getSessionId(token))
