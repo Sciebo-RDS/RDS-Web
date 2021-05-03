@@ -4,6 +4,7 @@ from flask_login import current_user, logout_user
 from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
 from .EasierRDS import parseDict
 from .app import socketio, clients
+from .Describo import getSessionId
 import logging
 import functools
 import os
@@ -228,15 +229,13 @@ def changePorts(jsonData):
                 "properties": []
             }
 
-            # TODO: add fileStorage
-            obj["properties"].append(
-                {
-                    "portType": "metadata",
-                    "value": True
-                }
-            )
-
             if "filepath" in port:
+                obj["properties"].append(
+                    {
+                        "portType": "fileStorage",
+                        "value": True
+                    }
+                )
                 obj["properties"].append({
                     "portType": "customProperties",
                     "value": [{
@@ -244,6 +243,14 @@ def changePorts(jsonData):
                         "value": port["filepath"]
                     }]
                 })
+            else:
+                obj["properties"].append(
+                    {
+                        "portType": "metadata",
+                        "value": True
+                    }
+                )
+
             if "projectId" in port:
                 obj["properties"].append({
                     "portType": "customProperties",
@@ -294,3 +301,12 @@ def changePorts(jsonData):
                 verify=os.getenv("VERIFY_SSL", "False") == "True")
 
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+
+@socketio.event
+def requestSessionId():
+    token = json.loads(httpManager.makeRequest(
+        "getServiceForUser", {
+            "servicename": "port-owncloud"
+        }
+    ))["access_token"]
+    emit("SessionId", getSessionId(token))
