@@ -23,9 +23,12 @@
     >
       <template v-slot:content>
         <file-picker
-          ref="filePicker"
+          ref="file-picker"
           variation="location"
           bearerToken="getToken"
+          :is-sdk-provided="true"
+          :config-object="{}"
+          v-on:selectResources="handleFilePick"
         />
       </template>
     </oc-modal>
@@ -44,6 +47,7 @@ export default {
   data: () => ({
     loading: true,
     showFilePicker: false,
+    latestPayloadFromFrame: {},
   }),
   computed: {
     ...mapGetters(["getToken"]),
@@ -128,10 +132,28 @@ export default {
     exit() {
       window.close();
     },
+    cancel() {
+      this.showFilePicker = false;
+    },
+    handleFilePick(event) {
+      this.cancel();
+      const location = event[0].path;
+      this.rdsWindow.postMessage(
+        JSON.stringify({
+          event: "filePathSelected",
+          data: {
+            projectId: this.latestPayloadFromFrame.projectId,
+            filePath: location,
+          },
+        }),
+        "*"
+      );
+    },
     eventloop(event) {
       if (event.data.length > 0) {
         let payload = JSON.parse(event.data);
         let data = payload.data;
+        this.latestPayloadFromFrame = data;
 
         switch (payload.event) {
           case "init":
@@ -159,22 +181,6 @@ export default {
               });
             break;
           case "showFilePicker":
-            const item = this.$refs.filePicker;
-
-            item.addEventListener("selectResources", (event) => {
-              this.showFilePicker = false;
-              let location = event.detail[0];
-              this.rdsWindow.postMessage(
-                JSON.stringify({
-                  event: "filePathSelected",
-                  data: {
-                    projectId: payload.data.projectId,
-                    filePath: location,
-                  },
-                }),
-                "*"
-              );
-            });
             this.showFilePicker = true;
             break;
           case "load":
@@ -202,8 +208,6 @@ export default {
   },
   mounted() {
     this.loading = false;
-  },
-  created() {
     window.addEventListener("message", this.eventloop);
   },
   beforeDestroy() {
