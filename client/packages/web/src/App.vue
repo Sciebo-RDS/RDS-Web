@@ -17,7 +17,6 @@
     />
     <oc-modal
       v-if="showFilePicker"
-      variation="danger"
       icon="search"
       title="Select a folder"
       :buttonConfirmDisabled="true"
