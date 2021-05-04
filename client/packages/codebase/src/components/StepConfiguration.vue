@@ -6,19 +6,21 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <v-card-subtitle
-              >1. Which folder do you want to publish?</v-card-subtitle
-            >
-            <v-card-actions
-              ><v-btn @click="togglePicker"
-                >Select Folder</v-btn
-              ></v-card-actions
-            >
+            <v-card-subtitle>
+              1. Which folder do you want to publish?
+             </v-card-subtitle>
+            <v-card-actions>
+              <v-btn @click="togglePicker">
+                Select Folder
+              </v-btn>
+            </v-card-actions>
+
             <v-card-subtitle
               style="padding-top: 0px"
               v-if="!!filepath(project) || !!currentFilePath"
-              >Current Folder: {{ currentFilePath }}</v-card-subtitle
             >
+              Current Folder: {{ currentFilePath }}
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col>

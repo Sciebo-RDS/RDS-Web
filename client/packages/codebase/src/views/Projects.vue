@@ -4,18 +4,7 @@
     <v-layout column align-end wrap>
       <v-switch v-model="showAll" inset label="show past projects"></v-switch>
     </v-layout>
-    <ProjectList
-      v-if="this.showAll"
-      @delete-project="deleteProject"
-      :projects="projects"
-      :panel="panel"
-    />
-    <ProjectList
-      v-else
-      @delete-project="deleteProject"
-      :projects="activeProjects"
-      :panel="panel"
-    />
+    <ProjectList />
     <!-- put these into their own components -->
     <v-card-text
       style="
@@ -85,33 +74,27 @@
 <script>
 /*import Header from '../components/Header'*/
 import ProjectList from "../components/ProjectList.vue";
-import { mapGetters } from "vuex";
 
 export default {
   components: {
     ProjectList,
   },
-  data: () => ({
-    panel: [],
-    showAll: false,
-  }),
   computed: {
-    activeProjects() {
-      return this.projects.filter((project) => project.status < 3);
+    showAll: {
+      get() {
+        return this.$store.getters.showAllProjects;
+      },
+      set(val) {
+        this.$store.commit("showAllProjects", val);
+      },
     },
-    ...mapGetters({
-      projects: "getProjectlist",
-    }),
   },
   methods: {
-    deleteProject(id) {
-      this.$store.dispatch("removeProject", { id: id });
+    collapseProjects() {
+      this.$root.$emit("collapseProjects");
     },
     addProject() {
       this.$store.dispatch("createProject");
-    },
-    collapseProjects() {
-      this.panel = [];
     },
   },
 };
