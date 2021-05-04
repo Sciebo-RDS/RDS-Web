@@ -9,26 +9,30 @@
     <iframe
       class="uk-height-1-1 uk-width-1-1"
       v-else
+      v-show="!showFilePicker"
       id="rds-editor"
       ref="rdsEditor"
       :src="iframeSource"
+      :disabled="showFilePicker"
     />
     <oc-modal
       v-if="showFilePicker"
+      variation="danger"
       icon="search"
       title="Select a folder"
-      button-cancel-text="Decline"
-      button-confirm-text="Accept"
-      class="oc-mb-l uk-position-relative"
+      :buttonConfirmDisabled="true"
+      class="uk-position-relative"
+      :focus-trap-active="showFilePicker"
+      @cancel="hideFilePicker"
     >
       <template v-slot:content>
         <file-picker
           ref="file-picker"
           variation="location"
-          bearerToken="getToken"
+          :bearerToken="getToken"
           :is-sdk-provided="true"
           :config-object="{}"
-          v-on:selectResources="handleFilePick"
+          @selectResources="handleFilePick"
         />
       </template>
     </oc-modal>
@@ -48,6 +52,7 @@ export default {
     loading: true,
     showFilePicker: false,
     latestPayloadFromFrame: {},
+    active: true,
   }),
   computed: {
     ...mapGetters(["getToken"]),
@@ -132,11 +137,11 @@ export default {
     exit() {
       window.close();
     },
-    cancel() {
+    hideFilePicker() {
       this.showFilePicker = false;
     },
     handleFilePick(event) {
-      this.cancel();
+      this.hideFilePicker();
       const location = event[0].path;
       this.rdsWindow.postMessage(
         JSON.stringify({
