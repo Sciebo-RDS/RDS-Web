@@ -59,27 +59,39 @@ export default {
       this.panel = [];
     },
     getProjects() {
-      let diffCount = this.allProjects.length - this.activeProjects.length;
       let projects = this.showAllProjects
         ? this.allProjects
         : this.activeProjects;
-
-      this.panel = this.panel.map((val) => {
-        return this.showAllProjects ? val + diffCount : val - diffCount;
-      });
 
       return JSON.parse(JSON.stringify(projects)).sort((a, b) => {
         return b.status - a.status;
       });
     },
-    deleteProject(id) {
-      this.$store.dispatch("removeProject", { id: id });
+    deleteProject(researchIndex) {
+      this.$store.dispatch("removeProject", { id: researchIndex });
+      this.panel = [];
     },
   },
   created() {
     this.unwatch = this.$store.watch(
       (state, getters) => getters.showAllProjects,
-      (newValue, oldValue) => {
+      (newValue) => {
+        this.projects = this.getProjects();
+
+        let diffCount = this.allProjects.length - this.activeProjects.length;
+        this.panel = this.panel.map((val) => {
+          let temp = newValue ? val + diffCount : val - diffCount;
+
+          if (temp >= 0) {
+            return temp;
+          }
+        });
+      }
+    );
+
+    this.unwatch = this.$store.watch(
+      (state, getters) => getters.getProjectlist,
+      () => {
         this.projects = this.getProjects();
       }
     );
