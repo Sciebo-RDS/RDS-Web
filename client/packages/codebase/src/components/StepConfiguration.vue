@@ -129,7 +129,7 @@ export default {
     computeChanges() {
       let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut());
       let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
-      let importAdd = this.setOwncloudIfInputDoesNotExists();
+      let importAdd = this.setImportAdd();
       let changes = {
         researchIndex: this.project["researchIndex"],
         import: {
@@ -158,13 +158,25 @@ export default {
       }
       return strippedOut;
     },
-    setOwncloudIfInputDoesNotExists() {
+    setImportAdd() {
       let add = [];
       if (this.project.portIn.length == 0) {
-        add = [
+        return [
           { servicename: "port-owncloud", filepath: this.currentFilePath },
         ];
       }
+      for (let i of this.project["portIn"])
+        if (
+          i["properties"]["customProperties"]["filepath"] !==
+          this.currentFilePath
+        ) {
+          add = [
+            {
+              servicename: i["port"],
+              filepath: this.currentFilePath,
+            },
+          ];
+        }
       return add;
     },
     emitChanges() {
