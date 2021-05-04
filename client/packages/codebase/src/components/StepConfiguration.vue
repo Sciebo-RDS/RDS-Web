@@ -16,7 +16,7 @@
             >
             <v-card-subtitle
               style="padding-top: 0px"
-              v-if="filepath(project) !== ``"
+              v-if="!!filepath(project) || !!currentFilePath"
               >Current Folder: {{ currentFilePath }}</v-card-subtitle
             >
           </v-card>
@@ -161,7 +161,9 @@ export default {
     setOwncloudIfInputDoesNotExists() {
       let add = [];
       if (this.project.portIn.length == 0) {
-        add = [{ servicename: "port-owncloud", filepath: "/photosForschung/" }];
+        add = [
+          { servicename: "port-owncloud", filepath: this.currentFilePath },
+        ];
       }
       return add;
     },
