@@ -129,6 +129,7 @@ export default {
   beforeCreate() {
     this.auth.login();
     const routeName = "Wizard";
+
     if (
       !this.$store.getters.isWizardFinished &&
       this.$route.name !== routeName
