@@ -118,6 +118,7 @@ export default {
             let data = payload.data;
             if (data.projectId == this.project.projectId) {
               this.currentFilePath = data.filePath;
+              this.emitChanges();
             }
             break;
         }
