@@ -31,7 +31,7 @@
 
       <v-stepper-content step="2">
         <v-card
-          v-if="e1 == 2"
+          v-if="e1 >= 2"
           class="d-flex flex-column justify-center mb-12"
           min-height="500px"
         >
