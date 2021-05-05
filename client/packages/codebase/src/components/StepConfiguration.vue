@@ -105,7 +105,7 @@ export default {
 
     this.currentFilePath = this.filepath(this.project);
     window.addEventListener("message", this.eventloop);
-    if (!!this.project.portIn.length) {
+    if (!this.project.portIn.length) {
       this.emitChanges();
     }
   },
