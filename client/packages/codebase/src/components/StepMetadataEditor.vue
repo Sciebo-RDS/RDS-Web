@@ -8,7 +8,7 @@
       </v-row>
       <v-row>
         <v-col>
-          Loading Metadata
+          {{ loadingText }}
         </v-col>
       </v-row>
     </v-container>
@@ -30,6 +30,7 @@ export default {
   props: ["project"],
   data: () => ({
     loading: true,
+    loadingText: "",
   }),
   computed: {
     editor() {
@@ -112,8 +113,28 @@ export default {
     },
   },
   mounted() {
+    this.standardLoadingText = this.$gettext("Editor loading");
+    this.loadingText = this.standardLoadingText;
+    let counter = 0;
+    let loader = setInterval(() => {
+      if (counter > 30) {
+        this.loadingText = this.$gettext(
+          "Error while loading. Please contact an administator."
+        );
+        clearInterval(loader);
+      } else {
+        if (counter % 4 > 0) {
+          this.loadingText += ".";
+        } else {
+          this.loadingText = this.standardLoadingText;
+        }
+        counter += 1;
+      }
+    }, 1000);
+
     this.$refs.describoWindow.addEventListener("load", () => {
       this.loading = false;
+      clearInterval(loader);
     });
   },
   created() {
