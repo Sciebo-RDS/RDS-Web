@@ -9,32 +9,29 @@
     <iframe
       class="uk-height-1-1 uk-width-1-1"
       v-else
-      v-show="!showFilePicker"
       id="rds-editor"
       ref="rdsEditor"
       :src="iframeSource"
       :disabled="showFilePicker"
     />
-    <oc-modal
-      v-if="showFilePicker"
-      icon="search"
-      title="Select a folder"
-      :buttonConfirmDisabled="true"
-      class="uk-position-relative"
-      :focus-trap-active="showFilePicker"
-      @cancel="hideFilePicker"
-    >
-      <template v-slot:content>
+    <div style="position: absolute;" v-if="showFilePicker">
+      <div class="app-background"></div>
+      <div class="app app-variations-passive uk-position-relative">
+        <div class="oc-modal-title">
+          <h2 v-text="$gettext(`Select a folder`)" />
+        </div>
         <file-picker
           ref="file-picker"
           variation="location"
           :bearerToken="getToken"
           :is-sdk-provided="true"
           :config-object="{}"
+          :cancel-btn-label="$gettext(`Close`)"
           @selectResources="handleFilePick"
+          @cancel="hideFilePicker"
         />
-      </template>
-    </oc-modal>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -49,7 +46,7 @@ export default {
   },
   data: () => ({
     loading: true,
-    showFilePicker: false,
+    showFilePicker: true,
     latestPayloadFromFrame: {},
     active: true,
   }),
@@ -219,3 +216,89 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@mixin oc-modal-variation($color) {
+  border-top-color: $color;
+  span {
+    color: $color;
+  }
+}
+
+.app {
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 1);
+  border-top: 10px solid var(--oc-color-swatch-passive-default);
+  box-shadow: 0 2px 4px rgba(14, 30, 37, 0.25);
+  max-width: 500px;
+  overflow: hidden;
+  width: 100%;
+  z-index: 5;
+  &:focus {
+    outline: none;
+  }
+  &-background {
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-flow: row wrap;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 4;
+  }
+  &-primary {
+    @include oc-modal-variation(var(--oc-color-swatch-primary-default));
+  }
+  &-success {
+    @include oc-modal-variation(var(--oc-color-swatch-success-default));
+  }
+  &-warning {
+    @include oc-modal-variation(var(--oc-color-swatch-warning-default));
+  }
+  &-danger {
+    @include oc-modal-variation(var(--oc-color-swatch-danger-default));
+  }
+  &-title {
+    align-items: center;
+    background-color: var(--oc-color-text-inverse);
+    display: flex;
+    flex-flow: row wrap;
+    padding: var(--oc-space-small) var(--oc-space-medium);
+    > .oc-icon {
+      margin-right: var(--oc-space-small);
+    }
+    > h2 {
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 0;
+    }
+  }
+  &-body {
+    background-color: var(--oc-color-background-muted);
+    color: var(--oc-color-text-default);
+    padding: var(--oc-space-medium);
+    &-message {
+      margin-bottom: var(--oc-space-medium);
+    }
+    &-input {
+      /* FIXME: this is ugly, but required so that the bottom padding doesn't look off when reserving vertical space for error messages below the input. */
+      margin-bottom: -20px;
+      padding-bottom: var(--oc-space-medium);
+    }
+    &-actions {
+      text-align: right;
+      .oc-button {
+        border-radius: 4px;
+        &.uk-button-default {
+          background-color: var(--oc-color-text-inverse);
+          color: var(--oc-color-text-default);
+        }
+      }
+    }
+  }
+}
+</style>
