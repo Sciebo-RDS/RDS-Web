@@ -14,7 +14,12 @@
       :src="iframeSource"
       :disabled="showFilePicker"
     />
-    <div style="position: absolute;" v-if="showFilePicker">
+    <div
+      style="position: absolute;"
+      v-if="showFilePicker"
+      tabindex="-1"
+      @keyup.esc="hideFilePicker"
+    >
       <div class="app-background"></div>
       <div class="app app-variations-passive uk-position-relative">
         <div class="oc-modal-title">
