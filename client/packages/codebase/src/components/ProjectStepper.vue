@@ -80,7 +80,7 @@ export default {
     return {
       e1: 1,
       changes: {},
-      configurationLockState: false,
+      configurationLockState: true,
     };
   },
   props: ["project"],
@@ -99,16 +99,17 @@ export default {
         this.project.portOut.length +
         pChanges["export"]["add"].length -
         pChanges["export"]["remove"].length;
-      if (numberOfSelectedPorts !== 0 && !!this.changes["import"]["add"]) {
+      if (numberOfSelectedPorts !== 0) {
+        if (!!this.changes["import"]["add"]) {
         for (let i of this.changes["import"]["add"]) {
           if (!i["filepath"]) {
-            this.configurationLockState = true;
-            return;
+              return true;
           }
         }
-        this.configurationLockState = false;
+        }
+        return false;
       } else {
-        this.configurationLockState = true;
+        return true;
       }
     },
     alert(msg) {
@@ -116,7 +117,7 @@ export default {
     },
     receiveChanges(pChanges) {
       this.changes = pChanges;
-      this.setConfigurationLock(pChanges);
+      this.configurationLockState = this.setConfigurationLock(pChanges);
     },
     sendChanges() {
       if (!!Object.keys(this.changes).length) {

@@ -169,11 +169,8 @@ export default {
           { servicename: "port-owncloud", filepath: this.currentFilePath },
         ];
       }
-      for (let i of this.project["portIn"])
-        if (
-          i["properties"]["customProperties"]["filepath"] !==
-          this.currentFilePath
-        ) {
+      for (let i of this.project["portIn"]) {
+        if (!!this.currentFilePath) {
           add = [
             {
               servicename: i["port"],
@@ -181,11 +178,13 @@ export default {
             },
           ];
         }
+      }
       return add;
     },
     emitChanges() {
       let payload = this.computeChanges();
       this.$emit("changePorts", payload);
+      this.changes = {};
     },
     filepath(project) {
       if (!!project.portIn.length) {
