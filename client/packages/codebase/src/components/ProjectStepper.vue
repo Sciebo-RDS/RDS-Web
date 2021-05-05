@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     getInitialConfigurationLockState() {
-      if (this.project.portOut.length !== 0) {
+      if (!!this.project.portOut.length && !!this.project["portIn"]) {
         return false;
       }
       return true;
@@ -99,7 +99,13 @@ export default {
         this.project.portOut.length +
         pChanges["export"]["add"].length -
         pChanges["export"]["remove"].length;
-      if (numberOfSelectedPorts !== 0) {
+      if (numberOfSelectedPorts !== 0 && !!this.changes["import"]["add"]) {
+        for (let i of this.changes["import"]["add"]) {
+          if (!i["filepath"]) {
+            this.configurationLockState = true;
+            return;
+          }
+        }
         this.configurationLockState = false;
       } else {
         this.configurationLockState = true;

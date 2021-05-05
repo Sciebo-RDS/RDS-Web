@@ -105,6 +105,9 @@ export default {
 
     this.currentFilePath = this.filepath(this.project);
     window.addEventListener("message", this.eventloop);
+    if (!!this.project.portIn.length) {
+      this.emitChanges();
+    }
   },
   beforeDestroy() {
     window.removeEventListener("message", this.eventloop);
@@ -185,7 +188,7 @@ export default {
       this.$emit("changePorts", payload);
     },
     filepath(project) {
-      if (project.portIn.length == 0) {
+      if (!!project.portIn.length) {
         return "";
       }
       const service = this.getService(project.portIn, "port-owncloud");
