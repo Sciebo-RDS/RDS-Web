@@ -101,11 +101,11 @@ export default {
         pChanges["export"]["remove"].length;
       if (numberOfSelectedPorts !== 0) {
         if (!!this.changes["import"]["add"]) {
-        for (let i of this.changes["import"]["add"]) {
-          if (!i["filepath"]) {
+          for (let i of this.changes["import"]["add"]) {
+            if (!i["filepath"]) {
               return true;
+            }
           }
-        }
         }
         return false;
       } else {

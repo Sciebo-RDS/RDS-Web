@@ -14,11 +14,9 @@
                 >Select Folder</v-btn
               ></v-card-actions
             >
-            <v-card-subtitle
-              style="padding-top: 0px"
-              v-if="!!filepath(project) || !!currentFilePath"
-              >Current Folder: {{ currentFilePath }}</v-card-subtitle
-            >
+            <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
+              Current Folder: {{ currentFilePath }}
+            </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col>
@@ -187,7 +185,7 @@ export default {
       this.changes = {};
     },
     filepath(project) {
-      if (!!project.portIn.length) {
+      if (!project.portIn.length) {
         return "";
       }
       const service = this.getService(project.portIn, "port-owncloud");
