@@ -3,6 +3,7 @@ import requests
 import os
 import json
 from flask_login import current_user
+from .app import use_predefined_user
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
@@ -52,10 +53,10 @@ class HTTPRequest:
             except:
                 pass
 
-        try:
-            data["userId"] = current_user.userId
-        except:
+        if use_predefined_user:
             data["userId"] = os.getenv("DEV_FLASK_USERID")
+        else:
+            data["userId"] = current_user.userId
 
         data["url"] = self.url
 

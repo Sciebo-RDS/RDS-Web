@@ -2,7 +2,8 @@ const getDefaultState = () => {
     return {
         userservicelist: [],
         servicelist: [],
-        projectlist: []
+        projectlist: [],
+        sessionID: null
     }
 }
 
@@ -13,12 +14,14 @@ export default {
     getters: {
         getUserServiceList: (state) => state.userservicelist,
         getServiceList: (state) => state.servicelist,
-        getProjectlist: (state) => state.projectlist
+        getProjectlist: (state) => state.projectlist,
+        getSessionId: (state) => state.sessionID
     },
     mutations: {
         setUserServiceList: (state, payload) => { state.userservicelist = payload.servicelist },
         setServiceList: (state, payload) => { state.servicelist = payload.servicelist },
-        setProjectList: (state, payload) => { state.projectlist = payload.projectlist }
+        setProjectList: (state, payload) => { state.projectlist = payload.projectlist },
+        setSessionId: (state, payload) => { state.sessionID = payload.sessionID }
     },
     actions: {
         SOCKET_UserServiceList(context, state) {
@@ -39,24 +42,33 @@ export default {
                 projectlist: JSON.parse(state)
             })
         },
+        SOCKET_SessionId(context, state) {
+            context.commit('setSessionId', {
+                sessionID: state
+            })
+        },
+        requestSessionId() {
+            this._vm.$socket.client.emit("requestSessionId")
+        },
+        setLocation(context, data) {
+            // TODO get and remove port-owncloud first and add it with new location!
+            const location = data.filePath
+            const projectId = data.projectId
+            this._vm.$socket.client.emit("setLocation", data);
+        },
         createProject() {
             this._vm.$socket.client.emit("createResearch");
         },
         saveProject(context, data) {
-            data.researchId = data.id
+            data.researchIndex = data.id
             this._vm.$socket.client.emit("saveResearch", data);
         },
         removeProject(context, data) {
-            data.researchId = data.id
+            data.researchIndex = data.id
             this._vm.$socket.client.emit("removeResearch", data);
         },
-        addPortOut(context, data) {
-            data.researchId = data.id
-            this._vm.$socket.client.emit("addExport", data)
-        },
-        removePortOut(context, data) {
-            data.researchId = data.id
-            this._vm.$socket.client.emit("removeExport", data)
+        changePorts(context, data) {
+            this._vm.$socket.client.emit("changePorts", JSON.stringify(data))
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {

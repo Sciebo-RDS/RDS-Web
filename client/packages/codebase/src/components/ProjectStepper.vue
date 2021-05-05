@@ -7,7 +7,9 @@
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="e1 > 2" step="2"> Metadata </v-stepper-step>
+      <v-stepper-step :complete="e1 > 2" step="2">
+        Metadata
+      </v-stepper-step>
 
       <v-divider></v-divider>
 
@@ -17,16 +19,24 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card class="mb-12" height="auto" flat>
-          <StepConfiguration :project="project" />
+          <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
 
         <v-btn text disabled> Back </v-btn>
 
-        <v-btn color="primary" @click="e1 = 2"> Continue </v-btn>
+        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
+          Continue
+        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="2">
-        <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
+        <v-card
+          v-if="e1 == 2"
+          class="d-flex flex-column justify-center mb-12"
+          min-height="500px"
+        >
+          <StepMetadataEditor :project="project" />
+        </v-card>
 
         <v-btn text @click="e1 = 1"> Back </v-btn>
 
@@ -60,21 +70,31 @@
 <script>
 import StepConfiguration from "./StepConfiguration.vue";
 import StepPublish from "./StepPublish.vue";
+import StepMetadataEditor from "./StepMetadataEditor.vue";
 
 export default {
   components: {
     StepConfiguration,
     StepPublish,
+    StepMetadataEditor,
   },
   data() {
     return {
       e1: 1,
     };
+    changes: {
+    }
   },
   props: ["project"],
   methods: {
     alert(msg) {
       alert(msg);
+    },
+    receiveChanges(pChanges) {
+      this.changes = pChanges;
+    },
+    sendChanges() {
+      this.$store.dispatch("changePorts", this.changes);
     },
   },
 };

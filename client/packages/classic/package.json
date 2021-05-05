@@ -5,7 +5,7 @@
     "scripts": {
         "build": "vue-cli-service build --mode production --name app"
     },
-    "devDependencies": {
-        "owncloud-design-system": "^4.2.0"
+    "dependencies": {
+        "owncloud-design-system": "^6.2.0"
     }
 }

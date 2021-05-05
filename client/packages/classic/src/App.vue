@@ -51,48 +51,66 @@ export default {
     error(error) {
       console.log(error);
     },
+    sendLocationToWindow(projectId, location) {
+      this.rdsWindow.postMessage(
+        JSON.stringify({
+          event: "filePathSelected",
+          data: {
+            projectId: projectId,
+            filePath: location,
+          },
+        }),
+        "*"
+      );
+    },
+    sendInformationsToWindow() {
+      const url = OC.generateUrl("/apps/rds/api/1.0/informations");
+      fetch(url, { headers: this.headers })
+        .then((response) => {
+          if (response.ok) {
+            return response.text();
+          }
+
+          throw new Error(`${response.status} ${response.statusText}`);
+        })
+        .then((resp) => {
+          this.rdsWindow.postMessage(
+            JSON.stringify({
+              event: "informations",
+              data: resp,
+            }),
+            "*"
+          );
+        })
+        .catch((error) => {
+          this.loading = true;
+          this.error(error);
+        });
+    },
   },
   created() {
-    getConfig()
-      .then((config) => {
-        this.config = config;
-        this.loading = false;
-      })
-      .catch(() => {
-        this.config = {
-          url: "http://localhost:8085",
-          server: "http://localhost:8085",
-        };
-        this.loading = false;
-      });
+    getConfig(this).then(() => (this.loading = false));
 
     window.addEventListener("message", (event) => {
       if (event.data.length > 0) {
+        console.log("got event:", event.data);
         var payload = JSON.parse(event.data);
         switch (payload.event) {
           case "init":
-            const url = OC.generateUrl("/apps/rds/api/1.0/informations");
-            fetch(url, { headers: this.headers })
-              .then((response) => {
-                if (response.ok) {
-                  return response.text();
-                }
-
-                throw new Error(`${response.status} ${response.statusText}`);
-              })
-              .then((resp) => {
-                this.rdsWindow.postMessage(
-                  JSON.stringify({
-                    event: "informations",
-                    data: resp,
-                  }),
-                  "*"
-                );
-              })
-              .catch((error) => {
-                this.loading = true;
-                this.error(error);
-              });
+            this.sendInformationsToWindow();
+            break;
+          case "showFilePicker":
+            let location = "";
+            OC.dialogs.filepicker(
+              t("files", "Choose source folder"),
+              (targetPath, type) => {
+                location = targetPath.trim();
+                this.sendLocationToWindow(payload.data.projectId, location);
+              },
+              false,
+              "httpd/unix-directory",
+              true
+            );
             break;
         }
       }

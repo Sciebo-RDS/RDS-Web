@@ -70,12 +70,15 @@ class PageController extends Controller
     public function index()
     {
         $policy = new \OCP\AppFramework\Http\EmptyContentSecurityPolicy();
-        $policy->addAllowedConnectDomain(parse_url($this->urlService->getURL())["host"]);
-        $policy->addAllowedConnectDomain("http://localhost:8080");
-        $policy->addAllowedConnectDomain("ws://localhost:8080");
-        $policy->addAllowedFontDomain("https://fonts.gstatic.com");
-        $policy->addAllowedScriptDomain('http://localhost:8080');
-        $policy->addAllowedFrameDomain('http://localhost:8080');
+        $url = parse_url(\OC::$server->getConfig()->getAppValue("rds", "cloudURL"));
+        $http = $url["scheme"] . "://" . $url["host"] . ":" . $url["port"];
+        $ws  = str_replace($url["scheme"], "http", "ws") . "://" . $url["host"] . ":" . $url["port"];
+        $policy->addAllowedConnectDomain($http);
+        $policy->addAllowedConnectDomain($ws);
+        $policy->addAllowedConnectDomain($http);
+        $policy->addAllowedConnectDomain($ws);
+        $policy->addAllowedScriptDomain($http);
+        $policy->addAllowedFrameDomain($http);
         \OC::$server->getContentSecurityPolicyManager()->addDefaultPolicy($policy);
 
         $userId = $this->userSession->getUser()->getUID();

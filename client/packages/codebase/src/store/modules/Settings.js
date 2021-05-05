@@ -8,7 +8,8 @@ const getDefaultState = () => {
         darkMode: false,
         deviceMode: true,
         language: language(),
-        finishedWizard: false
+        finishedWizard: false,
+        showAllProjects: false,
     }
 }
 
@@ -34,6 +35,9 @@ export default {
         },
         isWizardFinished(state) {
             return state.finishedWizard
+        },
+        showAllProjects(state) {
+            return state.showAllProjects
         }
     },
 
@@ -55,6 +59,9 @@ export default {
         },
         setWizardFinished(state) {
             state.finishedWizard = true
+        },
+        showAllProjects(state, payload) {
+            state.showAllProjects = payload;
         }
     },
     actions: {
