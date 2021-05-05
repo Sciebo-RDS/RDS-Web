@@ -1,6 +1,17 @@
 <template>
-  <div class="text-xs-center">
-    <v-progress-circular indeterminate color="primary" v-if="loading" />
+  <div class="text-center">
+    <v-container flex v-if="loading">
+      <v-row>
+        <v-col>
+          <v-progress-circular indeterminate color="primary" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          Loading Metadata
+        </v-col>
+      </v-row>
+    </v-container>
     <iframe
       v-show="!loading"
       ref="describoWindow"
@@ -8,7 +19,6 @@
       height="500px"
       width="100%"
       style="border: 0px;"
-      :onload="(loading = false)"
     ></iframe>
   </div>
 </template>
@@ -100,6 +110,11 @@ export default {
         }
       }
     },
+  },
+  mounted() {
+    this.$refs.describoWindow.addEventListener("load", () => {
+      this.loading = false;
+    });
   },
   created() {
     window.addEventListener("message", this.eventloop);

@@ -7,7 +7,9 @@
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="e1 > 2" step="2"> Metadata </v-stepper-step>
+      <v-stepper-step :complete="e1 > 2" step="2">
+        Metadata
+      </v-stepper-step>
 
       <v-divider></v-divider>
 
@@ -22,11 +24,14 @@
 
         <v-btn text disabled> Back </v-btn>
 
-        <v-btn color="primary" @click="[e1 = 2, sendChanges()]"> Continue </v-btn>
+        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
+          Continue
+        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="2">
         <v-card
+          v-if="e1 == 2"
           class="d-flex flex-column justify-center mb-12"
           min-height="500px"
         >
@@ -77,7 +82,8 @@ export default {
     return {
       e1: 1,
     };
-    changes: {}
+    changes: {
+    }
   },
   props: ["project"],
   methods: {
@@ -85,11 +91,11 @@ export default {
       alert(msg);
     },
     receiveChanges(pChanges) {
-      this.changes = pChanges
+      this.changes = pChanges;
     },
     sendChanges() {
-      this.$store.dispatch("changePorts", this.changes)
-    }
+      this.$store.dispatch("changePorts", this.changes);
+    },
   },
 };
 </script>
