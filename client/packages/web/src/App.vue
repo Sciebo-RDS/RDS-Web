@@ -51,7 +51,7 @@ export default {
   },
   data: () => ({
     loading: true,
-    showFilePicker: true,
+    showFilePicker: false,
     latestPayloadFromFrame: {},
     active: true,
   }),
