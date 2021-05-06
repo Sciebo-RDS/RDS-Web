@@ -1,10 +1,10 @@
-FROM node:15.8-alpine3.10 AS web
+FROM node:14-alpine3.10 AS web
 WORKDIR /app
 RUN apk add gettext
-COPY /client/package.json /client/package-lock.json ./
-RUN npm install
+COPY /client/package.json /client/yarn.lock ./
+RUN yarn install
 COPY /client .
-RUN npm run build
+RUN yarn standalone
 
 FROM python:3.8-alpine
 WORKDIR /app
