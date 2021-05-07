@@ -20,7 +20,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            heiss/RDS-ocWeb-integrator
+            heiss/rds-ocweb-integrator
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -37,7 +37,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            heiss/RDS-web
+            heiss/rds-web
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -96,8 +96,8 @@ jobs:
           body: |
             Use the zip files, if you want to host the plugins by yourself.
             The needed containers can be found [here](https://hub.docker.com/u/heiss):
-            - [Server+Frontend](https://hub.docker.com/u/heiss/RDS-web)
-            - [oc-web integrator server](https://hub.docker.com/u/heiss/RDS-ocWeb-integrator)
+            - [Server+Frontend](https://hub.docker.com/u/heiss/rds-web)
+            - [oc-web integrator server](https://hub.docker.com/u/heiss/rds-ocweb-integrator)
           draft: false
           prerelease: false
       - name: Upload Release Asset
