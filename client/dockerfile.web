@@ -1,2 +1,0 @@
-FROM nginx
-COPY --from=web packages/web/dist/ /usr/share/nginx/html

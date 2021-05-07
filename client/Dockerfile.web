@@ -1,0 +1,17 @@
+FROM node:14-alpine3.10 AS web
+WORKDIR /app
+RUN apk add gettext
+COPY ./package.json ./yarn.lock ./
+RUN yarn install
+COPY . .
+RUN yarn standalone
+
+FROM nginx:latest
+ENV JSFOLDER=/usr/share/nginx/html/js/*.js
+
+COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
+COPY dev/setup/start-nginx.sh /usr/bin/start-nginx.sh
+RUN chmod +x /usr/bin/start-nginx.sh
+#RUN curl https://github.com/owncloud/web/releases/latest/download/web.tar.gz | tar -xz -C /usr/share/nginx/html
+
+ENTRYPOINT [ "start-nginx.sh" ]
