@@ -5,5 +5,5 @@ COPY dev/describo-ui-plugins/ /plugins/
 RUN npm install
 RUN npm run build
 
-FROM nginx:latest   
+FROM nginx:latest
 COPY --from=api-builder /srv/dist/ /usr/share/nginx/html

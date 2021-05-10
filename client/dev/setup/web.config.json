@@ -1,0 +1,33 @@
+{
+    "server": "http://localhost:9100",
+    "theme": "owncloud",
+    "version": "0.1.0",
+    "auth": {
+        "clientId": "AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq",
+        "url": "http://localhost:80/index.php/apps/oauth2/api/v1/token",
+        "authUrl": "http://localhost:80/index.php/apps/oauth2/authorize"
+    },
+    "apps": [
+        "files",
+        "media-viewer"
+    ],
+    "external_apps": [
+        {
+            "id": "rds",
+            "path": "http://localhost:8082/index.js",
+            "config": {
+                "url": "http://localhost:80",
+                "describo": "http://localhost:8080"
+            }
+        },
+        {
+            "id": "draw-io",
+            "path": "web-app-draw-io",
+            "config": {
+                "url": "https://embed.diagrams.net",
+                "autosave": false,
+                "theme": "minimal"
+            }
+        }
+    ]
+}

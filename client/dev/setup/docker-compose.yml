@@ -12,6 +12,7 @@ volumes:
 
 services:
   describodb:
+    container_name: describo_db
     image: postgres:13-alpine
     hostname: db
     tty: true
@@ -25,11 +26,13 @@ services:
       - database_volume:/postgresql
 
   describoapi:
+    container_name: describo_api
     image: utseresearch/describo-online-api:latest
     build:
       context: ../describo-online
       dockerfile: Dockerfile.api-build
     hostname: api
+    restart: always
     tty: true
     environment:
       TERM: "xterm-256color"
@@ -42,7 +45,9 @@ services:
       - ./production-configuration.json:/srv/configuration.json
 
   describoui:
+    container_name: describo_ui
     image: utseresearch/describo-online-ui:latest
+    restart: always
     build:
       context: ../..
       dockerfile: Dockerfile.describo-ui
@@ -54,7 +59,7 @@ services:
       TERM: "xterm-256color"
       NODE_ENV: "production"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./wait-for-it.sh:/wait-for-it.sh
     command:
       [
@@ -71,22 +76,24 @@ services:
       - 8080:80
 
   web:
+    container_name: owncloud_web
+    hostname: owncloud_web
+    image: owncloud/web
+    restart: always
     build:
       context: ../..
-      dockerfile: Dockerfile.oc-web-integrator
-    restart: always
-    container_name: owncloud_web
+      dockerfile: Dockerfile.oc-web
     depends_on:
       - owncloud
     ports:
       - 9100:80
-    environment:
-      - SOCKETIO_PATH=/rds/socket.io
-      - SOCKETIO_HOST=http://web:9100
+    volumes:
+      - ./web.config.json:/usr/share/nginx/html/config.json
 
   owncloud:
     image: owncloud/server:${OWNCLOUD_VERSION}
     container_name: owncloud_server
+    hostname: owncloud_server
     restart: always
     ports:
       - ${HTTP_PORT}:8080
@@ -144,12 +151,49 @@ services:
     volumes:
       - redis:/data
 
-  rds:
-    image: heiss/rds-web
+  integrator:
     build:
       context: ../..
-      dockerfile: Dockerfile.web
+      dockerfile: Dockerfile.oc-web-integrator
+    restart: always
+    container_name: owncloud_web_integrator
+    depends_on:
+      - owncloud
+    ports:
+      - 8082:80
+    environment:
+      - IFRAME_URL=http://localhost:8080
+
+  rds:
+    container_name: rds_web
+    image: heiss/rds-web
+    build:
+      context: ../../..
+      dockerfile: Dockerfile.rds-standalone
     hostname: rds
+    restart: always
     depends_on:
       - owncloud
       - describoui
+    ports:
+      - 8008:80
+    environment:
+      - SOCKETIO_HOST=http://localhost:8008
+      - SOCKETIO_PATH=/rds/socket.io
+      - VUE_APP_DESCRIBO_URL=http://describoui:80/application
+      - DESCRIBO_API_ENDPOINT=http://describoui:80/api/session/application
+      - DESCRIBO_API_SECRET=IAMSECRET
+      - VUE_APP_FRONTENDHOST=http://localhost:8008
+      - VUE_APP_SOCKETIO_HOST=http://localhost:8008
+      - RDS_INSTALLATION_DOMAIN=https://sciebords-dev2.uni-muenster.de
+      - VERIFY_SSL=False
+      - EMBED_MODE=True
+      - OWNCLOUD_OAUTH_CLIENT_ID=AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq
+      - OWNCLOUD_OAUTH_CLIENT_SECRET=WnxAqddPtPzX3lyCYijHi3pVs1HGpoumzTYSUWqrVfL0vT7E92JSzNTQABBzCaIm
+      - REDIRECT_URL=http://localhost:9100/oidc-callback.html
+      - AUTHORIZE_URL=http://localhost:80/apps/oauth2/authorize
+      - DEV_FLASK_DEBUG=True
+      - DEV_USE_PREDEFINED_USER=False
+      - OWNCLOUD_URL=http://owncloud_server:80
+      - FLASK_ORIGINS=["http://localhost:80", "http://localhost:8080", "http://localhost:8008", "http://localhost:9100"]
+      - SECRET_KEY=1234

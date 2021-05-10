@@ -1,0 +1,33 @@
+FROM node:14-alpine3.10 AS web
+WORKDIR /app
+RUN apk add gettext
+COPY client/package.json client/yarn.lock ./
+RUN yarn install
+ADD client /app
+RUN yarn standalone
+
+FROM python:3.8-alpine
+WORKDIR /srv
+
+EXPOSE 80
+
+ENV JSFOLDER=/usr/share/nginx/html/js/*.js
+
+ENV SOCKETIO_HOST=http://localhost:80
+ENV SOCKETIO_PATH=/rds/socket.io
+
+COPY client/dev/setup/start-nginx.gunicorn.sh /usr/bin/start-nginx.sh
+RUN chmod +x /usr/bin/start-nginx.sh
+
+RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash
+RUN mkdir -p /run/nginx
+RUN mkdir -p /var/lib/nginx/tmp
+RUN pip install setuptools wheel setuptools-rust gunicorn pipenv
+COPY client/dev/setup/nginx/gunicorn.conf /etc/nginx/nginx.conf
+COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
+RUN pipenv install --system
+COPY ./server/starter.py /srv
+COPY ./server/src /srv/src
+COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
+
+ENTRYPOINT [ "start-nginx.sh" ]
