@@ -37,23 +37,6 @@
                 multiple
                 chips
               >
-                <template v-slot:prepend-item>
-                  <v-list-item ripple @click="toggle">
-                    <v-list-item-action>
-                      <v-icon
-                        :color="
-                          selectedPorts.length > 0 ? 'indigo darken-4' : ''
-                        "
-                      >
-                        {{ icon }}
-                      </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title> Select All </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2"></v-divider>
-                </template>
               </v-select>
             </v-card-text>
           </v-card>
@@ -194,15 +177,6 @@ export default {
       }
 
       return "";
-    },
-    toggle() {
-      this.$nextTick(() => {
-        if (this.selectAllPorts) {
-          this.selectedPorts = [];
-        } else {
-          this.selectedPorts = this.ports.slice();
-        }
-      });
     },
     alert(msg) {
       alert(msg);
