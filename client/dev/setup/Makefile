@@ -16,13 +16,15 @@ start:
 stop:
 	docker-compose down
 
+clean:
+	docker-compose down --remove-orphans 
+	docker-compose down --rmi all --volumes
+
+CONFIG = $$CONFIG
 install: start
-	@curl https://github.com/Sciebo-RDS/RDS-Web/releases/latest/download/ocClassicPlugin.zip -o ocClassicPlugin.zip
-	@unzip ocClassicPlugin.zip -d rds
-	@docker cp ./rds owncloud_server:/var/www/owncloud/apps/rds
-	@docker cp ./config.php owncloud_server:/var/www/owncloud/config.php
-	@docker exec -it owncloud_server /bin/bash -c "cat $"<?php $" > config.php"
-	@docker exec -it owncloud_server /bin/bash -c "php -r $"require('config/config.php'); $CONFIG=array_merge($CONFIG, array('web.baseUrl' => 'http://${OWNCLOUD_DOMAIN}:9100','cors.allowed-domains' => ['https://${OWNCLOUD_DOMAIN}:9100'])); file_put_contents("config.php", print_r($CONFIG, true), FILE_APPEND);$""
+	@docker cp ../../packages/classic/php owncloud_server:/var/www/owncloud/apps/rds
+	@docker exec -it owncloud_server /bin/bash -c "head -n -1 config/config.php > config.php"
+	@docker exec -it owncloud_server /bin/bash -c "echo \"'web.baseUrl' => 'http://${OWNCLOUD_DOMAIN}:9100', 'cors.allowed-domains' => ['https://${OWNCLOUD_DOMAIN}:9100'],);\" >> config.php"
 	@docker exec -it owncloud_server /bin/bash -c "cp config.php config/config.php"
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email ${ADMIN_MAIL}"
 	@docker exec -it owncloud_server /bin/bash -c "occ market:install oauth2 && occ market:install web && occ app:enable oauth2 && occ app:enable rds"
