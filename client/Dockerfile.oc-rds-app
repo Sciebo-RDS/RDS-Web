@@ -1,8 +1,7 @@
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
-COPY ./package.json ./yarn.lock ./
+ADD . .
 RUN yarn install
-ADD . /app
 RUN yarn classic
 
 RUN echo '$(function () {' > packages/classic/php/js/app.js

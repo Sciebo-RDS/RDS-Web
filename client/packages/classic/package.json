@@ -6,6 +6,7 @@
         "build": "vue-cli-service build --mode production --name app"
     },
     "dependencies": {
+        "focus-trap-vue": "*",
         "owncloud-design-system": "^6.2.0"
     }
 }

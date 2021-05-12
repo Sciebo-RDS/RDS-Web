@@ -1,8 +1,7 @@
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
-COPY dev/web/package.json dev/web/yarn.lock ./
+COPY dev/web .
 RUN yarn install
-COPY dev/web /app
 RUN yarn build
 
 FROM nginx:latest
