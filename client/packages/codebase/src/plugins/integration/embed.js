@@ -29,17 +29,19 @@ export default {
             });
         })
 
-        Vue.prototype.auth.loginMethods.push(new Promise((resolve, reject) => {
-            parWindow.postMessage(JSON.stringify({
-                event: "init"
-            }), "*")
+        Vue.prototype.auth.loginMethods.push(() => {
+            return new Promise((resolve, reject) => {
+                parWindow.postMessage(JSON.stringify({
+                    event: "init"
+                }), "*")
 
-            initProm.then(() => {
-                resolve(true)
-            }).catch(() => {
-                resolve(false)
+                initProm.then(() => {
+                    resolve(true)
+                }).catch(() => {
+                    resolve(false)
+                })
             })
-        }))
+        })
 
         Vue.prototype.showFilePicker = function (projectId, location) {
             parWindow.postMessage(JSON.stringify({

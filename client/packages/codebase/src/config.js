@@ -4,8 +4,8 @@ const config = {
         server: process.env.SOCKETIO_HOST || "$SOCKETIO_HOST",
         path: process.env.SOCKETIO_PATH || "$SOCKETIO_PATH"
     },
-    server: process.env.VUE_APP_FRONTENDHOST || "",
-    describo: process.env.VUE_APP_DESCRIBO_URL || "http://localhost:8100"
+    server: process.env.VUE_APP_FRONTENDHOST || "$VUE_APP_FRONTENDHOST",
+    describo: process.env.VUE_APP_DESCRIBO_URL || "$VUE_APP_DESCRIBO_URL"
 }
 
 export default {
