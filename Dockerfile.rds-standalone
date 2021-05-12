@@ -16,7 +16,7 @@ ENV JSFOLDER=/usr/share/nginx/html/js/*.js
 ENV SOCKETIO_HOST=http://localhost:80
 ENV SOCKETIO_PATH=/rds/socket.io
 
-RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash
+RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash supervisor
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
 RUN pip install setuptools wheel setuptools-rust gunicorn pipenv
@@ -24,11 +24,12 @@ RUN pip install setuptools wheel setuptools-rust gunicorn pipenv
 COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
 
-COPY client/dev/setup/start-nginx.gunicorn.sh /usr/bin/start-nginx.sh
+COPY client/dev/setup/supervisord.rds.conf /etc/supervisor/supervisord.conf
+COPY client/dev/setup/start-nginx.nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
 COPY client/dev/setup/nginx/gunicorn.conf /etc/nginx/nginx.conf
 COPY ./server/starter.py /srv
 COPY ./server/src /srv/src
 COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
 
-ENTRYPOINT [ "start-nginx.sh" ]
+ENTRYPOINT [ "supervisord", "-c" , "/etc/supervisor/supervisord.conf"]

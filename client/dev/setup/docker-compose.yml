@@ -183,7 +183,7 @@ services:
     environment:
       - SOCKETIO_HOST=http://localhost:8008
       - SOCKETIO_PATH=/rds/socket.io
-      - VUE_APP_DESCRIBO_URL=http://describoui:80/application
+      - VUE_APP_DESCRIBO_URL=http://localhost:8080/application
       - DESCRIBO_API_ENDPOINT=http://describoui:80/api/session/application
       - DESCRIBO_API_SECRET=IAMSECRET
       - VUE_APP_FRONTENDHOST=http://localhost:8008
