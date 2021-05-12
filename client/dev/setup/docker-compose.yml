@@ -91,7 +91,10 @@ services:
       - ./web.config.json:/usr/share/nginx/html/config.json
 
   owncloud:
-    image: owncloud/server:${OWNCLOUD_VERSION}
+    image: heiss/owncloud_server
+    build:
+      context: ../..
+      dockerfile: Dockerfile.oc-rds-app
     container_name: owncloud_server
     hostname: owncloud_server
     restart: always
@@ -194,6 +197,6 @@ services:
       - AUTHORIZE_URL=http://localhost:80/apps/oauth2/authorize
       - DEV_FLASK_DEBUG=True
       - DEV_USE_PREDEFINED_USER=False
-      - OWNCLOUD_URL=http://owncloud_server:80
+      - OWNCLOUD_URL=http://owncloud:8080
       - FLASK_ORIGINS=["http://localhost:80", "http://localhost:8080", "http://localhost:8008", "http://localhost:9100"]
       - SECRET_KEY=1234
