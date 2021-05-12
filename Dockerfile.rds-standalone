@@ -1,9 +1,8 @@
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
 RUN apk add gettext
-COPY client/package.json client/yarn.lock ./
+ADD client .
 RUN yarn install
-ADD client /app
 RUN yarn standalone
 
 FROM python:3.8-alpine
