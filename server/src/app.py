@@ -34,11 +34,16 @@ app.config["REMEMBER_COOKIE_HTTPONLY"] = False
 Session(app)
 
 print(os.getenv("FLASK_ORIGINS"))
+path = os.getenv("SOCKETIO_PATH", "socket.io")
+
+if(path.startswith("/")):
+    path = path.replace("/", "", 1)
 
 socketio = SocketIO(
     app,
     cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS")),
-    manage_session=False
+    manage_session=False,
+    path=path
 )
 
 
