@@ -26,6 +26,10 @@
      <settings-sections>
         <admin>OCA\RDS\Panels\AdminSection</admin>
     </settings-sections>
+    <commands>
+        <command>OCA\RDS\Commands\SetUrl</command>
+        <command>OCA\RDS\Commands\SetOauthname</command>
+    </commands>
     <screenshot>https://www.research-data-services.org/images/oc-plugin-view-user-research-context.png</screenshot>
     <screenshot>https://www.research-data-services.org/images/oc-plugin-view-admin.png</screenshot>
 </info>
