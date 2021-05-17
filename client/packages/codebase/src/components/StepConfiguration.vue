@@ -6,19 +6,15 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <v-card-subtitle>
-              1. Which folder do you want to publish?
-             </v-card-subtitle>
-            <v-card-actions>
-              <v-btn @click="togglePicker">
-                Select Folder
-              </v-btn>
-            </v-card-actions>
-
             <v-card-subtitle
-              style="padding-top: 0px"
-              v-if="!!filepath(project) || !!currentFilePath"
+              >1. Which folder do you want to publish?</v-card-subtitle
             >
+            <v-card-actions
+              ><v-btn @click="togglePicker"
+                >Select Folder</v-btn
+              ></v-card-actions
+            >
+            <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
               Current Folder: {{ currentFilePath }}
             </v-card-subtitle>
           </v-card>
@@ -32,30 +28,15 @@
               <v-select
                 v-model="selectedPorts"
                 @change="emitChanges"
-                :items="ports"
+                :items="
+                  ports.filter((i) => i['servicename'] !== 'port-owncloud')
+                "
                 :item-text="(item) => parseServicename(item.servicename)"
                 :item-value="(item) => item"
                 :label="$gettext('Select your Services')"
                 multiple
                 chips
               >
-                <template v-slot:prepend-item>
-                  <v-list-item ripple @click="toggle">
-                    <v-list-item-action>
-                      <v-icon
-                        :color="
-                          selectedPorts.length > 0 ? 'indigo darken-4' : ''
-                        "
-                      >
-                        {{ icon }}
-                      </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title> Select All </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2"></v-divider>
-                </template>
               </v-select>
             </v-card-text>
           </v-card>
@@ -105,6 +86,9 @@ export default {
 
     this.currentFilePath = this.filepath(this.project);
     window.addEventListener("message", this.eventloop);
+    if (!this.project.portIn.length) {
+      this.emitChanges();
+    }
   },
   beforeDestroy() {
     window.removeEventListener("message", this.eventloop);
@@ -118,6 +102,7 @@ export default {
             let data = payload.data;
             if (data.projectId == this.project.projectId) {
               this.currentFilePath = data.filePath;
+              this.emitChanges();
             }
             break;
         }
@@ -129,11 +114,11 @@ export default {
     computeChanges() {
       let strippedRemoveOut = this.computeStrippedOut(this.computeRemoveOut());
       let strippedAddOut = this.computeStrippedOut(this.computeAddOut());
-
+      let importAdd = this.setImportAdd();
       let changes = {
         researchIndex: this.project["researchIndex"],
         import: {
-          add: [],
+          add: importAdd,
           remove: [],
           change: [],
         },
@@ -158,32 +143,40 @@ export default {
       }
       return strippedOut;
     },
+    setImportAdd() {
+      let add = [];
+      if (this.project.portIn.length == 0) {
+        return [
+          { servicename: "port-owncloud", filepath: this.currentFilePath },
+        ];
+      }
+      for (let i of this.project["portIn"]) {
+        if (!!this.currentFilePath) {
+          add = [
+            {
+              servicename: i["port"],
+              filepath: this.currentFilePath,
+            },
+          ];
+        }
+      }
+      return add;
+    },
     emitChanges() {
       let payload = this.computeChanges();
       this.$emit("changePorts", payload);
+      this.changes = {};
     },
     filepath(project) {
-      if (project.portIn.length == 0) {
-        // TODO add port-owncloud default to project!
-        // FIXME add port-owncloud, when creating a new project. Not here!
+      if (!project.portIn.length) {
         return "";
       }
-
       const service = this.getService(project.portIn, "port-owncloud");
       if (service !== undefined) {
         return service.properties.customProperties.filepath;
       }
 
       return this.currentFilePath;
-    },
-    toggle() {
-      this.$nextTick(() => {
-        if (this.selectAllPorts) {
-          this.selectedPorts = [];
-        } else {
-          this.selectedPorts = this.ports.slice();
-        }
-      });
     },
     alert(msg) {
       alert(msg);

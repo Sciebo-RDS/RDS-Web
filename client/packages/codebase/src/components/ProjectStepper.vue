@@ -21,10 +21,11 @@
         <v-card class="mb-12" height="auto" flat>
           <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
-
         <v-btn text disabled> Back </v-btn>
-
-        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
+        <v-btn v-if="configurationLockState" disabled>
+          Continue
+        </v-btn>
+        <v-btn v-else color="primary" @click="[sendChanges(), (e1 = 2)]">
           Continue
         </v-btn>
       </v-stepper-content>
@@ -50,7 +51,7 @@
 
         <v-btn text @click="e1 = 2"> Back </v-btn>
 
-        <v-btn color="success" @click="alert('Publishing project...')">
+        <v-btn color="success" @click="publishProject">
           Publish
         </v-btn>
       </v-stepper-content>
@@ -81,20 +82,57 @@ export default {
   data() {
     return {
       e1: 1,
+      changes: {},
+      configurationLockState: true,
     };
-    changes: {
-    }
   },
   props: ["project"],
+  beforeMount() {
+    this.configurationLockState = this.getInitialConfigurationLockState();
+  },
   methods: {
+    getInitialConfigurationLockState() {
+      if (!!this.project.portOut.length && !!this.project["portIn"]) {
+        return false;
+      }
+      return true;
+    },
+    setConfigurationLock(pChanges) {
+      let numberOfSelectedPorts =
+        this.project.portOut.length +
+        pChanges["export"]["add"].length -
+        pChanges["export"]["remove"].length;
+      if (numberOfSelectedPorts !== 0) {
+        if (!!this.changes["import"]["add"]) {
+          for (let i of this.changes["import"]["add"]) {
+            if (!i["filepath"]) {
+              return true;
+            }
+          }
+        }
+        return false;
+      } else {
+        return true;
+      }
+    },
     alert(msg) {
       alert(msg);
     },
     receiveChanges(pChanges) {
       this.changes = pChanges;
+      this.configurationLockState = this.setConfigurationLock(pChanges);
     },
     sendChanges() {
-      this.$store.dispatch("changePorts", this.changes);
+      if (Object.keys(this.changes).length > 0) {
+        this.$store.dispatch("changePorts", this.changes);
+        this.changes = {};
+      }
+    },
+    publishProject() {
+      let indexObject = {
+        researchIndex: this.project["researchIndex"],
+      };
+      this.$store.dispatch("triggerSynchronization", indexObject);
     },
   },
 };

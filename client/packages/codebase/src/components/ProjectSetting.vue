@@ -1,35 +1,42 @@
 <template>
-  <div>
-    <v-container>
-      <v-row>
-        <v-col>
-          <ProjectStepper :project="project" />
-        </v-col>
-      </v-row>
-
-      <v-row align-content="end" justify="space-around">
-        <v-col cols="auto" class="mr-auto" />
-        <v-col
-          v-if="project.status != '3' && project.status != '4'"
-          cols="auto"
-        >
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            v-if="loading"
-            class="mr-2"
-          />
-          <v-btn
-            :disabled="loading"
-            tile
-            color="error"
-            @click="onDelete(project.researchIndex)"
-            >delete project</v-btn
-          >
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+    <div>
+        <template v-if="project.status < 3">
+        <v-container>
+            <v-row>
+                <v-col>
+                    <ProjectStepper :project="project" />
+                </v-col>
+            </v-row>
+            
+            <v-row align-content="end" justify="space-around">
+                <v-col cols="auto" class="mr-auto"/>
+                <v-col v-if="project.status != '3' && project.status != '4'" cols="auto">
+                    <v-btn tile color="error" @click="onDelete(project.researchIndex)">delete project</v-btn>
+                </v-col>
+            </v-row>
+        </v-container>
+        </template>
+        <template v-else-if="project.status == 3">
+            <v-card>
+                <v-card-title>
+                    Researchindex : {{ project.researchIndex }}
+                </v-card-title>
+                <v-card-subtitle>
+                    this is a published project
+                </v-card-subtitle>
+            </v-card>
+        </template>
+        <template v-else-if="project.status == 4">
+            <v-card>
+                <v-card-title>
+                    Researchindex : {{ project.researchIndex }}
+                </v-card-title>
+                <v-card-subtitle>
+                    this is a deleted project
+                </v-card-subtitle>
+            </v-card>
+        </template>
+    </div>
 </template>
 
 <script>
