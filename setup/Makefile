@@ -25,7 +25,6 @@ clean:
 
 CONFIG = $$CONFIG
 install: start
-	@docker cp ../../packages/classic/php owncloud_server:/var/www/owncloud/apps/rds
 	@docker exec -it owncloud_server /bin/bash -c "head -n -1 config/config.php > config.php"
 	@docker exec -it owncloud_server /bin/bash -c "echo \"'web.baseUrl' => 'http://${OWNCLOUD_DOMAIN}:9100', 'cors.allowed-domains' => ['http://${OWNCLOUD_DOMAIN}:9100'],);\" >> config.php"
 	@docker exec -it owncloud_server /bin/bash -c "cp config.php config/config.php"
