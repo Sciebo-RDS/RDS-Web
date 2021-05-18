@@ -1,10 +1,10 @@
 {
-    "server": "http://owncloud:8080",
+    "server": "http://localhost:80",
     "theme": "owncloud",
     "version": "0.1.0",
     "auth": {
         "clientId": "AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq",
-        "url": "http://owncloud:8080/index.php/apps/oauth2/api/v1/token",
+        "url": "http://localhost:80/index.php/apps/oauth2/api/v1/token",
         "authUrl": "http://localhost:80/index.php/apps/oauth2/authorize"
     },
     "apps": [
@@ -14,10 +14,10 @@
     "external_apps": [
         {
             "id": "rds",
-            "path": "http://localhost:8082/index.js",
+            "path": "http://localhost/integrator/index.js",
             "config": {
-                "url": "http://localhost:8008",
-                "describo": "http://localhost:8080"
+                "url": "http://localhost/rds",
+                "describo": "http://localhost/describo"
             }
         },
         {

@@ -49,8 +49,10 @@ services:
     image: utseresearch/describo-online-ui:latest
     restart: always
     build:
-      context: ../client
+      context: ../
       dockerfile: Dockerfile.describo-ui
+      args:
+        - VUE_APP_BASE_URL=/describo/
     hostname: ui
     depends_on:
       - describoapi
@@ -81,7 +83,7 @@ services:
     image: owncloud/web
     restart: always
     build:
-      context: ../client
+      context: ../
       dockerfile: Dockerfile.oc-web
     depends_on:
       - owncloud
@@ -93,7 +95,7 @@ services:
   owncloud:
     image: heiss/owncloud_server
     build:
-      context: ../client
+      context: ../
       dockerfile: Dockerfile.oc-rds-app
     container_name: owncloud_server
     hostname: owncloud_server
@@ -156,7 +158,7 @@ services:
 
   integrator:
     build:
-      context: ../client
+      context: ../
       dockerfile: Dockerfile.oc-web-integrator
     restart: always
     container_name: owncloud_web_integrator
@@ -171,8 +173,10 @@ services:
     container_name: rds_web
     image: heiss/rds-web
     build:
-      context: client..//..
+      context: ../
       dockerfile: Dockerfile.rds-standalone
+      args:
+        - VUE_APP_BASE_URL=/rds/
     hostname: rds
     restart: always
     depends_on:
@@ -181,13 +185,13 @@ services:
     ports:
       - 8008:80
     environment:
-      - SOCKETIO_HOST=http://localhost:8008
+      - SOCKETIO_HOST=http://localhost
       - SOCKETIO_PATH=/rds/socket.io
-      - VUE_APP_DESCRIBO_URL=http://localhost:8080/application
+      - VUE_APP_DESCRIBO_URL=http://localhost/describo/application
       - DESCRIBO_API_ENDPOINT=http://describoui:80/api/session/application
       - DESCRIBO_API_SECRET=IAMSECRET
-      - VUE_APP_FRONTENDHOST=http://localhost:8008
-      - VUE_APP_SOCKETIO_HOST=http://localhost:8008
+      - VUE_APP_FRONTENDHOST=http://localhost/rds
+      - VUE_APP_SOCKETIO_HOST=http://localhost/rds
       - RDS_INSTALLATION_DOMAIN=https://sciebords-dev2.uni-muenster.de
       - VERIFY_SSL=False
       - EMBED_MODE=True
@@ -198,7 +202,7 @@ services:
       - DEV_FLASK_DEBUG=True
       - DEV_USE_PREDEFINED_USER=False
       - OWNCLOUD_URL=http://owncloud:8080
-      - FLASK_ORIGINS=["http://localhost:80", "http://localhost:8080", "http://localhost:8008", "http://localhost:9100"]
+      - FLASK_ORIGINS=["http://localhost", "http://localhost:8080", "http://localhost:8008", "http://localhost:9100","https://amritb.github.io"]
       - SECRET_KEY=1234
 
   edge:

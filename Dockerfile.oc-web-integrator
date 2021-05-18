@@ -1,6 +1,6 @@
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
-ADD . .
+ADD client .
 RUN yarn install
 RUN yarn web
 

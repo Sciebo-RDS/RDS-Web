@@ -1,4 +1,6 @@
 FROM node:14-alpine3.10 AS web
+ARG VUE_APP_BASE_URL
+ENV VUE_APP_BASE_URL $VUE_APP_BASE_URL
 WORKDIR /app
 RUN apk add gettext
 ADD client .
@@ -13,7 +15,6 @@ EXPOSE 80
 ENV JSFOLDER=/usr/share/nginx/html/js/*.js
 
 ENV SOCKETIO_HOST=http://localhost:80
-ENV SOCKETIO_PATH=/rds/socket.io
 
 RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash supervisor
 RUN mkdir -p /run/nginx
@@ -24,10 +25,10 @@ COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
 
 COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
-COPY client/dev/setup/supervisord.rds.conf /etc/supervisor/supervisord.conf
-COPY client/dev/setup/start-nginx.nginx.sh /usr/bin/start-nginx.sh
+COPY ./setup/supervisord.rds.conf /etc/supervisor/supervisord.conf
+COPY ./setup/start-nginx.nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
-COPY client/dev/setup/nginx/gunicorn.conf /etc/nginx/nginx.conf
+COPY ./setup/nginx/gunicorn.conf /etc/nginx/nginx.conf
 COPY ./server/starter.py /srv
 COPY ./server/src /srv/src
 

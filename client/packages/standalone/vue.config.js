@@ -1,5 +1,5 @@
 const Dotenv = require('dotenv-webpack');
-const envPath = function() {
+const envPath = function () {
     return (!process.env.NODE_ENV || (process.env.NODE_ENV === 'development')) ?
         '../../../.env' :
         `../../../.env.${process.env.NODE_ENV}`;
@@ -10,7 +10,13 @@ const dotenvArgs = {
     path: envPath()
 };
 
+let publicPath = '/';
+if (process.env.NODE_ENV === 'production' && !!process.env.VUE_APP_BASE_URL) {
+    publicPath = process.env.VUE_APP_BASE_URL;
+}
+
 module.exports = {
+    publicPath,
     transpileDependencies: [
         'vuetify',
         'vue-oidc-client'
