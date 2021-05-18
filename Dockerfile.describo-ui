@@ -4,6 +4,15 @@ ENV VUE_APP_BASE_URL $VUE_APP_BASE_URL
 WORKDIR /srv
 COPY client/dev/describo-online/ui/ /srv/
 COPY client/dev/describo-ui-plugins/ /plugins/
+RUN cat /srv/vue.config.js > /srv/vue.config.js.bak
+RUN echo "let publicPath = '/';\
+    if (process.env.NODE_ENV === 'production' && !!process.env.VUE_APP_BASE_URL) {\
+    publicPath = process.env.VUE_APP_BASE_URL;\
+    }\
+    \
+    module.exports = {\
+    publicPath," > /srv/vue.config.js
+RUN tail -n +2 /srv/vue.config.js.bak >> /srv/vue.config.js
 RUN npm install
 RUN npm run build
 
