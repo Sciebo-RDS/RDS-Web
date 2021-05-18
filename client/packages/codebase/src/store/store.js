@@ -6,12 +6,18 @@ import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
+let plugins = []
+
+if (process.env.NODE_ENV === "production") {
+    plugins.push(createPersistedState())
+}
+
 const store = new Vuex.Store({
     modules: {
         RDSStore: RDS,
         SettingsStore: Settings
     },
-    plugins: [ /*createPersistedState()*/ ],
+    plugins,
     strict: process.env.NODE_ENV !== 'production'
 })
 
