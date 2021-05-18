@@ -11,6 +11,29 @@
         "files",
         "media-viewer"
     ],
+    "applications": [
+        {
+            "title": {
+                "en": "Classic Design",
+                "de": "Dateien",
+                "fr": "Fichiers",
+                "zh_CN": "文件"
+            },
+            "target": "_self",
+            "icon": "switch_ui",
+            "url": "http://localhost/index.php/apps/files"
+        },
+        {
+            "icon": "application",
+            "menu": "user",
+            "target": "_self",
+            "title": {
+                "de": "Einstellungen",
+                "en": "Settings"
+            },
+            "url": "http://localhost/index.php/settings/personal"
+        }
+    ],
     "external_apps": [
         {
             "id": "rds",
