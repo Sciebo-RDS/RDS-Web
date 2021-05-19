@@ -306,9 +306,12 @@ def changePorts(jsonData):
 
 @socketio.event
 def requestSessionId():
-    token = json.loads(httpManager.makeRequest(
-        "getServiceForUser", {
-            "servicename": "port-owncloud"
-        }
-    ))["data"]["access_token"]
-    emit("SessionId", getSessionId(token))
+    try:
+        token = json.loads(httpManager.makeRequest(
+            "getServiceForUser", {
+                "servicename": "port-owncloud"
+            }
+        ))["data"]["access_token"]
+        emit("SessionId", getSessionId(token))
+    except:
+        pass
