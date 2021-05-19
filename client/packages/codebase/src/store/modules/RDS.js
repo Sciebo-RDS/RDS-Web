@@ -30,7 +30,7 @@ export default {
                     servicelist: JSON.parse(state).list.map(el => el.informations)
                 })
             } catch (error) {
-                console.log("UserServiceList is invalid: ", error)
+                console.log("UserServiceList is invalid: ", error, "state: ", state)
             }
         },
         SOCKET_ServiceList(context, state) {
@@ -42,7 +42,7 @@ export default {
                     })
                 })
             } catch (error) {
-                console.log("ServiceList is invalid: ", error)
+                console.log("ServiceList is invalid: ", error, "state: ", state)
             }
         },
         SOCKET_ProjectList(context, state) {
@@ -51,7 +51,7 @@ export default {
                     projectlist: JSON.parse(state)
                 })
             } catch (error) {
-                console.log("ProjectList is invalid: ", error)
+                console.log("ProjectList is invalid: ", error, "state: ", state)
             }
         },
         SOCKET_SessionId(context, state) {
