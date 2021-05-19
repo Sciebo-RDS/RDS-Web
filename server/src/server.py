@@ -1,5 +1,5 @@
 from flask_cors import CORS
-from flask import Response, stream_with_context, session, render_template, request, redirect, url_for
+from flask import Response, stream_with_context, session, request, redirect, url_for
 from flask_login import (
     LoginManager,
     login_user,
@@ -163,7 +163,7 @@ def index(path):
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:
             exchangeCodeData(request.args)
-            return redirect("{}/{}".format(os.getenv("RDS_URL"), "/exchangeCode.html"))
+            return app.send_static_file("exchangeCode.html")
 
     if use_embed_mode or current_user.is_authenticated:
         if use_proxy:
