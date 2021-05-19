@@ -25,17 +25,25 @@ export default {
     },
     actions: {
         SOCKET_UserServiceList(context, state) {
-            context.commit('setUserServiceList', {
-                servicelist: JSON.parse(state).list.map(el => el.informations)
-            })
+            try {
+                context.commit('setUserServiceList', {
+                    servicelist: JSON.parse(state).list.map(el => el.informations)
+                })
+            } catch (error) {
+                console.log("UserServiceList is invalid: ", error)
+            }
         },
         SOCKET_ServiceList(context, state) {
-            context.commit('setServiceList', {
-                servicelist: JSON.parse(state).map(el => {
-                    el.informations.state = el.jwt
-                    return el.informations
+            try {
+                context.commit('setServiceList', {
+                    servicelist: JSON.parse(state).map(el => {
+                        el.informations.state = el.jwt
+                        return el.informations
+                    })
                 })
-            })
+            } catch (error) {
+                console.log("ServiceList is invalid: ", error)
+            }
         },
         SOCKET_ProjectList(context, state) {
             context.commit('setProjectList', {
