@@ -46,9 +46,13 @@ export default {
             }
         },
         SOCKET_ProjectList(context, state) {
-            context.commit('setProjectList', {
-                projectlist: JSON.parse(state)
-            })
+            try {
+                context.commit('setProjectList', {
+                    projectlist: JSON.parse(state)
+                })
+            } catch (error) {
+                console.log("ProjectList is invalid: ", error)
+            }
         },
         SOCKET_SessionId(context, state) {
             context.commit('setSessionId', {
