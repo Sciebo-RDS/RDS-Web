@@ -14,7 +14,7 @@ use_predefined_user = (os.getenv('DEV_USE_PREDEFINED_USER', 'False') == 'True')
 use_embed_mode = (os.getenv('EMBED_MODE', 'False') == 'True')
 use_proxy = (os.getenv('DEV_USE_PROXY', 'False') == 'True')
 redirect_url = os.getenv("OWNCLOUD_OAUTH_CLIENT_REDIRECT")
-authorize_url = os.getenv("AUTHORIZE_URL")
+authorize_url = os.getenv("OWNCLOUD_OAUTH_CLIENT_AUTHORIZE_URL")
 
 redirect_url = "{}?response_type=token&client_id={}&redirect_uri={}".format(
     authorize_url,

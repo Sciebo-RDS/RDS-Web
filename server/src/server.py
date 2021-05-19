@@ -9,7 +9,7 @@ from flask_login import (
     current_user,
 )
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
-from .websocket import socket_blueprint, exchangeCode
+from .websocket import socket_blueprint, exchangeCodeData
 import json
 import requests
 import uuid
@@ -90,7 +90,7 @@ def informations():
     return json.dumps(data)
 
 
-@ app.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return ("", 200) if (current_user.is_authenticated) else ("", 401)
@@ -128,13 +128,13 @@ def login():
     return "", 401
 
 
-@ login_manager.user_loader
+@login_manager.user_loader
 def load_user(user_id):
     return user_store.get(user_id)
 
 
-@ app.route("/logout")
-@ login_required
+@app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
@@ -162,7 +162,7 @@ def index(path):
 
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:
-            exchangeCode(request.args)
+            exchangeCodeData(request.args)
             return render_template("exchangeCode.html")
 
     if use_embed_mode or current_user.is_authenticated:
