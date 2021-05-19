@@ -95,7 +95,7 @@ def exchangeCodeData(data):
                         verify=os.getenv("VERIFY_SSL", "False") == "True")
     LOGGER.debug(req.text)
 
-    return req
+    return req.status_code < 400
 
 
 def authenticated_only(f):
