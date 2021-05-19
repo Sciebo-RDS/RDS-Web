@@ -91,7 +91,7 @@ def exchangeCodeData(data):
 
     urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
 
-    req = requests.post(f"{urlPort}/exchange", json=jwtEncode,
+    req = requests.post(f"{urlPort}/exchange", json={"jwt": jwtEncode},
                         verify=os.getenv("VERIFY_SSL", "False") == "True")
     LOGGER.debug(req.text)
 
