@@ -103,8 +103,8 @@ stop:
 	tmux kill-session -t standalone || true
 	sudo chown -R $(shell id -un):$(shell id -gn) client
 
-setup:
-	docker-compose -f setup/docker-compose.yml up -d
+start:
+	docker-compose -f setup/docker-compose.yml --env-file .env up -d
 
 CONFIG = $$CONFIG
 setup-install: setup
@@ -117,13 +117,13 @@ setup-install: setup
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email ${ADMIN_MAIL}"
 	@docker exec -it owncloud_server /bin/bash -c "occ market:install oauth2 && occ market:install web && occ app:enable oauth2 && occ app:enable rds"
 	@docker exec -it owncloud_server /bin/bash -c "occ rds:set-oauthname web && occ rds:set-url ${RDS_URL}"
-	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client web ${OWNCLOUD_OAUTH2_CLIENT_ID} ${OWNCLOUD_OAUTH2_CLIENT_SECRET} ${OWNCLOUD_OAUTH2_CLIENT_REDIRECT}"
+	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client web ${OWNCLOUD_OAUTH2_CLIENT_ID} ${OWNCLOUD_OAUTH2_CLIENT_SECRET} ${OWNCLOUD_OAUTH_CLIENT_REDIRECT}"
 	
 setup-build:
-	docker-compose -f setup/docker-compose.yml up -d --build
+	docker-compose -f setup/docker-compose.yml --env-file .env up -d --build
 
 setup-stop:
-	docker-compose -f setup/docker-compose.yml down
+	docker-compose -f setup/docker-compose.yml --env-file .env down
 
 clean:
-	docker-compose -f setup/docker-compose.yml down --rmi all --volumes --remove-orphans 
+	docker-compose -f setup/docker-compose.yml --env-file .env down --rmi all --volumes --remove-orphans 

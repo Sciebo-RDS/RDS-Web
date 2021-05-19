@@ -2,13 +2,75 @@
 
 The application to get RDS into the new OC Web, the old OC Classic and a standalone interface.
 
-*This application currently only supports the classic backend, which is written in php. Not the ocis backend in golang!*
+_This application currently only supports the classic backend, which is written in php. Not the ocis backend in golang!_
 
-## Dependencies
+## Production Setup
+
+```
+make
+docker
+docker-compose
+git
+```
+
+First you have to checkout this repository.
+(Currently, most packages are not published as containers in dockerhub, because they are in a work-in-progress state.)
+
+```bash
+git checkout https://github.com/Sciebo-RDS/RDS-Web.git
+cd RDS-Web
+git submodule update --init --recursive
+```
+
+### Configuration
+
+Notice: This installs an instance for owncloud `classic` and the new interface `web`. If you do not want this, you need to make the changes on your own.
+
+You need to adjust the following configuration files:
+
+- /.env
+- /setup/web.config.json
+- /setup/production-configuration.json
+
+If you do not find this files in your folder, you have to cp the example files, which are placed next to the mentioned files.
+For example, you have to do this:
+
+```bash
+cp .env.example .env
+cp setup/web.config.json.example setup/web.config.json
+cp setup/production-configuration.json.example setup/production-configuration.json
+```
+
+Notice: If you need to adjust the nginx configuration, please change the `setup/misc/nginx/nginx.edge.conf` file to your needs. All `.env` envvar`s are described further down this README.
+
+While you configure all files, you will need oauth2 informations from ownCloud for the `web` interface. You could generate them by yourself to set them with force. This is the most convenient way: You need 2 tokens with only letters and a length of 64 from your favourite password generator.
+
+But you can do it the long way: First you need to start the ownCloud instance (or open up your already running one) and activate oauth2 app. Then you can generate the oauth2 informations for a new .
+
+```bash
+docker-compose -f setup/docker-compose.yml --env-file .env up -d owncloud
+@docker exec -it owncloud_server /bin/bash -c "occ market:install oauth2 && occ market:install web && occ app:enable oauth2"
+```
+
+Now open your browser and open the owncloud, which should be `http://localhost/index.php/settings/admin?sectionid=authentication`. The name does not matter, but the redirect url have to be `http://localhost/web/oidc-callback.html`.
+
+If you want to change the domain, you need to setup `OWNCLOUD_DOMAIN` in `.env` file before you start up the owncloud instance.
+
+Now you have all informations you need for the files.
+
+For `describo-online` configuration, please take a look [here](https://github.com/Arkisto-Platform/describo-online). Notice, that the `secret` value in `production-configuration.json` needs to be equal with envvar `DESCRIBO_API_SECRET` in file `.env`.
+For `oc-Web` you find the documentation [here](https://owncloud.dev/clients/web/deployments/oc10-app/).
+
+## Development Setup
+
+If you want to develope for this software, you do not want to restart docker container everytime you change something. For a better developer experience, we choose a different approach to setup.
+
+### Dependencies
 
 This application needs different software for different integrations.
 
 For all, you need:
+
 ```
 make
 tmux
@@ -16,17 +78,18 @@ git
 ```
 
 For the server backend (owncloud classic and rds), you need:
+
 ```
 pipenv
 [docker](https://docs.docker.com/get-docker/)
 [php composer](https://getcomposer.org/download/)
 ```
 
-*Docker-compose file can be found in `/client/dev/docker-compose.yml`.*
-*Composer package file can be found in `/client/packages/classic/php/composer.json`.*
-
+_Docker-compose file can be found in `/client/dev/docker-compose.yml`._
+_Composer package file can be found in `/client/packages/classic/php/composer.json`._
 
 For webfrontend, you need:
+
 ```
 npm lts
 yarn
@@ -37,23 +100,25 @@ Best option for npm is [nvm](https://github.com/nvm-sh/nvm#install--update-scrip
 Yarn is needed, because of the workspace feature `npm install yarn`.
 All nodejs dependencies can be installed through `yarn --cwd client install`.
 
-## Notice
+### Notice
 
 In `/client/dev/ocis` you can find the sourcecode for ocis. Currently, we do not develope our software for this backend, so we only use the owncloud classic backend. But for further development, this sourcecode will be needed. For this software, we will need the following software:
+
 ```
 [golang](https://golang.org/dl/)
 ```
 
 Run `git submodule update --init --recursive` to pull ocis and web servercode.
 
-## Steps for development environment
+### Steps for development environment
 
 If you use ubuntu, you can use for some dependencies `make install` in root.
 Otherwise, please follow the steps.
 
-### Notices
+#### Notices
 
 First, you should think about, what you want to develope. You have the choice of:
+
 - standalone
 - owncloud classic
 - owncloud web
@@ -80,7 +145,6 @@ In the following sections, you read a lot about ports. Here you have an overview
 | 9100 | new owncloud web vue dev server                                                        |
 | 9200 | ocis frontend, which proxies requests to port 9100 (currently not used)                |
 
-
 ### Configuration
 
 We use the dotenv mechanic to provide a simple interface for configuration, which is compatible with the environment workflow of docker and kubernetes. So please configure the .env file to your needs.
@@ -90,26 +154,38 @@ cp .env.example .env
 vi .env
 ```
 
-| fieldname                    | description                                                                                                                                                                                                             | default                                                                                              |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| OWNCLOUD_URL                 | The url to your owncloud instance.                                                                                                                                                                                      | http://localhost:8000                                                                                |
-| OWNCLOUD_OAUTH_CLIENT_ID     | The client identifier from your oauth2 provider.                                                                                                                                                                        | ABC                                                                                                  |
-| OWNCLOUD_OAUTH_CLIENT_SECRET | The client secret  from your oauth2 provider.                                                                                                                                                                           | XYZ                                                                                                  |
-| EMBED_MODE                   | Set this to True, if you want to use the app in embed mode. False means standalone mode.                                                                                                                                | True                                                                                                 |
-| RDS_INSTALLATION_DOMAIN      | Set this URL to your RDS backend installation. If this is not available for server, you will get authentication errors.                                                                                                 | http://localhost:9900                                                                                |
-| FLASK_ORIGINS                | Set here all origins from requests can come. Otherwise it will be rejected through CORS.                                                                                                                                | ["http://localhost:8080", "http://localhost:8085", "http://localhost:8000", "http://localhost:9100"] |
-| OWNCLOUD_OAUTH2_CLIENT_REDIRECT                 | Set this URL for redirection on serverside through http statuscode 302. This needs to be the value, which you specify on your oauth2 provider side.                                                                     | http://localhost:8080                                                                                |
-| VUE_APP_DESCRIBO_URL         | Set this URL for your describo instance.                                                                                                                                                                                | http://localhost:8100                                                                                |
-| VUE_APP_FRONTENDHOST         | Set this URL to your frontend host.                                                                                                                                                                                     | http://localhost:8080                                                                                |
-| VUE_APP_SOCKETIO_HOST        | Set this URL to your socketio host. In this implementation, it is the same as frontendhost.                                                                                                                             | http://localhost:8080                                                                                |
-| DEV_WEBPACK_DEV_SERVER_HOST  | Set this URL to your vue app host, so the frontend host can proxy requests.                                                                                                                                             | "http://localhost:8085"                                                                              |
-| VERIFY_SSL                   | Set this to `True`, if you want to verify ssl certs. `False` if you do not want that.                                                                                                                                   | `False`                                                                                              |
-| DEV_FLASK_DEBUG              | Set this to `True`, if you want more debug informations in console.                                                                                                                                                     | `True`                                                                                               |
-| DEV_USE_PROXY                | Set this to `True`, if you want to use the server as a proxy for vue app. *Only for development use, not for production!*                                                                                               | `True`                                                                                               |
-| DEV_USE_PREDEFINED_USER      | Set this to `True`, if you want to use a predefined user. *Only for development use, not for production!*                                                                                                               | `False`                                                                                              |
-| DEV_FLASK_USERID             | Set the userId, which should be used, when `DEV_USE_PREDEFINED_USER` is `True`.                                                                                                                                         | test                                                                                                 |
-| SECRET_KEY                   | This env var can be set, if you want to reuse flask encrypted data after a server restart. Otherwise it will generate everytime a new secret, which cannot be used do decrypt the informations of a previous execution. | ""                                                                                                   |
-
+| fieldname                      | description                                                                                                                                                                                                             | default                                                                                              |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| OWNCLOUD_URL                   | The url to your owncloud instance.                                                                                                                                                                                      | http://localhost:8000                                                                                |
+| OWNCLOUD_OAUTH_CLIENT_ID       | The client identifier from your oauth2 provider.                                                                                                                                                                        | ABC                                                                                                  |
+| OWNCLOUD_OAUTH_CLIENT_SECRET   | The client secret from your oauth2 provider.                                                                                                                                                                            | XYZ                                                                                                  |
+| OWNCLOUD_OAUTH_CLIENT_REDIRECT | The client redirect url from your oauth2 provider.                                                                                                                                                                      |                                                                                                      |
+| EMBED_MODE                     | Set this to True, if you want to use the app in embed mode. False means standalone mode.                                                                                                                                | True                                                                                                 |
+| RDS_INSTALLATION_DOMAIN        | Set this URL to your RDS backend installation. If this is not available for server, you will get authentication errors.                                                                                                 | http://localhost:9900                                                                                |
+| FLASK_ORIGINS                  | Set here all origins from requests can come. Otherwise it will be rejected through CORS.                                                                                                                                | ["http://localhost:8080", "http://localhost:8085", "http://localhost:8000", "http://localhost:9100"] |
+| OWNCLOUD_OAUTH_CLIENT_REDIRECT | Set this URL for redirection on serverside through http statuscode 302. This needs to be the value, which you specify on your oauth2 provider side.                                                                     | http://localhost:8080                                                                                |
+| VUE_APP_DESCRIBO_URL           | Set this URL for your describo instance.                                                                                                                                                                                | http://localhost:8100                                                                                |
+| VUE_APP_FRONTENDHOST           | Set this URL to your frontend host.                                                                                                                                                                                     | http://localhost:8080                                                                                |
+| VUE_APP_SOCKETIO_HOST          | Set this URL to your socketio host. In this implementation, it is the same as frontendhost.                                                                                                                             | http://localhost:8080                                                                                |
+| DEV_WEBPACK_DEV_SERVER_HOST    | Set this URL to your vue app host, so the frontend host can proxy requests.                                                                                                                                             | "http://localhost:8085"                                                                              |
+| VERIFY_SSL                     | Set this to `True`, if you want to verify ssl certs. `False` if you do not want that.                                                                                                                                   | `False`                                                                                              |
+| DEV_FLASK_DEBUG                | Set this to `True`, if you want more debug informations in console.                                                                                                                                                     | `True`                                                                                               |
+| DEV_USE_PROXY                  | Set this to `True`, if you want to use the server as a proxy for vue app. _Only for development use, not for production!_                                                                                               | `True`                                                                                               |
+| DEV_USE_PREDEFINED_USER        | Set this to `True`, if you want to use a predefined user. _Only for development use, not for production!_                                                                                                               | `False`                                                                                              |
+| DEV_FLASK_USERID               | Set the userId, which should be used, when `DEV_USE_PREDEFINED_USER` is `True`.                                                                                                                                         | test                                                                                                 |
+| SECRET_KEY                     | This env var can be set, if you want to reuse flask encrypted data after a server restart. Otherwise it will generate everytime a new secret, which cannot be used do decrypt the informations of a previous execution. | ""                                                                                                   |
+| AUTHORIZE_URL                  | The authorize url for owncloud, so sciebo-rds can you redirect to it for authorization.                                                                                                                                 | http://localhost:8000/apps/oauth2/authorize                                                          |
+| DESCRIBO_API_ENDPOINT          | The describo api endpoint to create a session from rds backend.                                                                                                                                                         | http://localhost:9000/api/session/application                                                        |
+| DESCRIBO_API_SECRET            | The describo secret, which was specified in `production-configuration.json`, so sciebo-rds can authenticated against describo.                                                                                          | IAMSECRET                                                                                            |
+| OWNCLOUD_VERSION               | The owncloud version which will be setup.                                                                                                                                                                               | 10.7                                                                                                 |
+| OWNCLOUD_DOMAIN                | The owncloud domain                                                                                                                                                                                                     | localhost                                                                                            |
+| HTTP_PORT                      | The owncloud port                                                                                                                                                                                                       | 8000                                                                                                 |
+| ADMIN_USERNAME                 | The owncloud admin accountname.                                                                                                                                                                                         | admin                                                                                                |
+| ADMIN_PASSWORD                 | The owncloud admin password.                                                                                                                                                                                            | admin                                                                                                |
+| ADMIN_MAIL                     | The owncloud admin mailaddress.                                                                                                                                                                                         | not@valid.tld                                                                                        |
+| SOCKETIO_HOST                  | The socketio host for sciebo-rds.                                                                                                                                                                                       | http://localhost                                                                                     |
+| SOCKETIO_PATH                  | The socketio path for sciebo-rds.                                                                                                                                                                                       | /rds/socket.io                                                                                       |
+| RDS_URL                        | The url for sciebo-rds to load it in iframe                                                                                                                                                                             | http://localhost:80/rds                                                                              |
 
 The `REDIRECTION_URL` and `OWNCLOUD_OAUTH_CLIENT_SECRET` fields can only be set up correctly, when you start up the corresponding oauth backend before. So you have to start the backends and configure the `.env` file properly. After this, you can stop everything and can use the receipts in the corresponding sections for use.
 
@@ -127,12 +203,14 @@ Remind: If you delete all docker-resources (e.g. with `docker system prune --vol
 ### Client setup
 
 Install all nodejs dependencies.
+
 ```bash
 yarn --cwd client install
 yarn --cwd client/dev/web install
 ```
 
 Now, you have to configure the OC Web server
+
 ```bash
 cp client/dev/web/config/config.json.sample-oc10 client/dev/web/config/config.json
 vi client/dev/web/config/config.json
@@ -155,13 +233,15 @@ Then, you have to add our RDS application in `external_apps` field. Copy the fol
 ```
 
 If you use the owncloud classic backend, you will need to install the php dependencies, too.
+
 ```bash
-composer install --working-dir=client/packages/classic/php 
+composer install --working-dir=client/packages/classic/php
 ```
 
 ### Server setup
 
 Install the python dependencies.
+
 ```bash
 cd server
 pipenv install
@@ -174,16 +254,19 @@ For easier access, we provide a makefile in root folder.
 **Beware: For development and production, you need access to a working RDS instance. For example through VPN with `openconnect` or a ssh tunnel `ssh -L 1443:<your-k8s-rds-installation>:443 <jumphost>.<institution>` to an already existing one or use minikube for smaller test environments. [See this guide for more](https://www.research-data-services.org/doc/getting-started/k8s/).**
 
 If you want to start the environment for standalone, use the `standalone` receipt.
+
 ```bash
 make standalone
 ```
 
 If you want to start the environment for owncloud classic with classic ui, use the `classic` receipt.
+
 ```bash
 make classic
 ```
 
 If you want to start the environment for ownclouds new ui OC Web with classic backend, use the `web` receipt.
+
 ```bash
 make web
 ```
@@ -199,6 +282,7 @@ make test
 ```
 
 ### Compiles and minifies for production in standalone
+
 We use docker to create containers. This will build a single server, which serves the frontend under port 8080.
 This can be build with the following command, which will be stored in the local container storage under the name "rds-web".
 
@@ -207,11 +291,13 @@ docker build -t rds-web
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## Client Localization
