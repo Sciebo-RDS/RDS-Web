@@ -1,5 +1,6 @@
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
+RUN apk add git
 COPY client/dev/web /app
 RUN yarn install
 RUN yarn build
