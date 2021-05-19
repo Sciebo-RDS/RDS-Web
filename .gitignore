@@ -34,3 +34,6 @@ owncloud/web/web
 flask_session
 tunnel.sh
 client/packages/classic/php/js/app.js
+
+web.config.json
+production-configuration.json

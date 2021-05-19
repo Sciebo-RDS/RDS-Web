@@ -1,3 +1,15 @@
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
+
+ubuntu:
+	sudo apt install -y curl unzip
+
+fedora:
+	sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+	sudo yum install -y curl unzip yum-utils docker-ce docker-ce-cli containerd.io
+
 install:
 	apt install gettext
 	cd client
@@ -90,3 +102,28 @@ stop:
 	tmux kill-session -t classic || true
 	tmux kill-session -t standalone || true
 	sudo chown -R $(shell id -un):$(shell id -gn) client
+
+setup:
+	docker-compose -f setup/docker-compose.yml up -d
+
+CONFIG = $$CONFIG
+setup-install: setup
+	@echo "Not for production use!!! Or remove the oauth2 client by hand and create a new one and set all informations in docker-compose.yml"
+	@echo "Wait for ownCloud installation completion."
+	@while [ $(shell curl  -sw '%{http_code}' localhost) -gt 302 ]; do true; done;
+	@docker exec -it owncloud_server /bin/bash -c "head -n -1 config/config.php > config.php"
+	@docker exec -it owncloud_server /bin/bash -c "echo \"'web.baseUrl' => 'http://${OWNCLOUD_DOMAIN}/web', 'cors.allowed-domains' => ['http://${OWNCLOUD_DOMAIN}:9100','http://${OWNCLOUD_DOMAIN}:8008'],);\" >> config.php"
+	@docker exec -it owncloud_server /bin/bash -c "cp config.php config/config.php"
+	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email ${ADMIN_MAIL}"
+	@docker exec -it owncloud_server /bin/bash -c "occ market:install oauth2 && occ market:install web && occ app:enable oauth2 && occ app:enable rds"
+	@docker exec -it owncloud_server /bin/bash -c "occ rds:set-oauthname web && occ rds:set-url ${RDS_URL}"
+	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client web ${OWNCLOUD_OAUTH2_CLIENT_ID} ${OWNCLOUD_OAUTH2_CLIENT_SECRET} ${OWNCLOUD_OAUTH2_CLIENT_REDIRECT}"
+	
+setup-build:
+	docker-compose -f setup/docker-compose.yml up -d --build
+
+setup-stop:
+	docker-compose -f setup/docker-compose.yml down
+
+clean:
+	docker-compose -f setup/docker-compose.yml down --rmi all --volumes --remove-orphans 

@@ -3,13 +3,6 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-ubuntu:
-	sudo apt install -y curl unzip
-
-fedora:
-	sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-	sudo yum install -y curl unzip yum-utils docker-ce docker-ce-cli containerd.io
-
 start:
 	docker-compose up -d
 

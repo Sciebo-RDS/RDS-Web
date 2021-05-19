@@ -25,10 +25,10 @@ COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
 
 COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
-COPY ./setup/supervisord.rds.conf /etc/supervisor/supervisord.conf
-COPY ./setup/start-nginx.nginx.sh /usr/bin/start-nginx.sh
+COPY ./setup/misc/supervisord.rds.conf /etc/supervisor/supervisord.conf
+COPY ./setup/misc/start-nginx.nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
-COPY ./setup/nginx/gunicorn.conf /etc/nginx/nginx.conf
+COPY ./setup/misc/nginx/gunicorn.conf /etc/nginx/nginx.conf
 COPY ./server/starter.py /srv
 COPY ./server/src /srv/src
 
