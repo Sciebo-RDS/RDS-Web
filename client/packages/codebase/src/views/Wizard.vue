@@ -27,7 +27,7 @@
           <v-btn
             @click="grantAccess(getInformations('port-owncloud'))"
             color="primary"
-            :disabled="!loggedIn"
+            :disabled="!auth.loggedIn"
           >
             <translate>Grant access</translate>
           </v-btn>
@@ -117,9 +117,6 @@ export default {
     zIndex: 1000,
   }),
   computed: {
-    loggedIn() {
-      return this.auth.loggedIn;
-    },
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
       servicelist: (state) => state.RDSStore.servicelist,
