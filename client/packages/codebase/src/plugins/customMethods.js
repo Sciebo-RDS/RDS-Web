@@ -7,6 +7,7 @@ export default {
 
             var checkPopup = setInterval(function() {
                 if (ctx.$_popup.closed) {
+                    ctx.$store.dispatch("requestUserServiceList");
                     clearInterval(checkPopup);
                     ctx.$root.$emit("hideoverlay")
                 }
