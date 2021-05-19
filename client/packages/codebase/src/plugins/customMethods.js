@@ -27,6 +27,18 @@ export default {
             return false
         }
 
+        Vue.prototype.getInformations = function (servicename, services = undefined) {
+            if (services === undefined) {
+                services = this.servicelist;
+            }
+            for (const service of services) {
+                if (service.servicename == servicename) {
+                    return service;
+                }
+            }
+            return undefined;
+        }
+
         Vue.prototype.getService = function (arr, servicename) {
             for (const el of arr) {
                 if (el.port === servicename) return el;
