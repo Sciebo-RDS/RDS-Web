@@ -23,10 +23,7 @@ redirect_url = "{}?response_type=token&client_id={}&redirect_uri={}".format(
 )
 
 
-app = Flask(__name__,
-            static_folder=os.getenv(
-                "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
-            )
+app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", uuid.uuid4().hex)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config["REMEMBER_COOKIE_HTTPONLY"] = False

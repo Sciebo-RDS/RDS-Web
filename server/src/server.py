@@ -163,7 +163,7 @@ def index(path):
     if current_user.is_authenticated:
         if "code" in request.args and "state" in request.args:
             exchangeCodeData(request.args)
-            return render_template("exchangeCode.html")
+            return redirect("{}/{}".format(os.getenv("RDS_URL"), "/exchangeCode.html"))
 
     if use_embed_mode or current_user.is_authenticated:
         if use_proxy:
