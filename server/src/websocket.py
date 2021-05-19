@@ -87,7 +87,7 @@ def exchangeCodeData(data):
     # TODO exchange it in the background for user and redirect to wizard / projects
 
     jwtEncode = jwt.encode(body, os.getenv(
-        "OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
+        "RDS_CLIENT_SECRET"), algorithm="HS256")
 
     urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
 
