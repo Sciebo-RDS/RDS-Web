@@ -89,7 +89,10 @@ export default {
     },
   },
   created() {
-    getConfig(this).then(() => (this.loading = false));
+    getConfig(this).then(() => {
+      console.log("loading frame: ", this.config.url);
+      this.loading = false;
+    });
 
     window.addEventListener("message", (event) => {
       if (event.data.length > 0) {

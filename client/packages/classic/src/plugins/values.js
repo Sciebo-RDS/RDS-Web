@@ -36,13 +36,12 @@ function getConfig(context) {
     let prom = promise()
     prom.then((config) => {
         context.config = config;
-    })
-        .catch(() => {
-            context.config = {
-                url: "http://localhost:8080",
-                server: "http://localhost:8080"
-            };
-        });
+    }).catch(() => {
+        context.config = {
+            url: "http://localhost:8080",
+            server: "http://localhost:8080"
+        };
+    });
     return prom
 }
 
