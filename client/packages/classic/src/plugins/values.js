@@ -15,14 +15,15 @@ function promise() {
             })
         }).then((response) => {
             if (response.ok) {
-                return JSON.parse(response.text());
+                return response.text();
             }
             throw new Error(`${response.status} ${response.statusText}`);
         }).then((response) => {
-            const config = { url: response.cloudURL, server: response.cloudURL }
-            resolve(config)
+            console.log("got response: ", response)
+            const data = JSON.parse(response)
+            resolve({ url: data.cloudURL, server: data.cloudURL })
         }).catch((error) => {
-            reject("cloudURL is empty")
+            reject("cloudURL is empty, error: ", error)
         }).finally(() => {
             clearInterval(timer)
         })
