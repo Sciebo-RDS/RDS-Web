@@ -68,7 +68,7 @@ export default {
       fetch(url, { headers: this.headers })
         .then((response) => {
           if (response.ok) {
-            return JSON.parse(response.text());
+            return response.text();
           }
 
           throw new Error(`${response.status} ${response.statusText}`);
