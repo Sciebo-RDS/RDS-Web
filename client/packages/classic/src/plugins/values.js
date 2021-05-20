@@ -19,7 +19,9 @@ function promise() {
             }
             throw new Error(`${response.status} ${response.statusText}`);
         }).then((response) => {
-            const config = { url: response.cloudURL, server: response.cloudURL }
+            console.log("got response: ", response)
+            const data = JSON.parse(response)
+            const config = { url: data.cloudURL, server: data.cloudURL }
             resolve(config)
         }).catch((error) => {
             console.log("error in informations:", error)
