@@ -1,7 +1,15 @@
+FROM node:14-alpine3.10 AS staging
+WORKDIR /src
+RUN apk add findutils
+COPY client .
+RUN mkdir -p ./pkg/ \
+    && find . -type d -name node_modules -prune -false -o \( -name "package.json" -o -name "yarn.lock" -o -name "package-lock.json" \)  -exec install -D '{}' './pkg/{}' \;
+
 FROM node:14-alpine3.10 AS web
 WORKDIR /app
-ADD client .
-RUN yarn install
+COPY --from=staging /src/pkg ./
+RUN yarn install --non-interactive
+COPY client .
 RUN yarn web
 
 FROM nginx:latest
