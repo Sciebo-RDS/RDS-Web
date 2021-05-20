@@ -25,7 +25,7 @@
         OC.rds.config = { url: response.cloudURL, server: response.cloudURL }
         resolve(OC.rds.config)
       }).catch((error) => {
-        console.log("error in informations:", error)
+        console.log("error in informations:", error)  
         OC.rds.config = {
           url: "http://localhost:8080",
           server: "http://localhost:8080"
