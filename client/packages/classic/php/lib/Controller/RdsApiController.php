@@ -134,7 +134,10 @@ class RdsApiController extends ApiController
 
             $token = \Firebase\JWT\JWT::encode($data, $this->private_key, 'RS256');
 
-            return ["jwt" => $token];
+            return [
+                "jwt" => $token,
+                "cloudURL" => \OC::$server->getConfig()->getAppValue("rds", "cloudURL")
+            ];
         });
     }
 

@@ -10,17 +10,27 @@
     OC.rds.loggedIn = false
 
     let config = new Promise((resolve, reject) => {
-      OC.AppConfig.getValue("rds", "cloudURL", function (response) {
-        if (!response) {
-          OC.rds.config = {
-            url: "http://localhost:8080",
-            server: "http://localhost:8080"
-          };
-          reject("cloudURL is empty")
-        } else {
-          OC.rds.config = { url: response, server: response }
-          resolve({ url: response, server: response })
+      const url = OC.generateUrl("/apps/rds/api/1.0/informations");
+      fetch(url, {
+        headers: new Headers({
+          requesttoken: oc_requesttoken,
+          "Content-Type": "application/json",
+        })
+      }).then((response) => {
+        if (response.ok) {
+          return response.text();
         }
+        throw new Error(`${response.status} ${response.statusText}`);
+      }).then((response) => {
+        OC.rds.config = { url: response.cloudURL, server: response.cloudURL }
+        resolve(OC.rds.config)
+      }).catch((error) => {
+        console.log("error in informations:", error)
+        OC.rds.config = {
+          url: "http://localhost:8080",
+          server: "http://localhost:8080"
+        };
+        reject("cloudURL is empty")
       })
     })
 
