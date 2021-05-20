@@ -22,10 +22,11 @@
         }
         throw new Error(`${response.status} ${response.statusText}`);
       }).then((response) => {
-        OC.rds.config = { url: response.cloudURL, server: response.cloudURL }
+        const data = JSON.parse(response)
+        OC.rds.config = { url: data.cloudURL, server: data.cloudURL }
         resolve(OC.rds.config)
       }).catch((error) => {
-        console.log("error in informations:", error)  
+        console.log("error in informations:", error)
         OC.rds.config = {
           url: "http://localhost:8080",
           server: "http://localhost:8080"
