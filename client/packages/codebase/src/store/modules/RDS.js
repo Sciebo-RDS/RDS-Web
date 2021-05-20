@@ -90,17 +90,17 @@ export default {
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {
-                context.dispatch("SOCKET_UserServiceList", { response })
+                context.dispatch("SOCKET_UserServiceList", response)
             });
         },
         requestServiceList(context) {
             this._vm.$socket.client.emit("getServicesList", (response) => {
-                context.dispatch("SOCKET_ServiceList", { response })
+                context.dispatch("SOCKET_ServiceList", response)
             });
         },
         requestProjectList(context) {
             this._vm.$socket.client.emit("getAllResearch", (response) => {
-                context.dispatch("SOCKET_ProjectList", { response })
+                context.dispatch("SOCKET_ProjectList", response)
             });
         },
         exchangeCode(context, data) {
