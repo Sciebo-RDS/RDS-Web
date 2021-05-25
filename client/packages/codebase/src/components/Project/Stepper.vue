@@ -22,9 +22,11 @@
           <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
 
-        <v-btn text disabled><translate>Back</translate></v-btn>
-
-        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
+        <v-btn text disabled> <translate>Back</translate> </v-btn>
+        <v-btn v-if="configurationLockState" disabled>
+          <translate>Continue</translate>
+        </v-btn>
+        <v-btn v-else color="primary" @click="[sendChanges(), (e1 = 2)]">
           <translate>Continue</translate>
         </v-btn>
       </v-stepper-content>
@@ -56,7 +58,7 @@
           <translate>Back</translate>
         </v-btn>
 
-        <v-btn color="success" @click="publishProject" ref="publishBtn">
+        <v-btn color="success" @click="publishProject">
           <translate>Publish</translate>
         </v-btn>
       </v-stepper-content>
@@ -87,30 +89,59 @@ export default {
   data() {
     return {
       e1: 1,
+      changes: {},
+      configurationLockState: true,
     };
-    changes: {
-    }
   },
   props: ["project"],
+  beforeMount() {
+    this.configurationLockState = this.getInitialConfigurationLockState();
+  },
   methods: {
-    publishProject() {
-      this.$refs.publishBtn.value = this.$gettext("In progress...");
-      this.$refs.publishBtn.disabled = false;
-      this.$socket.client.emit(
-        "triggerSynchronization",
-        {
-          researchIndex: this.project.researchIndex,
-        },
-        () => {
-          this.$refs.publishBtn.value = this.$gettext("Publishing done");
+    getInitialConfigurationLockState() {
+      if (!!this.project.portOut.length && !!this.project["portIn"]) {
+        return false;
+      }
+      return true;
+    },
+    setConfigurationLock(pChanges) {
+      let numberOfSelectedPorts =
+        this.project.portOut.length +
+        pChanges["export"]["add"].length -
+        pChanges["export"]["remove"].length;
+      if (numberOfSelectedPorts !== 0) {
+        if (!!this.changes["import"]["add"]) {
+          for (let i of this.changes["import"]["add"]) {
+            if (!i["filepath"]) {
+              return true;
+            }
+          }
         }
-      );
+        return false;
+      } else {
+        return true;
+      }
+    },
+    alert(msg) {
+      alert(msg);
     },
     receiveChanges(pChanges) {
       this.changes = pChanges;
+      this.configurationLockState = this.setConfigurationLock(pChanges);
     },
     sendChanges() {
-      this.$store.dispatch("changePorts", this.changes);
+      if (Object.keys(this.changes).length > 0) {
+        this.$store.dispatch("changePorts", this.changes);
+        this.changes = {};
+      }
+    },
+    publishProject() {
+      this.$refs.publishBtn.value = this.$gettext("In progress...");
+
+      let indexObject = {
+        researchIndex: this.project["researchIndex"],
+      };
+      this.$store.dispatch("triggerSynchronization", indexObject);
     },
   },
 };

@@ -83,6 +83,7 @@ classic: describo
 	@docker exec -it owncloud_server /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
 	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client describo AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq WnxAqddPtPzX3lyCYijHi3pVs1HGpoumzTYSUWqrVfL0vT7E92JSzNTQABBzCaIm ${OWNCLOUD_DOMAIN}/apps/describo/authorize"
 	@docker exec -it owncloud_server /bin/bash -c "occ rds:set-oauthname web && occ rds:set-url ${RDS_URL}"
+	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client web AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq WnxAqddPtPzX3lyCYijHi3pVs1HGpoumzTYSUWqrVfL0vT7E92JSzNTQABBzCaIm http://localhost:9100/oidc-callback.html | true"
 	@echo Warning!!! You have to create a new oauth2 url and enter it in root .env file and configure RDS properly.
 	@echo Start on http://localhost:8000
 
@@ -127,6 +128,7 @@ setup-build:
 
 setup-stop:
 	docker-compose -f setup/docker-compose.yml --env-file .env down
+	docker-compose -f client/dev/describo-online/docker-compose.yml down || true
 
 clean:
 	docker-compose -f setup/docker-compose.yml --env-file .env down --rmi all --volumes --remove-orphans 
