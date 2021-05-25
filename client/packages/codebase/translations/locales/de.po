@@ -98,7 +98,7 @@ msgstr "Löscht den Zugang zu %{name} aus deinem Konto."
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:14
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:12
 msgid "delete project"
-msgstr "Projekte"
+msgstr "Projekt löschen"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:9
 msgid "deleted"
