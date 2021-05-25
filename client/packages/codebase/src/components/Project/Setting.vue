@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import ProjectStepper from "./ProjectStepper.vue";
+import ProjectStepper from "./Stepper.vue";
 export default {
   components: {
     ProjectStepper,

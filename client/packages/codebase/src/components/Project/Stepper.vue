@@ -68,9 +68,9 @@
 </style>
 
 <script>
-import StepConfiguration from "./StepConfiguration.vue";
-import StepPublish from "./StepPublish.vue";
-import StepMetadataEditor from "./StepMetadataEditor.vue";
+import StepConfiguration from "./Step/Configuration.vue";
+import StepPublish from "./Step/Publish.vue";
+import StepMetadataEditor from "./Step/MetadataEditor.vue";
 
 export default {
   components: {

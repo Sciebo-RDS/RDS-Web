@@ -73,7 +73,7 @@
 
 <script>
 /*import Header from '../components/Header'*/
-import ProjectList from "../components/ProjectList.vue";
+import ProjectList from "../components/Project/List.vue";
 
 export default {
   components: {

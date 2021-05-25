@@ -30,8 +30,8 @@
 </style>
 
 <script>
-import ProjectSetting from "./ProjectSetting.vue";
-import ProjectStatusChip from "./ProjectStatusChip.vue";
+import ProjectSetting from "./Setting.vue";
+import ProjectStatusChip from "./StatusChip.vue";
 import { mapGetters } from "vuex";
 
 export default {

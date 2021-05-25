@@ -84,7 +84,7 @@
 
 <script>
 import { mapState } from "vuex";
-import ServiceCard from "./ServiceCard.vue";
+import ServiceCard from "./Card.vue";
 
 export default {
   components: { ServiceCard },

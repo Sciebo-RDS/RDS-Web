@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import LanguageSelector from "../components/LanguageSelector.vue";
-import ThemeSelector from "../components/ThemeSelector.vue";
-import ServiceEditor from "../components/ServiceEditor.vue";
+import LanguageSelector from "../components/Settings/LanguageSelector.vue";
+import ThemeSelector from "../components/Settings/ThemeSelector.vue";
+import ServiceEditor from "../components/Service/Editor.vue";
 
 export default {
   components: {
