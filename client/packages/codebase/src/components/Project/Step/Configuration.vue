@@ -6,11 +6,11 @@
       <v-row>
         <v-col>
           <v-card flat>
-            <v-card-subtitle>
+            <v-card-subtitle v-translate>
               1. Which folder do you want to publish?
-             </v-card-subtitle>
+            </v-card-subtitle>
             <v-card-actions>
-              <v-btn @click="togglePicker">
+              <v-btn @click="togglePicker" v-translate>
                 Select Folder
               </v-btn>
             </v-card-actions>
@@ -19,13 +19,19 @@
               style="padding-top: 0px"
               v-if="!!filepath(project) || !!currentFilePath"
             >
-              Current Folder: {{ currentFilePath }}
+              <translate
+                :translate-params="{
+                  filePath: currentFilePath,
+                }"
+              >
+                Current Folder: %{filePath}
+              </translate>
             </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col>
           <v-card flat>
-            <v-card-subtitle>
+            <v-card-subtitle v-translate>
               2. Which Services do you want to publish to?
             </v-card-subtitle>
             <v-card-text>
@@ -51,7 +57,9 @@
                       </v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                      <v-list-item-title> Select All </v-list-item-title>
+                      <v-list-item-title v-translate>
+                        Select All
+                      </v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider class="mt-2"></v-divider>

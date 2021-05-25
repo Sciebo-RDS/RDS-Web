@@ -14,14 +14,14 @@ install:
 	apt install gettext
 	cd client
 	npm install -g yarn
-	npm --prefix ./client install
-	npm --prefix ./client install --only=dev
+	yarn --cwd ./client install
+	ln -s ../../client/node_modules packages/codebase/node_modules  
 
 l10n-compile:
-	npm --prefix ./client run localize-compile 
+	yarn --cwd ./client localize-compile 
 	
 l10n-extract:
-	npm --prefix ./client run localize-extract
+	yarn --cwd ./client localize-extract
 
 flask:
 	cd server
@@ -36,7 +36,7 @@ lint:
 	pipenv run black .
 
 build:
-	yarn --prefix ./client workspaces build
+	yarn --cwd ./client workspaces build
 
 test:
 	yarn --cwd ./client test && cd server && cd server && pipenv run pytest

@@ -33,7 +33,7 @@
               <v-icon>mdi-arrow-collapse</v-icon>
             </v-btn>
           </template>
-          <span><translate>Collapse all</translate></span>
+          <span v-translate>Collapse all</span>
         </v-tooltip>
       </v-fab-transition>
     </v-card-text>

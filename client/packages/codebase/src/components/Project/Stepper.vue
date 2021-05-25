@@ -1,19 +1,19 @@
 <template>
   <v-stepper v-model="e1" alt-labels>
     <v-stepper-header>
-      <v-stepper-step :complete="e1 > 1" step="1">
+      <v-stepper-step :complete="e1 > 1" step="1" v-translate>
         Configuration
       </v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step :complete="e1 > 2" step="2">
+      <v-stepper-step :complete="e1 > 2" step="2" v-translate>
         Metadata
       </v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step step="3"> Publish </v-stepper-step>
+      <v-stepper-step step="3" v-translate> Publish </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
@@ -24,7 +24,7 @@
 
         <v-btn text disabled> Back </v-btn>
 
-        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
+        <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]" v-translate>
           Continue
         </v-btn>
       </v-stepper-content>
@@ -38,9 +38,9 @@
           <StepMetadataEditor :project="project" />
         </v-card>
 
-        <v-btn text @click="e1 = 1"> Back </v-btn>
+        <v-btn text @click="e1 = 1" v-translate> Back </v-btn>
 
-        <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
+        <v-btn color="primary" @click="e1 = 3" v-translate> Continue </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="3">
@@ -48,9 +48,14 @@
           <StepPublish :project="project" />
         </v-card>
 
-        <v-btn text @click="e1 = 2"> Back </v-btn>
+        <v-btn text @click="e1 = 2" v-translate> Back </v-btn>
 
-        <v-btn color="success" @click="publishProject" ref="publishBtn" translate>
+        <v-btn
+          color="success"
+          @click="publishProject"
+          ref="publishBtn"
+          v-translate
+        >
           Publish
         </v-btn>
       </v-stepper-content>

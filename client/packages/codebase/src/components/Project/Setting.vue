@@ -24,6 +24,7 @@
             tile
             color="error"
             @click="onDelete(project.researchIndex)"
+            v-translate
             >delete project</v-btn
           >
         </v-col>

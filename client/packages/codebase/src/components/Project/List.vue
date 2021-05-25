@@ -4,7 +4,15 @@
       <v-expansion-panel v-for="(project, i) in projects" :key="i">
         <v-expansion-panel-header>
           <v-row>
-            <v-col cols="auto"> Project {{ project.researchIndex + 1 }} </v-col>
+            <v-col cols="auto">
+              <translate
+                :translate-params="{
+                  researchIndex: project.researchIndex + 1,
+                }"
+              >
+                Project %{ researchIndex }
+              </translate></v-col
+            >
             <ProjectStatusChip v-bind:status="project.status" />
           </v-row>
         </v-expansion-panel-header>
