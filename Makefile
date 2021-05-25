@@ -41,7 +41,8 @@ build:
 test:
 	yarn --cwd ./client test && cd server && cd server && pipenv run pytest
 
-web:
+web: describo
+	yarn --cwd ./client install
 	docker-compose -f client/dev/docker-compose.yml up -d
 	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve" || true
@@ -68,7 +69,8 @@ ocis:
 	@echo "Done. Open http://localhost:9200 with your browser."
 	@echo 'If you want to close the server, execute "make stop" and close everything.'
 
-classic:
+classic: describo
+	yarn --cwd ./client install
 	yarn --cwd ./client classic
 	echo '$$(function () {' > ./client/packages/classic/php/js/app.js
 	cat ./client/packages/classic/dist/js/app.js >> ./client/packages/classic/php/js/app.js
@@ -80,6 +82,7 @@ classic:
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email not@valid.tld"
 	@docker exec -it owncloud_server /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
 	@docker exec -it owncloud_server /bin/bash -c "occ oauth2:add-client describo AfRGQ5ywVhNQDlfGVbntjDOn2rLPTjg0SYEVBlvuYV4UrtDmmgIvKWktIMDP5Dqq WnxAqddPtPzX3lyCYijHi3pVs1HGpoumzTYSUWqrVfL0vT7E92JSzNTQABBzCaIm ${OWNCLOUD_DOMAIN}/apps/describo/authorize"
+	@docker exec -it owncloud_server /bin/bash -c "occ rds:set-oauthname web && occ rds:set-url ${RDS_URL}"
 	@echo Warning!!! You have to create a new oauth2 url and enter it in root .env file and configure RDS properly.
 	@echo Start on http://localhost:8000
 
