@@ -32,8 +32,9 @@ vendor
 owncloud/web/ocis
 owncloud/web/web
 flask_session
-tunnel.sh
+/tunnel.sh
 client/packages/classic/php/js/app.js
 
 web.config.json
 production-configuration.json
+/sign.sh
