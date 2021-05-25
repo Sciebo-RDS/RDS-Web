@@ -274,6 +274,10 @@ msgstr ""
 msgid "Settings for theme"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:33
+msgid "show past projects"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Editor.vue:46
 msgid "This cannot be undone."
 msgstr ""

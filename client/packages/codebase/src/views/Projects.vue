@@ -2,7 +2,11 @@
   <v-main style="padding: 0px">
     <!-- move this into header bar-->
     <v-layout column align-end wrap>
-      <v-switch v-model="showAll" inset label="show past projects"></v-switch>
+      <v-switch
+        v-model="showAll"
+        inset
+        :label="$gettext('show past projects')"
+      ></v-switch>
     </v-layout>
     <ProjectList />
     <!-- put these into their own components -->
