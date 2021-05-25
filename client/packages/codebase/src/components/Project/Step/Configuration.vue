@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card flat>
-      <v-card-title>Configure your Project</v-card-title>
+      <v-card-title v-translate>Configure your Project</v-card-title>
       <!--<v-card-subtitle>Please select the services you want to publish to: </v-card-subtitle>-->
       <v-row>
         <v-col>
@@ -10,8 +10,10 @@
               1. Which folder do you want to publish?
             </v-card-subtitle>
             <v-card-actions>
-              <v-btn @click="togglePicker" v-translate>
-                Select Folder
+              <v-btn @click="togglePicker">
+                <translate>
+                  Select Folder
+                </translate>
               </v-btn>
             </v-card-actions>
 

@@ -19,7 +19,7 @@ msgstr "(öffnet ein neues Fenster)"
 msgid "1. Which folder do you want to publish?"
 msgstr "1. Welcher Ordner soll veröffentlicht werden?"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:28
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:30
 msgid "2. Which Services do you want to publish to?"
 msgstr "2. Wohin willst Du die Daten veröffentlichen?"
 
@@ -40,8 +40,8 @@ msgstr "Dienst hinzufügen"
 msgid "Are you sure?"
 msgstr "Bist Du Dir sicher?"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:36
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:46
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:37
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:50
 msgid "Back"
 msgstr "Zurück"
 
@@ -62,26 +62,30 @@ msgstr "Zurücksetzen"
 msgid "Collapse all"
 msgstr "Alles zusammenklappen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:3
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:4
 msgid "Configuration"
 msgstr "Konfiguration"
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:3
+msgid "Configure your Project"
+msgstr "Veröffentliche dein Projekt"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Card.vue:6
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:39
 msgid "Connect your %{name} account with RDS"
 msgstr "Erlaube RDS den Zugang zu deinem %{name} Konto."
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:38
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:27
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:41
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:60
 msgid "Continue"
 msgstr "Weiter"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:2
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:3
 msgid "created"
 msgstr "Erstellt"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:18
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:20
 msgid "Current Folder: %{filePath}"
 msgstr "Aktueller Ordner: %{filePath}"
 
@@ -93,7 +97,7 @@ msgstr "Löscht den Zugang zu %{name} aus deinem Konto."
 msgid "delete project"
 msgstr "Projekte"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:11
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:9
 msgid "deleted"
 msgstr "Gelöscht"
 
@@ -169,7 +173,7 @@ msgstr "Alle Projektinformationen im Überblick."
 msgid "Manage your access to services"
 msgstr "Verwalte deine Dienstzugänge"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:9
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:10
 msgid "Metadata"
 msgstr ""
 
@@ -198,7 +202,7 @@ msgid "Projects"
 msgstr "Projekte"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:15
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:48
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
 msgid "Publish"
 msgstr "Veröffentlichen"
 
@@ -206,7 +210,7 @@ msgstr "Veröffentlichen"
 msgid "Publish your project"
 msgstr "Veröffentliche dein Projekt"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:8
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:7
 msgid "published"
 msgstr "Veröffentlicht"
 
@@ -239,14 +243,14 @@ msgstr "Zugangsdaten speichern"
 msgid "Save selection and activate services"
 msgstr "Dienste anpassen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:43
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:45
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:10
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:12
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:8
 msgid "Select All"
 msgstr "Alle auswählen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:12
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:13
 msgid "Select Folder"
 msgstr "Alle auswählen"
 
@@ -258,7 +262,7 @@ msgstr "Sprache ändern"
 msgid "Select services"
 msgstr "Wähle deine Dienste aus"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:115
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:120
 msgid "Select your Services"
 msgstr "Wähle deine Dienste aus"
 
