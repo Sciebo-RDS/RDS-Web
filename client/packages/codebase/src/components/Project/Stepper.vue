@@ -22,7 +22,7 @@
           <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
 
-        <v-btn text disabled> Back </v-btn>
+        <v-btn text disabled><translate>Back</translate></v-btn>
 
         <v-btn color="primary" @click="[sendChanges(), (e1 = 2)]">
           <translate>Continue</translate>
