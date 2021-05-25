@@ -2,7 +2,6 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const language = () => {
     const ll_CC = urlParams.get('lang') || navigator.language || navigator.userLanguage;
-    console.log("lang: ", urlParams.get('lang'), " got: ", ll_CC)
     return ll_CC.split("-", 1)[0];
 }
 
