@@ -50,7 +50,7 @@
 
         <v-btn text @click="e1 = 2"> Back </v-btn>
 
-        <v-btn color="success" @click="alert('Publishing project...')">
+        <v-btn color="success" @click="publishProject" ref="publishBtn" translate>
           Publish
         </v-btn>
       </v-stepper-content>
@@ -87,8 +87,18 @@ export default {
   },
   props: ["project"],
   methods: {
-    alert(msg) {
-      alert(msg);
+    publishProject() {
+      this.$refs.publishBtn.value = this.$gettext("In progress...");
+      this.$refs.publishBtn.disabled = false;
+      this.$socket.client.emit(
+        "triggerSynchronization",
+        {
+          researchIndex: this.project.researchIndex,
+        },
+        () => {
+          this.$refs.publishBtn.value = this.$gettext("Publishing done");
+        }
+      );
     },
     receiveChanges(pChanges) {
       this.changes = pChanges;
