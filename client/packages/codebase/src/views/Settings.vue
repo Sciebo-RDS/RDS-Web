@@ -1,7 +1,7 @@
 <template>
   <v-container flex>
     <v-row>
-      <v-col><LanguageSelector /></v-col>
+      <v-col v-if="!languagePredefined"><LanguageSelector /></v-col>
       <v-col><ThemeSelector /></v-col>
     </v-row>
     <v-row>
@@ -20,6 +20,12 @@ export default {
     LanguageSelector,
     ThemeSelector,
     ServiceEditor,
+  },
+  computed: {
+    languagePredefined() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.has("lang");
+    },
   },
 };
 </script>

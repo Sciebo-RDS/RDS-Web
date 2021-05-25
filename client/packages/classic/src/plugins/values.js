@@ -21,7 +21,12 @@ function promise() {
         }).then((response) => {
             console.log("got response: ", response)
             const data = JSON.parse(response)
-            resolve({ url: data.cloudURL, server: data.cloudURL })
+            resolve({
+                url: data.cloudURL,
+                server: data.cloudURL,
+                language: data.language,
+                response
+            })
         }).catch((error) => {
             reject("cloudURL is empty, error: ", error)
         }).finally(() => {

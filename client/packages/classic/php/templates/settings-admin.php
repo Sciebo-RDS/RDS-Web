@@ -23,7 +23,7 @@ script('rds', 'settings-admin');
                 <?php p($l->t('Specify here the name of the oauth, which you entered in your ownCloud instance for user oauth authentification. It needs to be the same.')); ?>
             </label>
         </p>
+        <input id="rds_submit" type="button" class="button" value="<?php p($l->t('Save')); ?>">
+        <span class="msg"></span>
     </form>
-    <button id="rds_submit" type="button" class="button"><?php p($l->t('Save')); ?></button>
-    </p>
 </div>
