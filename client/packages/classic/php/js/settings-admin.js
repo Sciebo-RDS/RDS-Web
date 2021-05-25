@@ -2,6 +2,8 @@ $(document).ready(function () {
 
 	$('#rds_submit').on('click', function (event) {
 		event.preventDefault();
+		OC.msg.startSaving('#rdsSettings .msg');
+
 		var app = "rds"
 		var url = $("#cloud_url");
 		var urlValue = url.val();
@@ -13,7 +15,10 @@ $(document).ready(function () {
 
 		var oauthname = $("#oauth_name");
 		OC.AppConfig.setValue(app, oauthname.attr('name'), oauthname.val());
+
+		OC.msg.finishedSaving('#rdsSettings .msg', { status: 'success', data: { message: t('rds', 'Saved.') } });
 	});
 
 	$('.section .icon-info').tipsy({ gravity: 'w' });
 });
+

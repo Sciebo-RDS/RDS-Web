@@ -1,5 +1,7 @@
+const urlParams = new URLSearchParams(window.location.search);
+
 const language = () => {
-    const ll_CC = navigator.language || navigator.userLanguage;
+    const ll_CC = urlParams.get('lang') || navigator.language || navigator.userLanguage;
     return ll_CC.split("-", 1)[0];
 }
 
@@ -22,7 +24,7 @@ export default {
     // You can use it as a state getter function (probably the best solution)
     getters: {
         getLanguage(state) {
-            return state.language;
+            return urlParams.get('lang') || state.language;
         },
         isDarkMode(state) {
             if (state.deviceMode) {

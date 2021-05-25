@@ -2,18 +2,18 @@
   <v-stepper v-model="e1" alt-labels>
     <v-stepper-header>
       <v-stepper-step :complete="e1 > 1" step="1">
-        Configuration
+        <translate>Configuration</translate>
       </v-stepper-step>
 
       <v-divider></v-divider>
 
       <v-stepper-step :complete="e1 > 2" step="2">
-        Metadata
+        <translate>Metadata</translate>
       </v-stepper-step>
 
       <v-divider></v-divider>
 
-      <v-stepper-step step="3"> Publish </v-stepper-step>
+      <v-stepper-step step="3"><translate>Publish</translate> </v-stepper-step>
     </v-stepper-header>
 
     <v-stepper-items>
@@ -21,12 +21,13 @@
         <v-card class="mb-12" height="auto" flat>
           <StepConfiguration :project="project" @changePorts="receiveChanges" />
         </v-card>
-        <v-btn text disabled> Back </v-btn>
+
+        <v-btn text disabled> <translate>Back</translate> </v-btn>
         <v-btn v-if="configurationLockState" disabled>
-          Continue
+          <translate>Continue</translate>
         </v-btn>
         <v-btn v-else color="primary" @click="[sendChanges(), (e1 = 2)]">
-          Continue
+          <translate>Continue</translate>
         </v-btn>
       </v-stepper-content>
 
@@ -39,9 +40,13 @@
           <StepMetadataEditor :project="project" />
         </v-card>
 
-        <v-btn text @click="e1 = 1"> Back </v-btn>
+        <v-btn text @click="e1 = 1">
+          <translate>Back</translate>
+        </v-btn>
 
-        <v-btn color="primary" @click="e1 = 3"> Continue </v-btn>
+        <v-btn color="primary" @click="e1 = 3">
+          <translate>Continue</translate>
+        </v-btn>
       </v-stepper-content>
 
       <v-stepper-content step="3">
@@ -49,10 +54,12 @@
           <StepPublish :project="project" />
         </v-card>
 
-        <v-btn text @click="e1 = 2"> Back </v-btn>
+        <v-btn text @click="e1 = 2">
+          <translate>Back</translate>
+        </v-btn>
 
         <v-btn color="success" @click="publishProject">
-          Publish
+          <translate>Publish</translate>
         </v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -69,9 +76,9 @@
 </style>
 
 <script>
-import StepConfiguration from "./StepConfiguration.vue";
-import StepPublish from "./StepPublish.vue";
-import StepMetadataEditor from "./StepMetadataEditor.vue";
+import StepConfiguration from "./Step/Configuration.vue";
+import StepPublish from "./Step/Publish.vue";
+import StepMetadataEditor from "./Step/MetadataEditor.vue";
 
 export default {
   components: {
@@ -129,6 +136,8 @@ export default {
       }
     },
     publishProject() {
+      this.$refs.publishBtn.value = this.$gettext("In progress...");
+
       let indexObject = {
         researchIndex: this.project["researchIndex"],
       };

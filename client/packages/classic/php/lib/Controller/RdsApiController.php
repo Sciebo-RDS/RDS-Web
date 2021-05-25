@@ -17,6 +17,7 @@ use OCP\AppFramework\{
     ApiController,
 };
 use OCP\IConfig;
+use OCP\L10N\IFactory;
 
 /**
 - Define a new api controller
@@ -44,6 +45,7 @@ class RdsApiController extends ApiController
     private $jwsBuilder;
 
     private $config;
+    protected $lfactory;
 
     use Errors;
 
@@ -56,7 +58,8 @@ class RdsApiController extends ApiController
         IUserSession $userSession,
         IURLGenerator $urlGenerator,
         RDSService $rdsService,
-        IConfig $config
+        IConfig $config,
+        IFactory $lfactory
     ) {
         parent::__construct($AppName, $request);
         $this->appName = $AppName;
@@ -68,6 +71,7 @@ class RdsApiController extends ApiController
         $this->urlService = $rdsService->getUrlService();
 
         $this->config = $config;
+        $this->lfactory = $lfactory;
 
         $this->jwk = RSAKey::createFromJWK(JWKFactory::createRSAKey(
             4096 // Size in bits of the key. We recommend at least 2048 bits.
@@ -133,8 +137,18 @@ class RdsApiController extends ApiController
             ];
 
             $token = \Firebase\JWT\JWT::encode($data, $this->private_key, 'RS256');
+            $activeLangCode = $this->config->getUserValue(
+                $this->userSession->getUser()->getUID(),
+                'core',
+                'lang',
+                $this->lfactory->findLanguage()
+            );
 
-            return ["jwt" => $token];
+            return [
+                "jwt" => $token,
+                "cloudURL" => \OC::$server->getConfig()->getAppValue("rds", "cloudURL"),
+                "language" => $activeLangCode
+            ];
         });
     }
 

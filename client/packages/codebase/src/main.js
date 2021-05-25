@@ -13,9 +13,9 @@ import vuetify from './plugins/vuetify.js';
 const vuet = vuetify.vuetify
 
 function install(Vue) {
+    Vue.use(config)
     Vue.use(Vuex)
     Vue.use(store)
-    Vue.use(config)
     axios.defaults.withCredentials = true;
     Vue.use(VueAxios, axios)
     Vue.use(vuetify)

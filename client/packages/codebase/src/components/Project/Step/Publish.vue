@@ -1,8 +1,10 @@
 <template>
   <v-container>
     <v-card flat>
-      <v-card-title> Publish your project </v-card-title>
-      <v-card-subtitle> Make sure your settings are correct! </v-card-subtitle>
+      <v-card-title v-translate> Publish your project </v-card-title>
+      <v-card-subtitle v-translate>
+        Make sure your settings are correct!
+      </v-card-subtitle>
       <v-card-text>
         <!-- replace with logic-->
         PortIn: {{ port(project.portIn) }}<br />

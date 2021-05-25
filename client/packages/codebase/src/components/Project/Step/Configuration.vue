@@ -1,27 +1,34 @@
 <template>
   <v-container>
     <v-card flat>
-      <v-card-title>Configure your Project</v-card-title>
+      <v-card-title v-translate>Configure your Project</v-card-title>
       <!--<v-card-subtitle>Please select the services you want to publish to: </v-card-subtitle>-->
       <v-row>
         <v-col>
           <v-card flat>
-            <v-card-subtitle
-              >1. Which folder do you want to publish?</v-card-subtitle
-            >
-            <v-card-actions
-              ><v-btn @click="togglePicker"
-                >Select Folder</v-btn
-              ></v-card-actions
-            >
+            <v-card-subtitle v-translate>
+              1. Which folder do you want to publish?
+            </v-card-subtitle>
+
+            <v-card-actions>
+              <v-btn @click="togglePicker">
+                Select Folder
+              </v-btn>
+            </v-card-actions>
             <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
-              Current Folder: {{ currentFilePath }}
+              <translate
+                :translate-params="{
+                  filePath: currentFilePath,
+                }"
+              >
+                Current Folder: %{filePath}
+              </translate>
             </v-card-subtitle>
           </v-card>
         </v-col>
         <v-col>
           <v-card flat>
-            <v-card-subtitle>
+            <v-card-subtitle v-translate>
               2. Which Services do you want to publish to?
             </v-card-subtitle>
             <v-card-text>
@@ -37,6 +44,25 @@
                 multiple
                 chips
               >
+                <template v-slot:prepend-item>
+                  <v-list-item ripple @click="toggle">
+                    <v-list-item-action>
+                      <v-icon
+                        :color="
+                          selectedPorts.length > 0 ? 'indigo darken-4' : ''
+                        "
+                      >
+                        {{ icon }}
+                      </v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                      <v-list-item-title v-translate>
+                        Select All
+                      </v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                  <v-divider class="mt-2"></v-divider>
+                </template>
               </v-select>
             </v-card-text>
           </v-card>

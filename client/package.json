@@ -14,7 +14,9 @@
     "web": "yarn workspace @rds/web run build",
     "test:unit": "yarn workspace @rds/codebase run test --setupTestFrameworkScriptFile=./tests/setup.js",
     "lint": "vue-cli-service lint",
-    "test": "npm run test:unit"
+    "test": "npm run test:unit",
+    "localize-extract": "yarn workspace @rds/codebase run localize-extract",
+    "localize-compile": "yarn workspace @rds/codebase run localize-compile"
   },
   "dependencies": {
     "axios": "^0.21.1",

@@ -25,21 +25,39 @@ export default {
     },
     actions: {
         SOCKET_UserServiceList(context, state) {
+            let servicelist = []
+            try {
+                servicelist = JSON.parse(state).list.map(el => el.informations)
+            } catch (error) {
+                console.log("UserServiceList is invalid: ", error, "state: ", state)
+            }
             context.commit('setUserServiceList', {
-                servicelist: JSON.parse(state).list.map(el => el.informations)
+                servicelist
             })
         },
         SOCKET_ServiceList(context, state) {
-            context.commit('setServiceList', {
-                servicelist: JSON.parse(state).map(el => {
+            let servicelist = []
+            try {
+                servicelist = JSON.parse(state).map(el => {
                     el.informations.state = el.jwt
                     return el.informations
                 })
+            } catch (error) {
+                console.log("ServiceList is invalid: ", error, "state: ", state)
+            }
+            context.commit('setServiceList', {
+                servicelist
             })
         },
         SOCKET_ProjectList(context, state) {
+            let projectlist = []
+            try {
+                projectlist = JSON.parse(state)
+            } catch (error) {
+                console.log("ProjectList is invalid: ", error, "state: ", state)
+            }
             context.commit('setProjectList', {
-                projectlist: JSON.parse(state)
+                projectlist
             })
         },
         SOCKET_SessionId(context, state) {
@@ -75,17 +93,17 @@ export default {
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {
-                context.dispatch("SOCKET_UserServiceList", { list: response })
+                context.dispatch("SOCKET_UserServiceList", response)
             });
         },
         requestServiceList(context) {
             this._vm.$socket.client.emit("getServicesList", (response) => {
-                context.dispatch("SOCKET_ServiceList", { list: response })
+                context.dispatch("SOCKET_ServiceList", response)
             });
         },
         requestProjectList(context) {
             this._vm.$socket.client.emit("getAllResearch", (response) => {
-                context.dispatch("SOCKET_ProjectList", { list: JSON.parse(response) })
+                context.dispatch("SOCKET_ProjectList", response)
             });
         },
         exchangeCode(context, data) {

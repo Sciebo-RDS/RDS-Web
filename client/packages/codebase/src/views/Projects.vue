@@ -2,7 +2,11 @@
   <v-main style="padding: 0px">
     <!-- move this into header bar-->
     <v-layout column align-end wrap>
-      <v-switch v-model="showAll" inset label="show past projects"></v-switch>
+      <v-switch
+        v-model="showAll"
+        inset
+        :label="$gettext('show past projects')"
+      ></v-switch>
     </v-layout>
     <ProjectList />
     <!-- put these into their own components -->
@@ -33,7 +37,7 @@
               <v-icon>mdi-arrow-collapse</v-icon>
             </v-btn>
           </template>
-          <span><translate>Collapse all</translate></span>
+          <span v-translate>Collapse all</span>
         </v-tooltip>
       </v-fab-transition>
     </v-card-text>
@@ -73,7 +77,7 @@
 
 <script>
 /*import Header from '../components/Header'*/
-import ProjectList from "../components/ProjectList.vue";
+import ProjectList from "../components/Project/List.vue";
 
 export default {
   components: {

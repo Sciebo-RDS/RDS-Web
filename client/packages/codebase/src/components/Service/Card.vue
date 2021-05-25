@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import CredentialsInput from "./CredentialsInput.vue";
+import CredentialsInput from "../Settings/CredentialsInput.vue";
 
 export default {
   components: { CredentialsInput },

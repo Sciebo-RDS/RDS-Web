@@ -71,6 +71,9 @@ class HTTPRequest:
         LOGGER.debug(
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
+        if req.status_code >= 300:
+            return []
+
         response = req.text
         if reqConf["method"].lower() == "get":
             try:

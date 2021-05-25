@@ -40,7 +40,7 @@
 
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn @click="saveCredentials" color="primary">
+      <v-btn @click="saveCredentials" color="primary" v-trans>
         <translate>Save credentials</translate>
       </v-btn>
       <v-btn @click="$emit('closecredentials')" color="error">

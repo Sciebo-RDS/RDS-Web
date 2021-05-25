@@ -27,7 +27,7 @@
           <v-btn
             @click="grantAccess(getInformations('port-owncloud'))"
             color="primary"
-            :disabled="!loggedIn"
+            :disabled="!auth.loggedIn"
           >
             <translate>Grant access</translate>
           </v-btn>
@@ -105,7 +105,7 @@
 
 <script>
 import { mapState } from "vuex";
-import CredentialsInput from "../components/CredentialsInput.vue";
+import CredentialsInput from "../components/Settings/CredentialsInput.vue";
 
 export default {
   data: () => ({
@@ -117,9 +117,6 @@ export default {
     zIndex: 1000,
   }),
   computed: {
-    loggedIn() {
-      return this.auth.loggedIn;
-    },
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
       servicelist: (state) => state.RDSStore.servicelist,
@@ -153,17 +150,6 @@ export default {
     finishWizard() {
       this.$store.commit("setWizardFinished");
       this.$router.push("/projects");
-    },
-    getInformations(servicename, services = undefined) {
-      if (services === undefined) {
-        services = this.servicelist;
-      }
-      for (const service of services) {
-        if (service.servicename == servicename) {
-          return service;
-        }
-      }
-      return undefined;
     },
   },
   components: { CredentialsInput },

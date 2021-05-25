@@ -34,6 +34,7 @@ export default {
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
+        lang: this.config.language.split("_")[0],
       });
       return `${this.config.url}?${query}`;
     },
@@ -64,32 +65,20 @@ export default {
       );
     },
     sendInformationsToWindow() {
-      const url = OC.generateUrl("/apps/rds/api/1.0/informations");
-      fetch(url, { headers: this.headers })
-        .then((response) => {
-          if (response.ok) {
-            return response.text();
-          }
-
-          throw new Error(`${response.status} ${response.statusText}`);
-        })
-        .then((resp) => {
-          this.rdsWindow.postMessage(
-            JSON.stringify({
-              event: "informations",
-              data: resp,
-            }),
-            "*"
-          );
-        })
-        .catch((error) => {
-          this.loading = true;
-          this.error(error);
-        });
+      this.rdsWindow.postMessage(
+        JSON.stringify({
+          event: "informations",
+          data: this.config.response,
+        }),
+        "*"
+      );
     },
   },
   created() {
-    getConfig(this).then(() => (this.loading = false));
+    getConfig(this).then(() => {
+      console.log("loading frame: ", this.config.url);
+      this.loading = false;
+    });
 
     window.addEventListener("message", (event) => {
       if (event.data.length > 0) {
