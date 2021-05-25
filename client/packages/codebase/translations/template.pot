@@ -35,8 +35,9 @@ msgstr ""
 msgid "Are you sure?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:37
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:50
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:24
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:39
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
 msgid "Back"
 msgstr ""
 
@@ -70,8 +71,9 @@ msgstr ""
 msgid "Connect your %{name} account with RDS"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:27
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:41
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:43
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:60
 msgid "Continue"
 msgstr ""
@@ -88,7 +90,8 @@ msgstr ""
 msgid "Delete %{name} from your account."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:13
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:14
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:12
 msgid "delete project"
 msgstr ""
 
@@ -141,7 +144,7 @@ msgstr ""
 msgid "If you want to reuse this service, you need to add it again."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:21
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:61
 msgid "In progress..."
 msgstr ""
 
@@ -194,7 +197,7 @@ msgid "Projects"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:15
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:57
 msgid "Publish"
 msgstr ""
 
@@ -204,10 +207,6 @@ msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:7
 msgid "published"
-msgstr ""
-
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
-msgid "Publishing done"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Card.vue:66
@@ -227,6 +226,12 @@ msgstr ""
 msgid "Remove service"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:23
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:37
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:3
+msgid "Researchindex :%{researchIndex}"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:27
 msgid "Save credentials"
 msgstr ""
@@ -235,14 +240,14 @@ msgstr ""
 msgid "Save selection and activate services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:45
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:47
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:10
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:12
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:8
 msgid "Select All"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:13
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:14
 msgid "Select Folder"
 msgstr ""
 
@@ -254,7 +259,7 @@ msgstr ""
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:120
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:122
 msgid "Select your Services"
 msgstr ""
 
@@ -284,6 +289,16 @@ msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Editor.vue:46
 msgid "This cannot be undone."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:43
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:9
+msgid "this is a deleted project"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:29
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:9
+msgid "this is a published project"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:8

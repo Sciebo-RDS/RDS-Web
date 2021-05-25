@@ -40,8 +40,9 @@ msgstr "Dienst hinzufügen"
 msgid "Are you sure?"
 msgstr "Bist Du Dir sicher?"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:37
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:50
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:24
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:39
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
 msgid "Back"
 msgstr "Zurück"
 
@@ -75,8 +76,9 @@ msgstr "Veröffentliche dein Projekt"
 msgid "Connect your %{name} account with RDS"
 msgstr "Erlaube RDS den Zugang zu deinem %{name} Konto."
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:27
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:41
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:43
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:60
 msgid "Continue"
 msgstr "Weiter"
@@ -93,7 +95,8 @@ msgstr "Aktueller Ordner: %{filePath}"
 msgid "Delete %{name} from your account."
 msgstr "Löscht den Zugang zu %{name} aus deinem Konto."
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:13
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:14
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:12
 msgid "delete project"
 msgstr "Projekte"
 
@@ -149,7 +152,7 @@ msgstr ""
 msgid "If you want to reuse this service, you need to add it again."
 msgstr "Falls Du diesen Dienst später erneut nutzen willst, musst Du ihn wieder hinzufügen."
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:21
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:61
 msgid "In progress..."
 msgstr "In Bearbeitung..."
 
@@ -202,7 +205,7 @@ msgid "Projects"
 msgstr "Projekte"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:15
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:57
 msgid "Publish"
 msgstr "Veröffentlichen"
 
@@ -213,10 +216,6 @@ msgstr "Veröffentliche dein Projekt"
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:7
 msgid "published"
 msgstr "Veröffentlicht"
-
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
-msgid "Publishing done"
-msgstr "Fertig"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Card.vue:66
 msgid "Remove %{ name }"
@@ -235,6 +234,12 @@ msgstr "Zugang entfernen zu RDS"
 msgid "Remove service"
 msgstr "Dienst löschen"
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:23
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:37
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:3
+msgid "Researchindex :%{researchIndex}"
+msgstr "Forschungsnummer %{ researchIndex }"
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:27
 msgid "Save credentials"
 msgstr "Zugangsdaten speichern"
@@ -243,16 +248,16 @@ msgstr "Zugangsdaten speichern"
 msgid "Save selection and activate services"
 msgstr "Dienste anpassen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:45
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:47
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:10
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:12
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:8
 msgid "Select All"
 msgstr "Alle auswählen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:13
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:14
 msgid "Select Folder"
-msgstr "Alle auswählen"
+msgstr "Ordner wählen"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/LanguageSelector.vue:28
 msgid "Select language"
@@ -262,7 +267,7 @@ msgstr "Sprache ändern"
 msgid "Select services"
 msgstr "Wähle deine Dienste aus"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:120
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:122
 msgid "Select your Services"
 msgstr "Wähle deine Dienste aus"
 
@@ -293,6 +298,16 @@ msgstr "Zeige alte Projekte"
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Editor.vue:46
 msgid "This cannot be undone."
 msgstr "Dies kann nicht rückgängig gemacht werden."
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:43
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:9
+msgid "this is a deleted project"
+msgstr "gelöschtes Projekte"
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:29
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Setting.vue:9
+msgid "this is a published project"
+msgstr "veröffentlichtes Projekt"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:8
 msgid "This service does not require any input, as it can derive the credentials by other means."
