@@ -12,7 +12,9 @@
 
             <v-card-actions>
               <v-btn @click="togglePicker">
-                Select Folder
+                <translate>
+                  Select Folder
+                </translate>
               </v-btn>
             </v-card-actions>
             <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
