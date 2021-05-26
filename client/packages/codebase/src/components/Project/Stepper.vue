@@ -58,7 +58,7 @@
           <translate>Back</translate>
         </v-btn>
 
-        <v-btn color="success" @click="publishProject">
+        <v-btn ref="publishBtn" color="success" @click="publishProject">
           <translate>Publish</translate>
         </v-btn>
       </v-stepper-content>
