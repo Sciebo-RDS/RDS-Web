@@ -120,8 +120,8 @@ def authenticated_only(f):
 @socketio.event("triggerSynchronization")
 @authenticated_only
 def triggerSynchronization(json):
-    httpManager.makeRequest("triggerFileSynchronization", data=json)
     httpManager.makeRequest("triggerMetadataSynchronization", data=json)
+    httpManager.makeRequest("triggerFileSynchronization", data=json)
     httpManager.makeRequest("finishResearch", data=json)
 
 
