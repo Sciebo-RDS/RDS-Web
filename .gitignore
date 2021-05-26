@@ -22,7 +22,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 /.env
-.env.production
+.env.*
 
 .pytest_cache
 responses.json
@@ -38,3 +38,4 @@ client/packages/classic/php/js/app.js
 web.config.json
 production-configuration.json
 /sign.sh
+/rds
