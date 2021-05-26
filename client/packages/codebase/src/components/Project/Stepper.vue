@@ -137,6 +137,7 @@ export default {
     },
     publishProject() {
       this.$refs.publishBtn.value = this.$gettext("In progress...");
+      this.$refs.publishBtn.disabled = false;
 
       let indexObject = {
         researchIndex: this.project["researchIndex"],
