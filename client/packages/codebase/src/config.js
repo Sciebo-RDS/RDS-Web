@@ -5,13 +5,13 @@ const config = {
         path: process.env.SOCKETIO_PATH || "$SOCKETIO_PATH"
     },
     server: process.env.VUE_APP_FRONTENDHOST || "$VUE_APP_FRONTENDHOST",
-    describo: process.env.VUE_APP_DESCRIBO_URL || "$VUE_APP_DESCRIBO_URL"
+    describo: process.env.VUE_APP_DESCRIBO_URL || "$VUE_APP_DESCRIBO_URL",
+    predefined_user: (process.env.DEV_USE_PREDEFINED_USER === "True")
 }
 
 export default {
     config,
     install: function (Vue) {
-        console.log(config.socket.server)
         for (const [key, value] of Object.entries(config)) {
             Vue.config[key] = value
         }
