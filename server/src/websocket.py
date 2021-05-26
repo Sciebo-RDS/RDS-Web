@@ -141,7 +141,7 @@ def disconnect():
         LOGGER.error(e, exc_info=True)
 
 
-@socketio.event("triggerSynchronization")
+@socketio.on("triggerSynchronization")
 @authenticated_only
 def triggerSynchronization(json):
     LOGGER.debug("trigger synch, data: {}".format(json))
