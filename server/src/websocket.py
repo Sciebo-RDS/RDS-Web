@@ -117,15 +117,6 @@ def authenticated_only(f):
     return wrapped
 
 
-@socketio.event("triggerSynchronization")
-@authenticated_only
-def triggerSynchronization(json):
-    LOGGER.debug("trigger synch, data: {}".format(json))
-    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
-    httpManager.makeRequest("triggerFileSynchronization", data=json)
-    httpManager.makeRequest("finishResearch", data=json)
-
-
 @socketio.on("connect")
 @authenticated_only
 def connected():
@@ -150,11 +141,13 @@ def disconnect():
         LOGGER.error(e, exc_info=True)
 
 
-@socketio.on("sendMessage")
+@socketio.event("triggerSynchronization")
 @authenticated_only
-def handle_message(jsonData):
-    LOGGER.info("got {}".format(jsonData))
-    emit("getMessage", {"message": jsonData["message"][::-1]}, json=True)
+def triggerSynchronization(json):
+    LOGGER.debug("trigger synch, data: {}".format(json))
+    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
+    httpManager.makeRequest("triggerFileSynchronization", data=json)
+    httpManager.makeRequest("finishResearch", data=json)
 
 
 @socketio.on("addCredentials")
