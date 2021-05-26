@@ -1,6 +1,18 @@
 <template>
   <v-row justify="center">
-    <v-expansion-panels inset focusable multiple v-model="panel">
+    <v-card v-if="projects.length == 0" outlined tile>
+      <v-card-title v-translate>No projects found</v-card-title>
+      <v-card-text v-translate>
+        Set the filter or create a new one project.
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click="addProject">
+          <translate>Create a new project</translate>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-expansion-panels inset focusable multiple v-model="panel" v-else>
       <v-expansion-panel v-for="(project, i) in projects" :key="i">
         <v-expansion-panel-header>
           <v-row>
@@ -78,6 +90,9 @@ export default {
     deleteProject(researchIndex) {
       this.$store.dispatch("removeProject", { id: researchIndex });
       this.panel = [];
+    },
+    addProject() {
+      this.$store.dispatch("createProject");
     },
   },
   created() {

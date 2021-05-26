@@ -78,6 +78,10 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:10
+msgid "Create a new project"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:3
 msgid "created"
 msgstr ""
@@ -180,6 +184,10 @@ msgstr ""
 msgid "New project"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:3
+msgid "No projects found"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:73
 msgid "Password"
 msgstr ""
@@ -188,7 +196,7 @@ msgstr ""
 msgid "Permit RDS to access your ownCloud files."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:7
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:19
 msgid "Project %{ researchIndex }"
 msgstr ""
 
@@ -267,6 +275,10 @@ msgstr ""
 msgid "Service activation in progress"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:4
+msgid "Set the filter or create a new one project."
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:42
 msgid "Settings"
 msgstr ""
@@ -283,7 +295,7 @@ msgstr ""
 msgid "Settings for theme"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:33
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
 msgid "show past projects"
 msgstr ""
 

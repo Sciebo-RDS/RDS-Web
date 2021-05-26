@@ -68,7 +68,7 @@
               <v-icon>mdi-plus-thick</v-icon>
             </v-btn>
           </template>
-          <span><translate>New project</translate></span>
+          <span v-translate>New project</span>
         </v-tooltip>
       </v-fab-transition>
     </v-card-text>

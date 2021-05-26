@@ -83,6 +83,10 @@ msgstr "Erlaube RDS den Zugang zu deinem %{name} Konto."
 msgid "Continue"
 msgstr "Weiter"
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:10
+msgid "Create a new project"
+msgstr "Erstelle ein Projekt"
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:3
 msgid "created"
 msgstr "Erstellt"
@@ -188,6 +192,10 @@ msgstr "verändert"
 msgid "New project"
 msgstr "Neues Projekt"
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:3
+msgid "No projects found"
+msgstr "Kein Projekt verfügbar"
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:73
 msgid "Password"
 msgstr "Passwort"
@@ -196,7 +204,7 @@ msgstr "Passwort"
 msgid "Permit RDS to access your ownCloud files."
 msgstr "Gewähre RDS Zugriff auf deine ownCloud Dateien."
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:7
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:19
 msgid "Project %{ researchIndex }"
 msgstr "Projekt %{ researchIndex }"
 
@@ -275,6 +283,10 @@ msgstr "Wähle deine Dienste aus"
 msgid "Service activation in progress"
 msgstr "Dienstaktivierung im Gange"
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:4
+msgid "Set the filter or create a new one project."
+msgstr "Setze den Filter anders oder erstelle ein neues Projekt."
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:42
 msgid "Settings"
 msgstr "Einstellungen"
@@ -291,7 +303,7 @@ msgstr "Verknüpfte Dienste einstellen"
 msgid "Settings for theme"
 msgstr "Aussehen ändern"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:33
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
 msgid "show past projects"
 msgstr "Zeige alte Projekte"
 
