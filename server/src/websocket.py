@@ -148,6 +148,7 @@ def triggerSynchronization(json):
     httpManager.makeRequest("triggerMetadataSynchronization", data=json)
     httpManager.makeRequest("triggerFileSynchronization", data=json)
     httpManager.makeRequest("finishResearch", data=json)
+    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
 
 @socketio.on("addCredentials")
