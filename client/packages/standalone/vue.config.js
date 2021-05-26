@@ -23,9 +23,6 @@ module.exports = {
     ],
     filenameHashing: false,
     productionSourceMap: false,
-    devServer: {
-        proxy: 'http://localhost:8080'
-    },
     configureWebpack: {
         plugins: [
             new Dotenv(dotenvArgs)

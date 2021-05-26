@@ -116,6 +116,11 @@ export default {
     servicename: "",
     zIndex: 1000,
   }),
+  mounted() {
+    if (this.$config.predefined_user) {
+      this.finishWizard();
+    }
+  },
   computed: {
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
