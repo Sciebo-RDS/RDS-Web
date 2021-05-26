@@ -58,8 +58,12 @@
           <translate>Back</translate>
         </v-btn>
 
-        <v-btn ref="publishBtn" color="success" @click="publishProject">
-          <translate>Publish</translate>
+        <v-btn
+          color="success"
+          @click="publishProject"
+          :disabled="publishInProgress"
+        >
+          {{ publishText }}
         </v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -91,7 +95,16 @@ export default {
       e1: 1,
       changes: {},
       configurationLockState: true,
+      publishInProgress: false,
+      publishText: this.$gettext("Publish"),
     };
+  },
+  watch: {
+    publishInProgress(value) {
+      this.publishText = value
+        ? this.$gettext("In progress...")
+        : this.$gettext("Publish");
+    },
   },
   props: ["project"],
   beforeMount() {
@@ -136,8 +149,7 @@ export default {
       }
     },
     publishProject() {
-      this.$refs.publishBtn.value = this.$gettext("In progress...");
-      this.$refs.publishBtn.disabled = false;
+      this.publishInProgress = true;
 
       let indexObject = {
         researchIndex: this.project["researchIndex"],

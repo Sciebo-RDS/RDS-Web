@@ -148,7 +148,7 @@ msgstr ""
 msgid "If you want to reuse this service, you need to add it again."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:61
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:23
 msgid "In progress..."
 msgstr ""
 
@@ -205,7 +205,8 @@ msgid "Projects"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:15
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:57
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:17
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:24
 msgid "Publish"
 msgstr ""
 
