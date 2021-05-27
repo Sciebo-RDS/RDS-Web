@@ -120,6 +120,6 @@ class HTTPManager:
             try:
                 return service.makeRequest(*args, **kwargs)
             except Exception as e:
-                LOGGER.error("make request error: {}".format(e), exc_info=True)
+                LOGGER.error("make request error while service search: {}".format(e), exc_info=True)
 
         raise ValueError("no service implements the given url.")
