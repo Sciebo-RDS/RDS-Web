@@ -32,7 +32,7 @@ url = os.getenv("RDS_INSTALLATION_DOMAIN")
 data = {
     os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
         ("getUserServices", "{url}/user/{userId}/service"),
-        ("getServicesList", "{url}/service", "get", removeDuplicates),
+        ("getServicesList", "{url}/service", "get", None, removeDuplicates),
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
         ("removeServiceForUser",
@@ -48,9 +48,10 @@ data = {
          "{url}/user/{userId}/research/{researchIndex}", "delete")
     ],
     os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"): [
-        ("getAllResearch", "{url}/user/{userId}", "get", parseAllResearch),
+        ("getAllResearch", "{url}/user/{userId}",
+         "get", None, parseAllResearch),
         ("getResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "get", parseResearch),
+         "{url}/user/{userId}/research/{researchIndex}", "get", None, parseResearch),
         ("createResearch", "{url}/user/{userId}",
          "post", None, refreshProjects),
         ("saveResearch",
