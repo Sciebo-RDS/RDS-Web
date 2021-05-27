@@ -36,7 +36,9 @@ data = {
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
         ("removeServiceForUser",
-         "{url}/user/{userId}/service/{servicename}", "delete", None, refreshUserServices)
+         "{url}/user/{userId}/service/{servicename}", "delete", None, refreshUserServices),
+        ("createProject",
+         "{url}/user/{userId}/service/{servicename}/projects", "post"),
     ],
     os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE", f"{url}/exporter"): [
         ("getAllFiles", "{url}/user/{userId}/research/{researchIndex}"),
@@ -71,10 +73,6 @@ data = {
          "{url}/user/{userId}/research/{researchIndex}", "put", None, refreshProjects),
         ("triggerMetadataSynchronization",
          "{url}/user/{userId}/research/{researchIndex}", "patch")
-    ],
-    os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
-        ("createProject",
-         "{url}/user/{userId}/service/{servicename}/projects", "post"),
     ]
 }
 
