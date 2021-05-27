@@ -147,11 +147,12 @@ def disconnect():
 
 @socketio.on("triggerSynchronization")
 @authenticated_only
-def triggerSynchronization(json):
-    LOGGER.debug("trigger synch, data: {}".format(json))
+def triggerSynchronization(jsonData):
+    LOGGER.debug("trigger synch, data: {}".format(jsonData))
     # TODO: Create project for all entered services in researchIndex
 
-    research = json.loads(httpManager.makeRequest("getResearch", data=json))
+    research = json.loads(httpManager.makeRequest(
+        "getResearch", data=jsonData))
     LOGGER.debug("start synchronization, research: {}".format(research))
     for index, port in enumerate(research["portOut"]):
         port["servicename"] = port["port"]
@@ -162,9 +163,9 @@ def triggerSynchronization(json):
 
     httpManager.makeRequest("saveResearch", data=research)
 
-    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
-    httpManager.makeRequest("triggerFileSynchronization", data=json)
-    httpManager.makeRequest("finishResearch", data=json)
+    httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
+    httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
+    httpManager.makeRequest("finishResearch", data=jsonData)
 
     LOGGER.debug("done synchronization, research: {}".format(research))
     # FIXME: finishResearch should emit an update to client automatically
