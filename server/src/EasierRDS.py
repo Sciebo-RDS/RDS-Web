@@ -31,11 +31,12 @@ class HTTPRequest:
         self.url = url
         self.requestList = {}
 
-    def addRequest(self, key, url, method="get", function=None, afterFunction=None):
+    def addRequest(self, key, url, method="get", beforeFunction=None, afterFunction=None):
         self.requestList[key] = {
             "url": url,
             "method": method,
-            "function": function
+            "before": beforeFunction,
+            "after": afterFunction
         }
 
     def makeRequest(self, key, data=None):
@@ -47,9 +48,9 @@ class HTTPRequest:
 
         reqConf = self.requestList[key]
 
-        if reqConf["method"].lower() != "get" and reqConf["function"] is not None and not reqConf["function"].__name__.startswith("refresh"):
+        if reqConf["before"] is not None:
             try:
-                data = reqConf["function"](data)
+                data = reqConf["before"](data)
             except:
                 pass
 
@@ -75,15 +76,18 @@ class HTTPRequest:
             return []
 
         response = req.text
-        if reqConf["method"].lower() == "get":
-            try:
-                response = json.dumps(
-                    reqConf["function"](json.loads(req.text)))
-            except:
-                pass
-
-        if reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
-            reqConf["function"]()
+        if reqConf["after"] is not None:
+            if reqConf["after"].__name__.startswith("refresh"):
+                try:
+                    reqConf["after"]()
+                except:
+                    pass
+            else:
+                try:
+                    response = json.dumps(
+                        reqConf["after"](json.loads(req.text)))
+                except:
+                    pass
 
         return response
 

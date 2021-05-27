@@ -36,7 +36,7 @@ data = {
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
         ("removeServiceForUser",
-         "{url}/user/{userId}/service/{servicename}", "delete", refreshUserServices)
+         "{url}/user/{userId}/service/{servicename}", "delete", None, refreshUserServices)
     ],
     os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE", f"{url}/exporter"): [
         ("getAllFiles", "{url}/user/{userId}/research/{researchIndex}"),
@@ -49,13 +49,14 @@ data = {
         ("getAllResearch", "{url}/user/{userId}", "get", parseAllResearch),
         ("getResearch",
          "{url}/user/{userId}/research/{researchIndex}", "get", parseResearch),
-        ("createResearch", "{url}/user/{userId}", "post", refreshProjects),
+        ("createResearch", "{url}/user/{userId}",
+         "post", None, refreshProjects),
         ("saveResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "post", refreshProjects),
+         "{url}/user/{userId}/research/{researchIndex}", "post", parsePortBack, refreshProjects),
         ("removeAllResearch", "{url}/user/{userId}",
-         "delete", refreshProjects),
+         "delete", None, refreshProjects),
         ("removeResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "delete", refreshProjects),
+         "{url}/user/{userId}/research/{researchIndex}", "delete", None, refreshProjects),
         ("addImport",
          "{url}/user/{userId}/research/{researchIndex}/imports", "post", parsePortBack),
         ("addExport",
@@ -67,9 +68,13 @@ data = {
     ],
     os.getenv("USE_CASE_SERVICE_METADATA_SERVICE", f"{url}/metadata"): [
         ("finishResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "put"),
+         "{url}/user/{userId}/research/{researchIndex}", "put", None, refreshProjects),
         ("triggerMetadataSynchronization",
          "{url}/user/{userId}/research/{researchIndex}", "patch")
+    ],
+    os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
+        ("createProject",
+         "{url}/user/{userId}/service/{servicename}/projects", "post"),
     ]
 }
 
@@ -145,10 +150,24 @@ def disconnect():
 @authenticated_only
 def triggerSynchronization(json):
     LOGGER.debug("trigger synch, data: {}".format(json))
+    # TODO: Create project for all entered services in researchIndex
+
+    research = httpManager.makeRequest("getResearch", data=json)
+    LOGGER.debug("start synchronization, research: {}".format(research))
+    for index, port in enumerate(research["portOut"]):
+        port["servicename"] = port["port"]
+        research["portOut"][index]["customProperties"]["projectId"] = httpManager.makeRequest(
+            "createProject", data=port)
+
+    httpManager.makeRequest("saveResearch", data=research)
+
     httpManager.makeRequest("triggerMetadataSynchronization", data=json)
     httpManager.makeRequest("triggerFileSynchronization", data=json)
     httpManager.makeRequest("finishResearch", data=json)
-    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+
+    LOGGER.debug("done synchronization, research: {}".format(research))
+    # FIXME: finishResearch should emit an update to client automatically
+    # emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
 
 @socketio.on("addCredentials")
