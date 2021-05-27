@@ -151,7 +151,7 @@ def triggerSynchronization(json):
     LOGGER.debug("trigger synch, data: {}".format(json))
     # TODO: Create project for all entered services in researchIndex
 
-    research = httpManager.makeRequest("getResearch", data=json)
+    research = json.loads(httpManager.makeRequest("getResearch", data=json))
     LOGGER.debug("start synchronization, research: {}".format(research))
     for index, port in enumerate(research["portOut"]):
         port["servicename"] = port["port"]
