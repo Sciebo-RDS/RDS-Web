@@ -158,6 +158,8 @@ def triggerSynchronization(json):
         port["servicename"] = port["port"]
         research["portOut"][index]["customProperties"]["projectId"] = httpManager.makeRequest(
             "createProject", data=port)
+        LOGGER.debug("created projectId: {}".format(
+            research["portOut"][index]["customProperties"]["projectId"]))
 
     httpManager.makeRequest("saveResearch", data=research)
 
