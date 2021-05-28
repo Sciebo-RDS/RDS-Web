@@ -54,8 +54,6 @@ data = {
          "{url}/user/{userId}/research/{researchIndex}", "get", None, parseResearch),
         ("createResearch", "{url}/user/{userId}",
          "post", None, refreshProjects),
-        ("saveResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "post", parsePortBack, refreshProjects),
         ("removeAllResearch", "{url}/user/{userId}",
          "delete", None, refreshProjects),
         ("removeResearch",
@@ -145,6 +143,27 @@ def disconnect():
         LOGGER.error(e, exc_info=True)
 
 
+def saveResearch(research):
+    researchUrl = "{}/user/{}/research/{}".format(
+        os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"),
+        research["userId"],
+        research["researchIndex"]
+    )
+
+    try:
+        for portUrl, portType in {"imports": "portIn", "exports": "portOut"}.items():
+            for port in research[portType]:
+                req = requests.post(f"{researchUrl}/{portUrl}", json=port)
+                LOGGER.debug("sent port: {}, status code: {}".format(
+                    port, req.status_code
+                ))
+
+        return True
+    except Exception as e:
+        LOGGER.error("Error: {}".format(e), exc_info=True)
+        return False
+
+
 @socketio.on("triggerSynchronization")
 @authenticated_only
 def triggerSynchronization(jsonData):
@@ -165,7 +184,7 @@ def triggerSynchronization(jsonData):
         LOGGER.debug("created projectId: {}".format(
             research["portOut"][index]["customProperties"]["projectId"]))
 
-    httpManager.makeRequest("saveResearch", data=research)
+    saveResearch(research)
 
     httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
     httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
