@@ -73,7 +73,7 @@ class HTTPRequest:
             "status_code: {}, content: {}".format(req.status_code, req.text))
 
         if req.status_code >= 300:
-            return []
+            return None
 
         response = req.text
         if reqConf["after"] is not None:
@@ -120,6 +120,7 @@ class HTTPManager:
             try:
                 return service.makeRequest(*args, **kwargs)
             except Exception as e:
-                LOGGER.error("make request error while service search: {}".format(e), exc_info=True)
+                LOGGER.error(
+                    "make request error while service search: {}".format(e), exc_info=True)
 
         raise ValueError("no service implements the given url.")
