@@ -169,7 +169,6 @@ def saveResearch(research):
 @authenticated_only
 def triggerSynchronization(jsonData):
     LOGGER.debug("trigger synch, data: {}".format(jsonData))
-    # TODO: Create project for all entered services in researchIndex
 
     research = json.loads(httpManager.makeRequest(
         "getResearch", data=jsonData))
@@ -181,19 +180,18 @@ def triggerSynchronization(jsonData):
             research["portOut"][index]["customProperties"] = {}
 
         research["portOut"][index]["customProperties"]["projectId"] = httpManager.makeRequest(
-            "createProject", data=port)
+            "createProject", data=parsePortBack(port))
         LOGGER.debug("created projectId: {}".format(
-            research["portOut"][index]["customProperties"]["projectId"]))
+            research["portOut"][index]["customProperties"]["projectId"]
+        ))
 
-    saveResearch(research)
+    saveResearch(parseResearchBack(research))
 
     httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
     httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
     httpManager.makeRequest("finishResearch", data=jsonData)
 
     LOGGER.debug("done synchronization, research: {}".format(research))
-    # FIXME: finishResearch should emit an update to client automatically
-    # emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
 
 @socketio.on("addCredentials")
