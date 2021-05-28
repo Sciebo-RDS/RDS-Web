@@ -153,7 +153,8 @@ def saveResearch(research):
     try:
         for portUrl, portType in {"imports": "portIn", "exports": "portOut"}.items():
             for port in research[portType]:
-                req = requests.post(f"{researchUrl}/{portUrl}", json=port)
+                req = requests.post(f"{researchUrl}/{portUrl}", json=port,
+                                    verify=os.getenv("VERIFY_SSL", "False") == "True")
                 LOGGER.debug("sent port: {}, status code: {}".format(
                     port, req.status_code
                 ))
