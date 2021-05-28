@@ -174,13 +174,14 @@ def triggerSynchronization(jsonData):
         "getResearch", data=jsonData))
     LOGGER.debug("start synchronization, research: {}".format(research))
     for index, port in enumerate(research["portOut"]):
-        port["servicename"] = port["port"]
+        parsedBack = parsePortBack(port)
+        parsedBack["servicename"] = port["port"]
 
         if "customProperties" not in research["portOut"][index]:
             research["portOut"][index]["customProperties"] = {}
 
         research["portOut"][index]["customProperties"]["projectId"] = httpManager.makeRequest(
-            "createProject", data=parsePortBack(port))
+            "createProject", data=parsedBack)
         LOGGER.debug("created projectId: {}".format(
             research["portOut"][index]["customProperties"]["projectId"]
         ))
