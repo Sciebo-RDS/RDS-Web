@@ -1,4 +1,7 @@
 
+import copy
+
+
 def parsePropBack(prop):
     types = ["fileStorage", "metadata"]
 
@@ -11,7 +14,8 @@ def parsePropBack(prop):
     customProp = [{"key": key, "value": value}
                   for key, value in prop.get("customProperties", {}).items()]
 
-    data.append({"portType": "customProperties", "value": customProp})
+    if len(customProp) > 0:
+        data.append({"portType": "customProperties", "value": customProp})
 
     return data
 
@@ -28,8 +32,9 @@ def parseResearchBack(response):
         "portIn": [parsePortBack(port) for port in response["portIn"]],
         "portOut": [parsePortBack(port) for port in response["portOut"]]
     }
-    response.update(data)
-    return response
+    d = copy.deepcopy(response)
+    d.update(data)
+    return d
 
 
 def parseCustomProp(customProp):
@@ -54,13 +59,13 @@ def parsePort(port):
 
 
 def parseResearch(response):
-
     data = {
         "portIn": [parsePort(port) for port in response["portIn"]],
         "portOut": [parsePort(port) for port in response["portOut"]]
     }
-    response.update(data)
-    return response
+    d = copy.deepcopy(response)
+    d.update(data)
+    return d
 
 
 def parseAllResearch(response):
