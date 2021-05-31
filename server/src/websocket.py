@@ -177,16 +177,16 @@ def triggerSynchronization(jsonData):
         parsedBack = parsePortBack(port)
         parsedBack["servicename"] = port["port"]
 
-        if "customProperties" not in research["portOut"][index]:
-            research["portOut"][index]["customProperties"] = {}
-
         createProjectResp = httpManager.makeRequest(
             "createProject", data=parsedBack)
 
-        LOGGER.debug("created projectId: {}".format(createProjectResp))
-        research["portOut"][index]["customProperties"]["projectId"] = json.loads(
-            createProjectResp
-        )["projectId"]
+        projectId = json.loads(createProjectResp)["projectId"]
+        LOGGER.debug("created projectId: {}".format(projectId))
+
+        if "customProperties" not in research["portOut"][index]:
+            research["portOut"][index]["customProperties"] = {}
+
+        research["portOut"][index]["customProperties"].update(projectId)
 
     saveResearch(parseResearchBack(research))
 
