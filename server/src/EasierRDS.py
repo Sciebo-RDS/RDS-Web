@@ -69,13 +69,13 @@ class HTTPRequest:
             url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True"
         )
 
+        response = req.text
         LOGGER.debug(
-            "status_code: {}, content: {}".format(req.status_code, req.text))
+            "status_code: {}, content: {}".format(req.status_code, response))
 
         if req.status_code >= 300:
             return None
 
-        response = req.text
         if reqConf["after"] is not None:
             if reqConf["after"].__name__.startswith("refresh"):
                 try:
@@ -85,7 +85,7 @@ class HTTPRequest:
             else:
                 try:
                     response = json.dumps(
-                        reqConf["after"](json.loads(req.text)))
+                        reqConf["after"](json.loads(response)))
                 except:
                     pass
 
