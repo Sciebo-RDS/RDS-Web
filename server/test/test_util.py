@@ -1,4 +1,6 @@
-from ..src.Util import parseResearch, parseResearchBack, parseAllResearch, parseAllResearchBack, removeDuplicates
+import sys
+sys.path.append("..")
+from src.Util import parseResearch, parseResearchBack, parseAllResearch, parseAllResearchBack, removeDuplicates
 import unittest
 import copy
 

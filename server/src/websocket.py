@@ -174,21 +174,23 @@ def triggerSynchronization(jsonData):
         "getResearch", data=jsonData))
     LOGGER.debug("start synchronization, research: {}".format(research))
     for index, port in enumerate(research["portOut"]):
-        parsedBack = parsePortBack(port)
-        parsedBack["servicename"] = port["port"]
+        parsedBackPort = parsePortBack(port)
+        parsedBackPort["servicename"] = port["port"]
 
-        createProjectResp = httpManager.makeRequest(
-            "createProject", data=parsedBack)
+        createProjectResp = json.loads(httpManager.makeRequest(
+            "createProject", data=parsedBackPort))
 
-        projectId = json.loads(createProjectResp)["projectId"]
-        LOGGER.debug("created projectId: {}, got response: {}".format(
-            projectId, createProjectResp))
+        LOGGER.debug("got response: {}".format(createProjectResp))
 
         if "customProperties" not in research["portOut"][index]:
             research["portOut"][index]["customProperties"] = {}
 
-        research["portOut"][index]["customProperties"]["projectId"] = projectId
+        research["portOut"][index]["customProperties"].update(
+            createProjectResp
+        )
 
+    LOGGER.debug("research before: {}, \nafter: {}".format(
+        research, parseResearchBack(research)))
     saveResearch(parseResearchBack(research))
 
     httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
