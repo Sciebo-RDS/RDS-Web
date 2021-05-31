@@ -187,7 +187,7 @@ def triggerSynchronization(jsonData):
         if "customProperties" not in research["portOut"][index]:
             research["portOut"][index]["customProperties"] = {}
 
-        research["portOut"][index]["customProperties"].update(projectId)
+        research["portOut"][index]["customProperties"]["projectId"] = projectId
 
     saveResearch(parseResearchBack(research))
 
