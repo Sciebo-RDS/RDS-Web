@@ -183,9 +183,9 @@ def triggerSynchronization(jsonData):
         LOGGER.debug("got response: {}".format(createProjectResp))
 
         if "customProperties" not in research["portOut"][index]:
-            research["portOut"][index]["customProperties"] = {}
+            research["portOut"][index]["properties"]["customProperties"] = {}
 
-        research["portOut"][index]["customProperties"].update(
+        research["portOut"][index]["properties"]["customProperties"].update(
             createProjectResp
         )
 
