@@ -32,11 +32,13 @@ url = os.getenv("RDS_INSTALLATION_DOMAIN")
 data = {
     os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service"): [
         ("getUserServices", "{url}/user/{userId}/service"),
-        ("getServicesList", "{url}/service", "get", removeDuplicates),
+        ("getServicesList", "{url}/service", "get", None, removeDuplicates),
         ("getService", "{url}/service/{servicename}"),
         ("getServiceForUser", "{url}/user/{userId}/service/{servicename}"),
         ("removeServiceForUser",
-         "{url}/user/{userId}/service/{servicename}", "delete", refreshUserServices)
+         "{url}/user/{userId}/service/{servicename}", "delete", None, refreshUserServices),
+        ("createProject",
+         "{url}/user/{userId}/service/{servicename}/projects", "post"),
     ],
     os.getenv("USE_CASE_SERVICE_EXPORTER_SERVICE", f"{url}/exporter"): [
         ("getAllFiles", "{url}/user/{userId}/research/{researchIndex}"),
@@ -46,16 +48,16 @@ data = {
          "{url}/user/{userId}/research/{researchIndex}", "delete")
     ],
     os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"): [
-        ("getAllResearch", "{url}/user/{userId}", "get", parseAllResearch),
+        ("getAllResearch", "{url}/user/{userId}",
+         "get", None, parseAllResearch),
         ("getResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "get", parseResearch),
-        ("createResearch", "{url}/user/{userId}", "post", refreshProjects),
-        ("saveResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "post", refreshProjects),
+         "{url}/user/{userId}/research/{researchIndex}", "get", None, parseResearch),
+        ("createResearch", "{url}/user/{userId}",
+         "post", None, refreshProjects),
         ("removeAllResearch", "{url}/user/{userId}",
-         "delete", refreshProjects),
+         "delete", None, refreshProjects),
         ("removeResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "delete", refreshProjects),
+         "{url}/user/{userId}/research/{researchIndex}", "delete", None, refreshProjects),
         ("addImport",
          "{url}/user/{userId}/research/{researchIndex}/imports", "post", parsePortBack),
         ("addExport",
@@ -67,7 +69,7 @@ data = {
     ],
     os.getenv("USE_CASE_SERVICE_METADATA_SERVICE", f"{url}/metadata"): [
         ("finishResearch",
-         "{url}/user/{userId}/research/{researchIndex}", "put"),
+         "{url}/user/{userId}/research/{researchIndex}", "put", None, refreshProjects),
         ("triggerMetadataSynchronization",
          "{url}/user/{userId}/research/{researchIndex}", "patch")
     ]
@@ -141,14 +143,61 @@ def disconnect():
         LOGGER.error(e, exc_info=True)
 
 
+def saveResearch(research):
+    researchUrl = "{}/user/{}/research/{}".format(
+        os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"),
+        research["userId"],
+        research["researchIndex"]
+    )
+
+    try:
+        for portUrl, portType in {"imports": "portIn", "exports": "portOut"}.items():
+            for port in research[portType]:
+                req = requests.post(f"{researchUrl}/{portUrl}", json=port,
+                                    verify=os.getenv("VERIFY_SSL", "False") == "True")
+                LOGGER.debug("sent port: {}, status code: {}".format(
+                    port, req.status_code
+                ))
+
+        return True
+    except Exception as e:
+        LOGGER.error("Error: {}".format(e), exc_info=True)
+        return False
+
+
 @socketio.on("triggerSynchronization")
 @authenticated_only
-def triggerSynchronization(json):
-    LOGGER.debug("trigger synch, data: {}".format(json))
-    httpManager.makeRequest("triggerMetadataSynchronization", data=json)
-    httpManager.makeRequest("triggerFileSynchronization", data=json)
-    httpManager.makeRequest("finishResearch", data=json)
-    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+def triggerSynchronization(jsonData):
+    LOGGER.debug("trigger synch, data: {}".format(jsonData))
+
+    research = json.loads(httpManager.makeRequest(
+        "getResearch", data=jsonData))
+    LOGGER.debug("start synchronization, research: {}".format(research))
+    for index, port in enumerate(research["portOut"]):
+        parsedBackPort = parsePortBack(port)
+        parsedBackPort["servicename"] = port["port"]
+
+        createProjectResp = json.loads(httpManager.makeRequest(
+            "createProject", data=parsedBackPort))
+
+        LOGGER.debug("got response: {}".format(createProjectResp))
+
+        if "customProperties" not in research["portOut"][index]:
+            research["portOut"][index]["properties"]["customProperties"] = {}
+
+        research["portOut"][index]["properties"]["customProperties"].update(
+            createProjectResp
+        )
+
+    LOGGER.debug("research before: {}, \nafter: {}".format(
+        research, parseResearchBack(research)))
+    saveResearch(parseResearchBack(research))
+
+    httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
+    httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
+    httpManager.makeRequest("finishResearch", data=jsonData)
+
+    LOGGER.debug("done synchronization, research: {}".format(research))
 
 
 @socketio.on("addCredentials")

@@ -2,6 +2,7 @@ import logging
 import requests
 import os
 import json
+import re
 from flask_login import current_user
 from .app import use_predefined_user
 
@@ -31,11 +32,12 @@ class HTTPRequest:
         self.url = url
         self.requestList = {}
 
-    def addRequest(self, key, url, method="get", function=None, afterFunction=None):
+    def addRequest(self, key, url, method="get", beforeFunction=None, afterFunction=None):
         self.requestList[key] = {
             "url": url,
             "method": method,
-            "function": function
+            "before": beforeFunction,
+            "after": afterFunction
         }
 
     def makeRequest(self, key, data=None):
@@ -47,9 +49,9 @@ class HTTPRequest:
 
         reqConf = self.requestList[key]
 
-        if reqConf["method"].lower() != "get" and reqConf["function"] is not None and not reqConf["function"].__name__.startswith("refresh"):
+        if reqConf["before"] is not None:
             try:
-                data = reqConf["function"](data)
+                data = reqConf["before"](data)
             except:
                 pass
 
@@ -62,28 +64,51 @@ class HTTPRequest:
 
         LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
+        sendEmptyData = False
+
+        group = re.findall(r"{\w*}", reqConf["url"])
+        LOGGER.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
+            reqConf["url"], group, len(group), len(
+                data), len(group) == len(data)
+        ))
+        if len(group) == len(data):
+            sendEmptyData = True
+
         url = reqConf["url"].format(**data)
+
+        LOGGER.debug(f"empty data: {sendEmptyData}")
+
+        parameters = {
+            "verify": os.getenv("VERIFY_SSL", "False") == "True"
+        }
+
+        if not sendEmptyData:
+            parameters["json"] = data
+
         LOGGER.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
-            url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True"
+            url, **parameters
         )
 
+        response = req.text
         LOGGER.debug(
-            "status_code: {}, content: {}".format(req.status_code, req.text))
+            "status_code: {}, content: {}".format(req.status_code, response))
 
         if req.status_code >= 300:
-            return []
+            return None
 
-        response = req.text
-        if reqConf["method"].lower() == "get":
-            try:
-                response = json.dumps(
-                    reqConf["function"](json.loads(req.text)))
-            except:
-                pass
-
-        if reqConf["function"] is not None and reqConf["function"].__name__.startswith("refresh"):
-            reqConf["function"]()
+        if reqConf["after"] is not None:
+            if reqConf["after"].__name__.startswith("refresh"):
+                try:
+                    reqConf["after"]()
+                except:
+                    pass
+            else:
+                try:
+                    response = json.dumps(
+                        reqConf["after"](json.loads(response)))
+                except:
+                    pass
 
         return response
 
@@ -116,6 +141,7 @@ class HTTPManager:
             try:
                 return service.makeRequest(*args, **kwargs)
             except Exception as e:
-                LOGGER.error("make request error: {}".format(e), exc_info=True)
+                LOGGER.error(
+                    "make request error while service search: {}".format(e), exc_info=True)
 
         raise ValueError("no service implements the given url.")
