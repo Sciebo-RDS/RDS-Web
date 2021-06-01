@@ -78,12 +78,16 @@ class HTTPRequest:
 
         LOGGER.debug(f"empty data: {sendEmptyData}")
 
-        if sendEmptyData:
-            data = None
+        parameters = {
+            "verify": os.getenv("VERIFY_SSL", "False") == "True"
+        }
+
+        if not sendEmptyData:
+            parameters["json"] = data
 
         LOGGER.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
-            url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True"
+            url, **parameters
         )
 
         response = req.text
