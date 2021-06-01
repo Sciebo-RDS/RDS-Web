@@ -65,10 +65,18 @@ class HTTPRequest:
         LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         sendEmptyData = False
-        if len(re.findall("{\w*}", reqConf["url"])) == len(data):
+
+        group = re.findall("r{\w*}", reqConf["url"])
+        LOGGER.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
+            reqConf["url"], group, len(group), len(
+                data), len(group) == len(data)
+        ))
+        if len(group) == len(data):
             sendEmptyData = True
 
         url = reqConf["url"].format(**data)
+
+        LOGGER.debug(f"empty data: {sendEmptyData}")
 
         if sendEmptyData:
             data = None
