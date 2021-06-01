@@ -2,6 +2,7 @@ import logging
 import requests
 import os
 import json
+import re
 from flask_login import current_user
 from .app import use_predefined_user
 
@@ -64,7 +65,7 @@ class HTTPRequest:
         LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         sendEmptyData = False
-        if reqConf["url"].count("{}") == len(data):
+        if len(re.findall("{\w*}", reqConf["url"])) == len(data):
             sendEmptyData = True
 
         url = reqConf["url"].format(**data)
