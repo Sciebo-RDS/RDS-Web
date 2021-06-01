@@ -63,7 +63,15 @@ class HTTPRequest:
 
         LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
+        sendEmptyData = False
+        if reqConf["url"].count("{}") == len(data):
+            sendEmptyData = True
+
         url = reqConf["url"].format(**data)
+
+        if sendEmptyData:
+            data = None
+
         LOGGER.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
             url, json=data, verify=os.getenv("VERIFY_SSL", "False") == "True"
