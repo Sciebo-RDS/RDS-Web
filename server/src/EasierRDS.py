@@ -66,7 +66,7 @@ class HTTPRequest:
 
         sendEmptyData = False
 
-        group = re.findall("r{\w*}", reqConf["url"])
+        group = re.findall(r"{\w*}", reqConf["url"])
         LOGGER.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
             reqConf["url"], group, len(group), len(
                 data), len(group) == len(data)
