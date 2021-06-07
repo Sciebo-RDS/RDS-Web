@@ -9,6 +9,7 @@ const getDefaultState = () => {
     return {
         darkMode: false,
         deviceMode: true,
+        timeMode: false,
         language: language(),
         finishedWizard: false,
         showAllProjects: false,
@@ -35,6 +36,12 @@ export default {
         usingDeviceMode(state) {
             return state.deviceMode == true
         },
+        usingDarkMode(state) {
+            return state.darkMode == true
+        },
+        usingTimeMode(state) {
+            return state.timeMode == true
+        },
         isWizardFinished(state) {
             return state.finishedWizard
         },
@@ -59,6 +66,9 @@ export default {
         setDeviceMode(state, payload) {
             state.deviceMode = payload.deviceMode
         },
+        setTimeMode(state, payload) {
+            state.timeMode = payload.timeMode
+        },
         setWizardFinished(state) {
             state.finishedWizard = true
         },
@@ -80,6 +90,11 @@ export default {
         setDeviceMode(context, state) {
             context.commit('setDeviceMode', {
                 deviceMode: state.deviceMode
+            })
+        },
+        setTimeMode(context, state) {
+            context.commit('setTimeMode', {
+                timeMode: state.timeMode
             })
         }
     }
