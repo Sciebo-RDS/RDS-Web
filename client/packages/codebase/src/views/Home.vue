@@ -1,17 +1,25 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Frame source="https://www.research-data-services.de">
+      Click here to
+      <v-btn color="primary" :href="gettingStarted">Getting started</v-btn>
+    </Frame>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '../components/HelloWorld.vue'
+import Frame from "../components/Frame.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    Frame,
+  },
+  data() {
+    return {
+      gettingStarted: "https://localhost:8000",
+    };
+  },
+};
 </script>

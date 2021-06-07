@@ -1,23 +1,38 @@
 <template>
-  <v-container>
-    <v-row class="fill-height">
-      <v-col>
-        <iframe :src="source" />
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <slot></slot>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="ma-0 pa-0 fill-height height:100%; width:100%;">
+    <iframe
+      :src="source"
+      class="ma-0 pa-0"
+      frameborder="0"
+      height="100%"
+      width="100%"
+    />
+    <v-divider />
+
+    <v-card
+      class="text-center pa-2"
+      style="width:100%; position: absolute; bottom: 0px;"
+      tile
+    >
+      <slot></slot>
+    </v-card>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Frame",
   props: {
     source: String,
   },
 };
 </script>
+<style>
+iframe {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  border: none;
+  overflow-x: hidden;
+}
+</style>
