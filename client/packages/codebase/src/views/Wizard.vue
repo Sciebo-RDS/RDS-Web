@@ -5,7 +5,7 @@
       v-if="!clickedStarted"
     >
       Click here to
-      <v-btn color="primary" @click="clickedStarted = true"
+      <v-btn color="primary" @click="clickGettingStarted"
         >Getting started</v-btn
       >
     </Frame>
@@ -154,6 +154,13 @@ export default {
     },
   },
   methods: {
+    clickGettingStarted() {
+      if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
+        this.clickedStarted = true;
+      } else {
+        grantAccess(getInformations("port-owncloud"));
+      }
+    },
     grantAccess(service) {
       if (!service.credentials) {
         this.openPopup(service, this);
