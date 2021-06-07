@@ -1,6 +1,15 @@
 <template>
   <div>
-    <v-stepper v-model="currentStep">
+    <Frame
+      source="https://www.research-data-services.de"
+      v-if="!clickedStarted"
+    >
+      Click here to
+      <v-btn color="primary" @click="clickedStarted = true"
+        >Getting started</v-btn
+      >
+    </Frame>
+    <v-stepper v-model="currentStep" v-else>
       <v-stepper-header>
         <v-stepper-step :complete="currentStep > 1" step="1">
           <translate>Activate RDS</translate>
@@ -106,6 +115,7 @@
 <script>
 import { mapState } from "vuex";
 import CredentialsInput from "../components/Settings/CredentialsInput.vue";
+import Frame from "../components/Frame.vue";
 
 export default {
   data: () => ({
@@ -115,6 +125,8 @@ export default {
     password: "",
     servicename: "",
     zIndex: 1000,
+    clickedStarted: false,
+    sourceRef: "https://www.research-data-services.de",
   }),
   mounted() {
     if (this.$config.predefined_user) {
@@ -154,9 +166,9 @@ export default {
     },
     finishWizard() {
       this.$store.commit("setWizardFinished");
-      this.$router.push("/projects");
+      this.$router.push("/");
     },
   },
-  components: { CredentialsInput },
+  components: { CredentialsInput, Frame },
 };
 </script>

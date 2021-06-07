@@ -1,6 +1,9 @@
 <template>
-  <div class="home">
-    <Frame source="https://www.research-data-services.de"></Frame>
+  <div class="help">
+    <Frame source="https://www.research-data-services.de">
+      Click here to
+      <v-btn color="primary" :href="gettingStarted">Getting started</v-btn>
+    </Frame>
   </div>
 </template>
 
@@ -9,7 +12,7 @@
 import Frame from "../components/Frame.vue";
 
 export default {
-  name: "Home",
+  name: "Help",
   components: {
     Frame,
   },
