@@ -3,6 +3,7 @@ import Home from "../views/Home.vue"
 import Projects from "../views/Projects.vue"
 import Settings from "../views/Settings.vue"
 import Wizard from "../views/Wizard.vue"
+import Help from "../views/Help.vue"
 
 let routes = [
   {
@@ -21,7 +22,14 @@ let routes = [
     path: '/settings',
     name: "Settings",
     component: Settings,
-    icon: "mdi-cog"
+    icon: "mdi-cog",
+    hide: true
+  },
+  {
+    path: '/help',
+    name: "Help",
+    component: Help,
+    icon: "mdi-help-circle",
   },
   {
     path: '/wizard',
@@ -40,7 +48,8 @@ export default {
       "Home": Vue.prototype.$gettext("Home"),
       "Projects": Vue.prototype.$gettext('Projects'),
       "Settings": Vue.prototype.$gettext('Settings'),
-      "Wizard": Vue.prototype.$gettext('Wizard')
+      "Wizard": Vue.prototype.$gettext('Wizard'),
+      "Help": Vue.prototype.$gettext("Help"),
     }
 
     for (let index = 0; index < routes.length; index++) {

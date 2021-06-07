@@ -66,8 +66,8 @@ export default {
           icon: "mdi-weather-night",
           click: () => {
             this.deviceMode = false;
-            this.darkMode = true;
             this.timeMode = false;
+            this.darkMode = true;
           },
           active: () => {
             return this.darkMode && !this.deviceMode && !this.timeMode;
@@ -77,8 +77,8 @@ export default {
           text: "System",
           icon: "mdi-desktop-classic",
           click: () => {
-            this.deviceMode = true;
             this.timeMode = false;
+            this.deviceMode = true;
           },
           active: () => {
             return this.deviceMode;
@@ -118,8 +118,8 @@ export default {
         return this.$store.getters.usingDarkMode;
       },
       set(value) {
-        this.$vuetify.theme.dark = value;
         this.$store.dispatch("setDarkMode", { darkMode: value });
+        this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
       },
     },
     deviceMode: {
@@ -128,6 +128,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setDeviceMode", { deviceMode: value });
+        this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
       },
     },
     timeMode: {
@@ -136,6 +137,7 @@ export default {
       },
       set(value) {
         this.$store.dispatch("setTimeMode", { timeMode: value });
+        this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
       },
     },
   },
@@ -146,23 +148,19 @@ export default {
   },
   methods: {
     loopTimeMode() {
-      console.log("exec timemode: ", this.timeMode);
-      const today = new Date();
-      console.log("darkMode: ", today.getHours() < 8 || today.getHours() > 20);
-      this.darkMode = today.getHours() < 8 || today.getHours() > 20;
+      if (this.timeMode) {
+        const today = new Date();
+        this.darkMode = today.getHours() < 8 || today.getHours() > 20;
+      }
     },
     startTimeMode() {
-      console.log("start timemode");
-      if (this.timeMode) {
+      this.loopTimeMode();
+      let timer = setInterval(() => {
+        if (!this.timeMode) {
+          clearInterval(timer);
+        }
         this.loopTimeMode();
-        let timer = setInterval(() => {
-          if (this.timeMode) {
-            this.loopTimeMode();
-          } else {
-            clearInterval(timer);
-          }
-        }, 1000 * 60 * 5);
-      }
+      }, 1000 * 60 * 5);
     },
   },
   beforeMount() {

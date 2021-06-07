@@ -31,6 +31,10 @@ export default {
             if (state.deviceMode) {
                 return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             }
+            if (state.timeMode) {
+                const today = new Date();
+                return today.getHours() < 8 || today.getHours() > 20;
+            }
             return state.darkMode == true
         },
         usingDeviceMode(state) {
