@@ -13,6 +13,7 @@
       class="text-center pa-2"
       style="width:100%; position: absolute; bottom: 0px;"
       tile
+      v-if="!!$slots.default"
     >
       <slot></slot>
     </v-card>
