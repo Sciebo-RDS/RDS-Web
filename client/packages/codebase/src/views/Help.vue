@@ -1,9 +1,6 @@
 <template>
   <div class="help">
-    <Frame source="https://www.research-data-services.de">
-      Click here to
-      <v-btn color="primary" :href="gettingStarted">Getting started</v-btn>
-    </Frame>
+    <Frame source="https://www.research-data-services.de" />
   </div>
 </template>
 

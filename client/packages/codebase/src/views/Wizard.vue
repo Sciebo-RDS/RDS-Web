@@ -4,10 +4,10 @@
       source="https://www.research-data-services.de"
       v-if="!clickedStarted"
     >
-      Click here to
-      <v-btn color="primary" @click="clickGettingStarted"
-        >Getting started</v-btn
-      >
+      <translate>Click here to</translate>&nbsp;
+      <v-btn color="primary" @click="clickGettingStarted">
+        <translate>Getting started</translate>
+      </v-btn>
     </Frame>
     <v-stepper v-model="currentStep" v-else>
       <v-stepper-header>
