@@ -1,9 +1,13 @@
 <template>
   <v-row justify="center">
     <v-card v-if="projects.length == 0" outlined tile>
-      <v-card-title v-translate>No projects found</v-card-title>
-      <v-card-text v-translate>
-        Set the filter or create a new one project.
+      <v-card-title>
+        <translate>No projects found</translate>
+      </v-card-title>
+      <v-card-text>
+        <translate>
+          Set the filter or create a new one project.
+        </translate>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
