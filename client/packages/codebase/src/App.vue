@@ -2,7 +2,7 @@
   <div>
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
-      <v-app-bar app flat class="d-lg-none">
+      <v-app-bar v-if="$vuetify.breakpoint.mobile" app flat class="d-lg-none">
         <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none" />
         <v-spacer />
         <settingsmenu />
@@ -36,7 +36,7 @@
           </v-container>
         </v-sheet>
 
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-list class="d-flex flex-column mb-10">
           <v-list-item-group v-model="model" mandatory color="indigo">
@@ -59,7 +59,10 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <settingsmenu class="d-none d-lg-flex" />
+        <settingsmenu
+          v-if="!$vuetify.breakpoint.mobile"
+          class="d-none d-lg-flex"
+        />
       </v-navigation-drawer>
 
       <v-main>

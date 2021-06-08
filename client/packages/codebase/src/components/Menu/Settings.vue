@@ -28,7 +28,7 @@
 
     <v-card>
       <v-container fluid>
-        <v-subheader>{{ $gettext("Mode") }}</v-subheader>
+        <v-subheader>{{ $gettext("Theme") }}</v-subheader>
         <v-btn
           v-for="item in modes"
           :key="item.text"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Frame
-      source="https://www.research-data-services.de"
+      :source="'/frames/' + $config.language + '/wizard.html'"
       v-if="!clickedStarted"
     >
       <translate>Click here to</translate>&nbsp;

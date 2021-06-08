@@ -1,6 +1,6 @@
 <template>
   <div class="help">
-    <Frame source="https://www.research-data-services.de" />
+    <Frame :source="'/frames/' + $config.language + '/help.html'" />
   </div>
 </template>
 

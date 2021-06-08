@@ -1,29 +1,23 @@
 <template>
   <div class="help">
-    <Frame source="https://www.research-data-services.de">
+    <Frame :source="'/frames/' + $config.language + '/removal.html'">
       <translate>
         Confirm the checkbox and click the button to remove the RDS account.
       </translate>
 
-      <v-container fluid>
-        <v-row>
-          <v-spacer />
-          <v-col md="2" class="d-flex align-center">
-            <v-checkbox
-              v-model="checked"
-              :label="
-                $gettext('Yes, i confirm that i want to delete my RDS account.')
-              "
-            />
-          </v-col>
-          <v-col md="2" class="d-flex align-center">
-            <v-btn @click="uninstallRDS" :disabled="!checked" color="error">
-              <translate>Delete RDS account</translate>
-            </v-btn>
-          </v-col>
-          <v-spacer />
-        </v-row>
-      </v-container>
+      <v-card flat class="d-flex flex-wrap justify-center">
+        <v-checkbox
+          v-model="checked"
+          :label="
+            $gettext('Yes, i confirm that i want to delete my RDS account.')
+          "
+        />
+      </v-card>
+      <v-card flat class="d-flex flex-wrap justify-center">
+        <v-btn @click="uninstallRDS" :disabled="!checked" color="error">
+          <translate>Delete RDS account</translate>
+        </v-btn>
+      </v-card>
     </Frame>
   </div>
 </template>
