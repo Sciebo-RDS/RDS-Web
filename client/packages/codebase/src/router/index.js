@@ -4,6 +4,7 @@ import Projects from "../views/Projects.vue"
 import Settings from "../views/Settings.vue"
 import Wizard from "../views/Wizard.vue"
 import Help from "../views/Help.vue"
+import Removal from "../views/RemoveRDS.vue"
 
 let routes = [
   {
@@ -32,6 +33,13 @@ let routes = [
     icon: "mdi-help-circle",
   },
   {
+    path: '/removeRDS',
+    name: "RemoveRDS",
+    component: Removal,
+    icon: "mdi-close",
+    hide: true
+  },
+  {
     path: '/wizard',
     name: "Wizard",
     component: Wizard,
@@ -50,6 +58,7 @@ export default {
       "Settings": Vue.prototype.$gettext('Settings'),
       "Wizard": Vue.prototype.$gettext('Wizard'),
       "Help": Vue.prototype.$gettext("Help"),
+      "RemoveRDS": Vue.prototype.$gettext("Remove RDS account")
     }
 
     for (let index = 0; index < routes.length; index++) {

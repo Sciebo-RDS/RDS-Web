@@ -73,8 +73,12 @@ export default {
         setTimeMode(state, payload) {
             state.timeMode = payload.timeMode
         },
-        setWizardFinished(state) {
-            state.finishedWizard = true
+        setWizardFinished(state, payload) {
+            if (!!payload) {
+                state.finishedWizard = payload.wizard
+            } else {
+                state.finishedWizard = true
+            }
         },
         showAllProjects(state, payload) {
             state.showAllProjects = payload;
