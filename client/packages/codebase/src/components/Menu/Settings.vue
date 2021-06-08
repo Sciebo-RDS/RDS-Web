@@ -1,8 +1,15 @@
 <template>
-  <v-list>
-    <v-list-item-group style="position: absolute; bottom:0px; width:100%">
-      <v-menu top offset-y :close-on-click="false" dark max-width="280px">
-        <template v-slot:activator="{ on, attrs }">
+  <v-menu
+    :top="!$vuetify.breakpoint.mobile"
+    offset-y
+    :close-on-content-click="false"
+    :close-on-click="false"
+    dark
+    max-width="280px"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <v-list class="d-none d-lg-flex">
+        <v-list-item-group style="position: absolute; bottom:0px; width:100%">
           <v-list-item v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon>mdi-cog</v-icon>
@@ -11,37 +18,55 @@
               <v-list-item-title v-text="$gettext('Settings')" />
             </v-list-item-content>
           </v-list-item>
-        </template>
+        </v-list-item-group>
+      </v-list>
 
-        <v-card>
-          <v-container fluid>
-            <v-subheader>{{ $gettext("Mode") }}</v-subheader>
-            <v-btn
-              v-for="item in modes"
-              :key="item.text"
-              @click="item.click"
-              class="ma-1"
-              style="width:120px"
-              :color="item.active() ? 'primary' : ''"
-            >
-              {{ item.text }} <v-icon right>{{ item.icon }}</v-icon>
-            </v-btn>
-            <div v-if="!languagePredefined">
-              <v-subheader>{{ $gettext("Language") }}</v-subheader>
-              <v-btn
-                v-for="item in availableLanguages"
-                :key="item.text"
-                class="ma-1"
-                style="width:120px"
-              >
-                {{ item.long }}
-              </v-btn>
-            </div>
-          </v-container>
-        </v-card>
-      </v-menu>
-    </v-list-item-group>
-  </v-list>
+      <v-btn icon v-bind="attrs" v-on="on" class="d-lg-none">
+        <v-icon>mdi-cog</v-icon>
+      </v-btn>
+    </template>
+
+    <v-card>
+      <v-container fluid>
+        <v-subheader>{{ $gettext("Mode") }}</v-subheader>
+        <v-btn
+          v-for="item in modes"
+          :key="item.text"
+          @click="item.click"
+          class="ma-1"
+          style="width:120px"
+          :color="item.active() ? 'primary' : ''"
+        >
+          {{ item.text }} <v-icon right>{{ item.icon }}</v-icon>
+        </v-btn>
+        <div v-if="!languagePredefined">
+          <v-subheader>{{ $gettext("Language") }}</v-subheader>
+          <v-btn
+            v-for="item in availableLanguages"
+            :key="item.short"
+            class="ma-1"
+            style="width:120px"
+            :color="item.short == language.short ? 'primary' : ''"
+            @click="language = item.short"
+          >
+            {{ item.long }}
+          </v-btn>
+        </div>
+        <div style="width: 100%; text-align:center;">
+          <v-btn
+            x-small
+            depressed
+            plain
+            color="error"
+            class="mt-3 mb-1"
+            @click="$router.push('/removeRDS')"
+          >
+            <translate>Remove account</translate>
+          </v-btn>
+        </div>
+      </v-container>
+    </v-card>
+  </v-menu>
 </template>
 
 <script>
@@ -97,7 +122,6 @@ export default {
           },
         },
       ],
-      language: [],
     };
   },
   computed: {
@@ -108,6 +132,18 @@ export default {
       }
 
       return res;
+    },
+    language: {
+      set(value) {
+        this.$config.language = value;
+        this.$store.dispatch("setLanguage", { language: value });
+      },
+      get() {
+        return {
+          short: this.$store.getters.getLanguage,
+          long: this.$language.available[this.$store.getters.getLanguage],
+        };
+      },
     },
     languagePredefined() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -147,6 +183,9 @@ export default {
     },
   },
   methods: {
+    console(val) {
+      console.log(val);
+    },
     loopTimeMode() {
       if (this.timeMode) {
         const today = new Date();

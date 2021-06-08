@@ -3,11 +3,9 @@
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
       <v-app-bar app flat class="d-lg-none">
-        <v-app-bar-nav-icon
-          @click="drawer = !drawer"
-          class="d-lg-none"
-        ></v-app-bar-nav-icon>
-        <v-toolbar-title></v-toolbar-title>
+        <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none" />
+        <v-spacer />
+        <settingsmenu />
       </v-app-bar>
 
       <v-navigation-drawer
@@ -61,7 +59,7 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <settingsmenu />
+        <settingsmenu class="d-none d-lg-flex" />
       </v-navigation-drawer>
 
       <v-main>
