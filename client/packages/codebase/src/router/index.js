@@ -1,47 +1,55 @@
-import VueRouter from 'vue-router'
-import Home from "../views/Home.vue"
-import Projects from "../views/Projects.vue"
-import Settings from "../views/Settings.vue"
-import Wizard from "../views/Wizard.vue"
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Projects from "../views/Projects.vue";
+import Settings from "../views/Settings.vue";
+import Wizard from "../views/Wizard.vue";
+import Services from "../views/Services.vue";
 
 let routes = [
   {
-    path: '/',
+    path: "/",
     name: "Home",
     component: Home,
-    icon: "mdi-home"
+    icon: "mdi-home",
   },
   {
-    path: '/projects',
+    path: "/projects",
     name: "Projects",
     component: Projects,
-    icon: "mdi-lightbulb-on"
+    icon: "mdi-lightbulb-on",
   },
   {
-    path: '/settings',
+    path: "/services",
+    name: "Services",
+    component: Services,
+    icon: "mdi-cloud-upload",
+  },
+  {
+    path: "/settings",
     name: "Settings",
     component: Settings,
-    icon: "mdi-cog"
+    icon: "mdi-cog",
   },
   {
-    path: '/wizard',
+    path: "/wizard",
     name: "Wizard",
     component: Wizard,
     icon: "mdi-wizard-hat",
-    hide: true
+    hide: true,
   },
-]
+];
 
 export default {
   install(Vue) {
-    Vue.use(VueRouter)
+    Vue.use(VueRouter);
 
     const titles = {
-      "Home": Vue.prototype.$gettext("Home"),
-      "Projects": Vue.prototype.$gettext('Projects'),
-      "Settings": Vue.prototype.$gettext('Settings'),
-      "Wizard": Vue.prototype.$gettext('Wizard')
-    }
+      Home: Vue.prototype.$gettext("Home"),
+      Projects: Vue.prototype.$gettext("Projects"),
+      Services: "Services",
+      Settings: Vue.prototype.$gettext("Settings"),
+      Wizard: Vue.prototype.$gettext("Wizard"),
+    };
 
     for (let index = 0; index < routes.length; index++) {
       const route = routes[index];
@@ -49,10 +57,10 @@ export default {
     }
 
     const router = new VueRouter({
-      routes
-    })
+      routes,
+    });
 
-    Vue.prototype.$routers = router
+    Vue.prototype.$routers = router;
   },
-  routes
-}
+  routes,
+};
