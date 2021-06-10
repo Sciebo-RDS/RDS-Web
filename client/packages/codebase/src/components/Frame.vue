@@ -7,7 +7,6 @@
       height="100%"
       width="100%"
     />
-    <v-divider />
 
     <v-card
       class="text-center pa-2"
