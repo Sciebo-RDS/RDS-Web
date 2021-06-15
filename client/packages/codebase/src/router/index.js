@@ -20,6 +20,12 @@ let routes = [
     icon: "mdi-lightbulb-on"
   },
   {
+    path: '/services',
+    name: "Services",
+    component: Projects,
+    icon: "mdi-share-variant"
+  },
+  {
     path: '/settings',
     name: "Settings",
     component: Settings,
@@ -55,6 +61,7 @@ export default {
     const titles = {
       "Home": Vue.prototype.$gettext("Home"),
       "Projects": Vue.prototype.$gettext('Projects'),
+      "Services": Vue.prototype.$gettext('Services'),
       "Settings": Vue.prototype.$gettext('Settings'),
       "Wizard": Vue.prototype.$gettext('Wizard'),
       "Help": Vue.prototype.$gettext("Help"),
