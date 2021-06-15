@@ -158,7 +158,7 @@ export default {
       if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
         this.clickedStarted = true;
       } else {
-        grantAccess(getInformations("port-owncloud"));
+        this.grantAccess(getInformations("port-owncloud"));
       }
     },
     grantAccess(service) {
