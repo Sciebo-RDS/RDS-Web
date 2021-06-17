@@ -9,7 +9,7 @@
   >
     <template v-slot:activator="{ on, attrs }">
       <v-list class="d-none d-lg-flex">
-        <v-list-item-group style="position: absolute; bottom:0px; width:100%">
+        <v-list-item-group style="position: fixed; bottom:0px; width:100%;">
           <v-list-item v-bind="attrs" v-on="on">
             <v-list-item-icon>
               <v-icon>mdi-cog</v-icon>
@@ -126,6 +126,7 @@ export default {
   },
   computed: {
     availableLanguages: function() {
+      console.log(this.$vuetify.theme.themes);
       let res = [];
       for (const [key, value] of Object.entries(this.$language.available)) {
         res.push({ short: key, long: value });

@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dotenv-webpack": "^6.0.4",
+    "marked": "^2.1.1",
     "socket.io-client": "^3.1.1",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",

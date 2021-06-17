@@ -90,6 +90,73 @@ def informations():
     return json.dumps(data)
 
 
+@app.route("/faq")
+def questions():
+    data = {
+        "de": [
+            {
+                "question": "Grundlegende Informationen",
+                "answer": """Sciebo RDS ist xyz... (inkl. an wen richtet sich Sciebo RDS/Zielgruppe).
+                
+Was hat Sciebo RDS mit der Hochschulcloud SCiebo zu tun? Wie ist Sciebo RDS mit Sciebo verbunden?
+
+Auflistung der Services / Was kann ich aktuell mit Sciebo RDS tun? (z.B. Daten veröffentlichen)""",
+            },
+            {
+                "question": "Kontoverwaltung",
+                "answer": """**Services aktivieren / Deaktivieren**
+                
+Ablauf (Klickweg beschreiben)
+
+Zugangsdaten für einzelne Dienste
+
+Muss ich alle Services / Dienste aktivieren, um Sciebo RDS nutzen zu können?
+
+Was passiert mit meinen Daten, wenn ich einen Dienst deaktiviere?
+
+**Konto verwalten / löschen**
+
+Muss ich mein Sciebo RDS Konto regelmäßig verlängern (wie bei Sciebo)?
+
+Konto löschen
+
+Was passiert mit meinen Daten, wenn ich meinen Sciebo RDS Account lösche?
+
+Neues Passwort?""",
+            },
+            {
+                "question": "Daten veröffentlichen",
+                "answer": """**Projekte anlegen**
+
+Wie kann ich über Sciebo RDS Daten veröffentlichen? (Ablauf beschreiben)
+
+Welche Daten kann ich über Sciebo RDS veröffentlichen (Datenformate)
+
+Wie bekomme ich Daten von Sciebo in Sciebo RDS?
+
+
+Was sind Projekte?
+
+**Metadaten verwalten**
+
+Ich habe falsche oder unvollständige (Meta)daten veröffetlich, wie kann ich Daten ändern?"""
+            }
+        ],
+        "en": [
+            {
+                "question": "This is the first question.",
+                "answer": "This is the first answer.",
+            },
+            {
+                "question": "This is the second question.",
+                "answer": "This is the second answer.",
+            },
+        ],
+    }
+
+    return json.dumps(data)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":

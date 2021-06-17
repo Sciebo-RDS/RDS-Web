@@ -1,6 +1,7 @@
 import Vuetify from 'vuetify';
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/dist/vuetify.min.css';
+import colors from 'vuetify/lib/util/colors'
 
 export default {
     install(Vue) {
@@ -10,5 +11,11 @@ export default {
         icons: {
             iconfont: 'mdi',
         },
+        theme: {
+            themes: {
+                light: {},
+                dark: {}
+            },
+        }
     })
 };

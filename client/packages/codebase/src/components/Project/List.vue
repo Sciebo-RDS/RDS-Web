@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" >
     <v-card v-if="projects.length == 0" outlined tile>
       <v-card-title>
         <translate>No projects found</translate>
