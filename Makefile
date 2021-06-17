@@ -76,7 +76,7 @@ classic: describo
 	cat ./client/packages/classic/dist/js/app.js >> ./client/packages/classic/php/js/app.js
 	echo "});" >> ./client/packages/classic/php/js/app.js
 	docker-compose -f client/dev/docker-compose.yml up -d
-	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || true
 	@echo Wait for 20 Seconds to boot everything up.
 	while [ $(shell curl  -sw '%{http_code}' localhost:8000) -gt 302 ]; do true; done;
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email not@valid.tld"
@@ -87,12 +87,12 @@ classic: describo
 	@echo Warning!!! You have to create a new oauth2 url and enter it in root .env file and configure RDS properly.
 	@echo Start on http://localhost:8000
 
-standalone:
+standalone: describo
 	docker-compose -f client/dev/docker-compose.yml up -d
 	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
 	@echo Wait for 20 Seconds to boot everything up.
 	@sleep 20
-	@docker exec -it dev_owncloud_1 /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
+	@docker exec -it owncloud_server /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"
 	@echo Warning!!! You have to create a new oauth2 url and enter it in root .env file and configure RDS properly.
 	@echo Start on http://localhost:8000
 
