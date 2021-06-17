@@ -1,12 +1,15 @@
 <template>
   <v-container>
     <v-row>
-      <v-col md="8" sm="12" xs="12">
+      <v-col md="2" sm="12" xs="12">
+        <img contain :src="service.icon" alt="img" class="image-fit" />
+      </v-col>
+      <v-col md="6" sm="12" xs="12">
         <v-card flat>
-          <v-card-title>{{ service.name }}</v-card-title>
+          <v-card-title>{{ service.displayName }}</v-card-title>
           <v-card-subtitle v-show="!!service.infoUrl || !!service.helpUrl">
             <a
-              :href="service.infoUrl"
+              :href="decodeURIComponent(service.infoUrl)"
               target="_blank"
               class="text-decoration-none"
               v-show="!!service.infoUrl"
@@ -17,7 +20,7 @@
             </a>
             <v-spacer v-show="!!service.infoUrl && !!service.helpUrl" />
             <a
-              :href="service.infoUrl"
+              :href="decodeURIComponent(service.helpUrl)"
               target="_blank"
               class="text-decoration-none"
               v-show="!!service.helpUrl"
@@ -36,14 +39,14 @@
         <v-card flat>
           <v-card-actions>
             <v-col class="text-right">
-              <v-btn @click="1" color="warning" v-if="!!service.state">
+              <v-btn @click="1" color="warning" v-if="userUses(service)">
                 <v-icon class="mr-2">mdi-link-variant-off</v-icon>
                 <translate class="mr-1">
                   Disconnect
                 </translate>
                 {{ service.name }}
               </v-btn>
-              <v-btn @click="grantAccess(service)" color="primary" v-else>
+              <v-btn @click="removeAccess(service)" color="primary" v-else>
                 <v-icon class="mr-2">mdi-link-variant</v-icon>
                 <translate class="mr-1">
                   Connect
@@ -59,14 +62,50 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: ["service"],
-  methods: {},
+  computed: {
+    ...mapState({
+      userservicelist: (state) => state.RDSStore.userservicelist,
+    }),
+  },
+  methods: {
+    userUses(service) {
+      for (var i of this.userservicelist) {
+        if (i.servicename === service.servicename) {
+          return true;
+        }
+      }
+      return false;
+    },
+    decodeURIComponent(url) {
+      return decodeURIComponent(url);
+    },
+    grantAccess(service) {
+      if (!service.credentials) {
+        this.openPopup(service, this);
+      } else {
+        this.servicename = service.servicename;
+        this.username = service.credentials.userId;
+        this.password = service.credentials.password;
+        this.overlay = true;
+      }
+    },
+    removeAccess(service) {
+      this.$store.dispatch("removeService", service);
+    },
+  },
 };
 </script>
 
 <style>
 .respect-linebreak {
   white-space: pre-line;
+}
+.image-fit {
+  width: 100%;
+  object-fit: cover;
 }
 </style>

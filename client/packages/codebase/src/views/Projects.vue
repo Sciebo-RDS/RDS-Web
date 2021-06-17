@@ -1,7 +1,7 @@
 <template>
   <v-main style="padding: 0px">
     <!-- move this into header bar-->
-    <v-layout column align-end wrap v-if="!!this.userservicelist">
+    <v-layout column align-end wrap v-if="userHasServicesConnected">
       <v-switch
         v-model="showAll"
         inset
@@ -100,6 +100,13 @@ export default {
       set(val) {
         this.$store.commit("showAllProjects", val);
       },
+    },
+    userHasServicesConnected() {
+      //hardcoded filter for owncloud, change
+      if (this.userservicelist.length > 1) {
+        return true;
+      }
+      return false;
     },
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,

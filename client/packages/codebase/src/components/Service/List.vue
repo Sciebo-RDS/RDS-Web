@@ -1,12 +1,12 @@
 <template>
   <v-row justify="center">
     <v-expansion-panels inset focusable multiple>
-      <v-expansion-panel v-for="(service, i) in services" :key="i">
+      <v-expansion-panel v-for="(service, i) in filteredServiceList" :key="i">
         <v-expansion-panel-header>
           <v-row>
-            <v-col cols="auto"> {{ service.name }}</v-col>
+            <v-col cols="auto"> {{ service.displayName }}</v-col>
             <v-chip
-              v-if="service.state"
+              v-if="userUses(service)"
               color="light-green lighten-1"
               class="ma-2"
               small
@@ -26,63 +26,38 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import ServiceConfiguration from "./Configuration.vue";
 
 export default {
   components: {
     ServiceConfiguration,
   },
-  data() {
-    return {
-      services: [
-        {
-          name: "zenodo",
-          state: 0,
-          description: {
-            de:
-              "ZENODO AUF DEUTSCH\n Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-            en: "ZENODO AUF ENGLISCH",
-          },
-          infoUrl: "https://zenodo.org/",
-          icon: "",
-          helpUrl: "",
-          displayName: "",
-        },
-        {
-          name: "datasafe",
-          state: 1,
-          description: {
-            de: "DATASAFE AUF DEUTSCH",
-            en: "DATASAFE AUF ENGLISCH",
-          },
-          infoUrl: "https://datasafe.uni-muenster.de/",
-          icon: "",
-          helpUrl: "https://datasafe.uni-muenster.de/",
-          displayName: "",
-        },
-        {
-          name: "owncloud",
-          state: 0,
-          description: {
-            de: "OWNCLOUD AUF DEUTSCH",
-            en: "OWNCLOUD AUF ENGLISCH",
-          },
-          infoUrl: "https://owncloud.com/de/",
-          icon: "",
-          helpUrl: "",
-          displayName: "",
-        },
-        {
-          name: "reva",
-          state: 1,
-          description: { de: "REVA AUF DEUTSCH", en: "REVA AUF ENGLISCH" },
-          infoUrl: "https://reva.link/",
-          icon: "",
-          helpUrl: "",
-          displayName: "",
-        },
-      ],
-    };
+  computed: {
+    ...mapState({
+      userservicelist: (state) => state.RDSStore.userservicelist,
+      servicelist: (state) => state.RDSStore.servicelist,
+    }),
+    filteredServiceList() {
+      var filtered = [];
+      for (var i of this.servicelist) {
+        if (i.servicename !== "port-owncloud") {
+          filtered.push(i);
+        }
+      }
+      return filtered;
+    },
+  },
+  methods: {
+    userUses(service) {
+      for (var i of this.userservicelist) {
+        if (i.servicename === service.servicename) {
+          return true;
+        }
+      }
+
+      return false;
+    },
   },
 };
 </script>
