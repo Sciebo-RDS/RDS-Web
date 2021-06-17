@@ -2,15 +2,19 @@
   <div>
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
-      <v-app-bar app flat class="d-lg-none">
-        <v-app-bar-nav-icon
-          @click="drawer = !drawer"
-          class="d-lg-none"
-        ></v-app-bar-nav-icon>
-        <v-toolbar-title></v-toolbar-title>
+      <v-app-bar v-if="$vuetify.breakpoint.mobile" app flat class="d-lg-none">
+        <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none" />
+        <v-spacer />
+        <settingsmenu />
       </v-app-bar>
 
-      <v-navigation-drawer id="v-navigation-drawer" v-model="drawer" app bottom>
+      <v-navigation-drawer
+        v-if="$store.getters.isWizardFinished"
+        id="v-navigation-drawer"
+        v-model="drawer"
+        app
+        bottom
+      >
         <v-sheet class="flex-direction row pa-4">
           <v-container>
             <v-row no-gutters align="center">
@@ -32,9 +36,9 @@
           </v-container>
         </v-sheet>
 
-        <v-divider></v-divider>
+        <v-divider />
 
-        <v-list>
+        <v-list class="d-flex flex-column mb-10">
           <v-list-item-group v-model="model" mandatory color="indigo">
             <v-list-item
               v-for="(item, i) in views"
@@ -44,20 +48,21 @@
                 !$store.getters.isWizardFinished != !item.hide ||
                   item.name == 'Home'
               "
-              :disabled="auth.isLoading"
             >
               <v-list-item-icon>
                 <v-icon v-text="item.icon" />
               </v-list-item-icon>
 
               <v-list-item-content>
-                <v-list-item-title
-                  v-text="$gettext(item.title)"
-                ></v-list-item-title>
+                <v-list-item-title v-text="$gettext(item.title)" />
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
         </v-list>
+        <settingsmenu
+          v-if="!$vuetify.breakpoint.mobile"
+          class="d-none d-lg-flex"
+        />
       </v-navigation-drawer>
 
       <v-main>
@@ -74,6 +79,10 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.v-list-item {
+  flex: 0;
 }
 
 #nav {
@@ -93,6 +102,7 @@
 <script>
 import { mapGetters } from "vuex";
 import overlay from "./components/Overlay.vue";
+import settingsmenu from "./components/Menu/Settings.vue";
 
 export default {
   name: "App",
@@ -115,7 +125,7 @@ export default {
       overlayText: null,
     };
   },
-  components: { overlay },
+  components: { overlay, settingsmenu },
   methods: {},
   computed: {
     ...mapGetters({

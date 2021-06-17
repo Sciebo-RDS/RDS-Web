@@ -9,6 +9,7 @@ const getDefaultState = () => {
     return {
         darkMode: false,
         deviceMode: true,
+        timeMode: false,
         language: language(),
         finishedWizard: false,
         showAllProjects: false,
@@ -30,10 +31,20 @@ export default {
             if (state.deviceMode) {
                 return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             }
+            if (state.timeMode) {
+                const today = new Date();
+                return today.getHours() < 8 || today.getHours() > 20;
+            }
             return state.darkMode == true
         },
         usingDeviceMode(state) {
             return state.deviceMode == true
+        },
+        usingDarkMode(state) {
+            return state.darkMode == true
+        },
+        usingTimeMode(state) {
+            return state.timeMode == true
         },
         isWizardFinished(state) {
             return state.finishedWizard
@@ -59,8 +70,15 @@ export default {
         setDeviceMode(state, payload) {
             state.deviceMode = payload.deviceMode
         },
-        setWizardFinished(state) {
-            state.finishedWizard = true
+        setTimeMode(state, payload) {
+            state.timeMode = payload.timeMode
+        },
+        setWizardFinished(state, payload) {
+            if (!!payload) {
+                state.finishedWizard = payload.wizard
+            } else {
+                state.finishedWizard = true
+            }
         },
         showAllProjects(state, payload) {
             state.showAllProjects = payload;
@@ -80,6 +98,11 @@ export default {
         setDeviceMode(context, state) {
             context.commit('setDeviceMode', {
                 deviceMode: state.deviceMode
+            })
+        },
+        setTimeMode(context, state) {
+            context.commit('setTimeMode', {
+                timeMode: state.timeMode
             })
         }
     }

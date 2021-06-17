@@ -1,6 +1,15 @@
 <template>
   <div>
-    <v-stepper v-model="currentStep">
+    <Frame
+      :source="'/frames/' + $config.language + '/wizard.html'"
+      v-if="!clickedStarted"
+    >
+      <translate>Click here to</translate>&nbsp;
+      <v-btn color="primary" @click="clickGettingStarted">
+        <translate>Getting started</translate>
+      </v-btn>
+    </Frame>
+    <v-stepper v-model="currentStep" v-else>
       <v-stepper-header>
         <v-stepper-step :complete="currentStep > 1" step="1">
           <translate>Activate RDS</translate>
@@ -106,6 +115,7 @@
 <script>
 import { mapState } from "vuex";
 import CredentialsInput from "../components/Settings/CredentialsInput.vue";
+import Frame from "../components/Frame.vue";
 
 export default {
   data: () => ({
@@ -115,6 +125,8 @@ export default {
     password: "",
     servicename: "",
     zIndex: 1000,
+    clickedStarted: false,
+    sourceRef: "https://www.research-data-services.de",
   }),
   mounted() {
     if (this.$config.predefined_user) {
@@ -142,6 +154,13 @@ export default {
     },
   },
   methods: {
+    clickGettingStarted() {
+      if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
+        this.clickedStarted = true;
+      } else {
+        grantAccess(getInformations("port-owncloud"));
+      }
+    },
     grantAccess(service) {
       if (!service.credentials) {
         this.openPopup(service, this);
@@ -154,9 +173,9 @@ export default {
     },
     finishWizard() {
       this.$store.commit("setWizardFinished");
-      this.$router.push("/projects");
+      this.$router.push("/");
     },
   },
-  components: { CredentialsInput },
+  components: { CredentialsInput, Frame },
 };
 </script>

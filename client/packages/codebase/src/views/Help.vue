@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <Frame :source="'/frames/' + $config.language + '/start.html'"></Frame>
+  <div class="help">
+    <Frame :source="'/frames/' + $config.language + '/help.html'" />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 import Frame from "../components/Frame.vue";
 
 export default {
-  name: "Home",
+  name: "Help",
   components: {
     Frame,
   },
