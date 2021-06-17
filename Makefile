@@ -44,7 +44,7 @@ test:
 web: describo
 	yarn --cwd ./client install
 	docker-compose -f client/dev/docker-compose.yml up -d
-	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web serve"\;\
+	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web install && yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve" || true
 	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || true
 	@while [ $(shell curl  -sw '%{http_code}' localhost:8000) -gt 302 ]; do true; done;
