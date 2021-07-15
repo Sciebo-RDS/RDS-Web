@@ -58,7 +58,7 @@ msgstr ""
 msgid "Click here to"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:22
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
 msgid "Collapse all"
 msgstr ""
 
@@ -74,9 +74,17 @@ msgstr ""
 msgid "Confirm the checkbox and click the button to remove the RDS account."
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:40
+msgid "Connect"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Card.vue:6
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:45
 msgid "Connect your %{name} account with RDS"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:7
+msgid "connected"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
@@ -115,6 +123,10 @@ msgstr ""
 msgid "deleted"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:33
+msgid "Disconnect"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:90
 msgid "Editor loading"
 msgstr ""
@@ -150,11 +162,12 @@ msgstr ""
 msgid "Grant access"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:67
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:17
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:68
 msgid "Help"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:62
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:63
 msgid "Home"
 msgstr ""
 
@@ -204,12 +217,16 @@ msgstr ""
 msgid "modified"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:40
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:49
 msgid "New project"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:4
 msgid "No projects found"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:11
+msgid "not connected"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:73
@@ -224,7 +241,7 @@ msgstr ""
 msgid "Project %{ researchIndex }"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:63
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:64
 msgid "Projects"
 msgstr ""
 
@@ -259,7 +276,7 @@ msgstr ""
 msgid "Remove account"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:68
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:69
 msgid "Remove RDS account"
 msgstr ""
 
@@ -308,7 +325,7 @@ msgstr ""
 msgid "Service activation in progress"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:64
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:65
 msgid "Services"
 msgstr ""
 
@@ -317,7 +334,7 @@ msgid "Set the filter or create a new one project."
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Menu/Settings.vue:53
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:65
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:66
 msgid "Settings"
 msgstr ""
 
@@ -333,7 +350,7 @@ msgstr ""
 msgid "Settings for theme"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:38
 msgid "show past projects"
 msgstr ""
 
@@ -386,7 +403,11 @@ msgstr ""
 msgid "Wait"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:66
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:11
+msgid "Website"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:67
 msgid "Wizard"
 msgstr ""
 

@@ -63,7 +63,7 @@ msgstr "Zurücksetzen"
 msgid "Click here to"
 msgstr "Drücke hier um"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:22
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
 msgid "Collapse all"
 msgstr "Alles zusammenklappen"
 
@@ -77,12 +77,20 @@ msgstr "Veröffentliche dein Projekt"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/RemoveRDS.vue:3
 msgid "Confirm the checkbox and click the button to remove the RDS account."
-msgstr ""
+msgstr "Bestätige die Checkbox und klicke auf den Knopf, um das Löschen des RDS Konto zu bestätigen."
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:40
+msgid "Connect"
+msgstr "Verbinden"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Card.vue:6
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:45
 msgid "Connect your %{name} account with RDS"
 msgstr "Erlaube RDS den Zugang zu deinem %{name} Konto."
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:7
+msgid "connected"
+msgstr "verbunden"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
@@ -114,11 +122,15 @@ msgstr "Projekt löschen"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/RemoveRDS.vue:14
 msgid "Delete RDS account"
-msgstr ""
+msgstr "RDS Konto löschen"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/StatusChip.vue:9
 msgid "deleted"
 msgstr "Gelöscht"
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:33
+msgid "Disconnect"
+msgstr "Trennen"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:90
 msgid "Editor loading"
@@ -155,11 +167,12 @@ msgstr "Projekte"
 msgid "Grant access"
 msgstr "Zugriff gewähren"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:67
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:17
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:68
 msgid "Help"
 msgstr "Hilfe"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:62
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:63
 msgid "Home"
 msgstr "Startseite"
 
@@ -190,7 +203,7 @@ msgstr "Vorbereitung..."
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/App.vue:137
 msgid "item"
-msgstr ""
+msgstr "Item"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Menu/Settings.vue:114
 msgid "Language"
@@ -212,13 +225,17 @@ msgstr "Metadata"
 msgid "modified"
 msgstr "verändert"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:40
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:49
 msgid "New project"
 msgstr "Neues Projekt"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:4
 msgid "No projects found"
 msgstr "Kein Projekt verfügbar"
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:11
+msgid "not connected"
+msgstr "nicht verbunden"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Settings/CredentialsInput.vue:73
 msgid "Password"
@@ -232,7 +249,7 @@ msgstr "Gewähre RDS Zugriff auf deine ownCloud Dateien."
 msgid "Project %{ researchIndex }"
 msgstr "Projekt %{ researchIndex }"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:63
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:64
 msgid "Projects"
 msgstr "Projekte"
 
@@ -265,9 +282,9 @@ msgstr "Zugang entfernen zu RDS"
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Menu/Settings.vue:35
 msgid "Remove account"
-msgstr "Zugang entfernen"
+msgstr "Zugang vollständig entfernen"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:68
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:69
 msgid "Remove RDS account"
 msgstr "RDS Zugang entfernen"
 
@@ -316,7 +333,7 @@ msgstr "Wähle deine Dienste aus"
 msgid "Service activation in progress"
 msgstr "Dienstaktivierung im Gange"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:64
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:65
 msgid "Services"
 msgstr "Dienste"
 
@@ -325,7 +342,7 @@ msgid "Set the filter or create a new one project."
 msgstr "Setze den Filter anders oder erstelle ein neues Projekt."
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Menu/Settings.vue:53
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:65
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:66
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -341,7 +358,7 @@ msgstr "Verknüpfte Dienste einstellen"
 msgid "Settings for theme"
 msgstr "Aussehen ändern"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:38
 msgid "show past projects"
 msgstr "Zeige alte Projekte"
 
@@ -394,7 +411,11 @@ msgstr "Farbgestaltung des Betriebssystem verwenden?"
 msgid "Wait"
 msgstr "Warte"
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:66
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Configuration.vue:11
+msgid "Website"
+msgstr "Webseite"
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/router/index.js:67
 msgid "Wizard"
 msgstr "Helfer"
 

@@ -10,10 +10,12 @@
               color="light-green lighten-1"
               class="ma-2"
               small
-              >connected <v-icon class="ml-2">mdi-link</v-icon>
+              ><translate> connected</translate>
+              <v-icon class="ml-2">mdi-link</v-icon>
             </v-chip>
-            <v-chip v-else color="grey" class="ma-2" small
-              >not connected <v-icon class="ml-2">mdi-link-off</v-icon>
+            <v-chip v-else color="grey" class="ma-2" small>
+              <translate>not connected</translate>
+              <v-icon class="ml-2">mdi-link-off</v-icon>
             </v-chip>
           </v-row>
         </v-expansion-panel-header>
