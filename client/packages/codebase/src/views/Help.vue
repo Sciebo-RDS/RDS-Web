@@ -18,6 +18,22 @@
 
 <script>
 import marked from "marked";
+import DOMPurify from "dompurify";
+
+const renderer = new marked.Renderer();
+const linkRenderer = renderer.link;
+renderer.link = (href, title, text) => {
+  const localLink = href.startsWith(
+    `${location.protocol}//${location.hostname}`
+  );
+  const html = linkRenderer.call(renderer, href, title, text);
+  return localLink
+    ? html
+    : html.replace(
+        /^<a /,
+        `<a target="_blank" rel="noreferrer noopener nofollow" `
+      );
+};
 
 export default {
   name: "Help",
@@ -37,9 +53,9 @@ export default {
   },
   methods: {
     markdown(text) {
-      console.log(text);
-      console.log(marked(text));
-      return marked(text);
+      const html = marked(text, { renderer });
+
+      return DOMPurify.sanitize(html, { ADD_ATTR: ["target"] });
     },
   },
 };
