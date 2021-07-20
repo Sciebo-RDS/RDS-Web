@@ -1,6 +1,14 @@
 <template>
   <v-row justify="center" class="pt-10">
-    <v-expansion-panels inset focusable multiple v-model="panel">
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      size="64"
+      v-if="Object.keys(questions).length == 0"
+    >
+      <translate>Wait</translate>
+    </v-progress-circular>
+    <v-expansion-panels inset focusable multiple v-model="panel" v-else>
       <v-expansion-panel
         v-for="(item, i) in questions[this.$config.language]"
         :key="i"
@@ -19,6 +27,7 @@
 <script>
 import marked from "marked";
 import DOMPurify from "dompurify";
+import { mapGetters } from "vuex";
 
 const renderer = new marked.Renderer();
 const linkRenderer = renderer.link;
@@ -37,19 +46,13 @@ renderer.link = (href, title, text) => {
 
 export default {
   name: "Help",
+  computed: {
+    ...mapGetters({ questions: "getQuestions" }),
+  },
   data() {
     return {
       panel: [],
-      questions: {},
     };
-  },
-  beforeMount() {
-    Vue.prototype.$http
-      .get(`${Vue.config.server}/faq`)
-      .then((response) => {
-        this.questions = response.data;
-      })
-      .catch(() => {});
   },
   methods: {
     markdown(text) {

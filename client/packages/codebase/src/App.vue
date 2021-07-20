@@ -38,7 +38,10 @@
 
         <v-divider />
 
-        <v-list class="d-flex flex-column mb-10" style="box-sizing: border-box; overflow: auto;">
+        <v-list
+          class="d-flex flex-column mb-10"
+          style="box-sizing: border-box; overflow: auto;"
+        >
           <v-list-item-group v-model="model" mandatory color="indigo">
             <v-list-item
               v-for="(item, i) in views"
@@ -162,6 +165,15 @@ export default {
     this.$config.language = this.getLanguage;
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
+
+    Vue.prototype.$http
+      .get(`${Vue.config.server}/faq`)
+      .then((response) => {
+        this.$store.commit("setQuestions", {
+          questions: response.data,
+        });
+      })
+      .catch(() => {});
   },
 };
 </script>

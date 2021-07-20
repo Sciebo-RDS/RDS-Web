@@ -12,25 +12,27 @@ Für weitere Informationen, sehen Sie sich gerne auf der [offiziellen Webseite](
         },
         {
             "question": "Kontoverwaltung",
-            "answer": """**Services aktivieren / Deaktivieren**
-                
-Ablauf (Klickweg beschreiben)
+            "answer": """Sciebo RDS nutzt die Oauth2-Technologie, um Informationen mit Diensten auszutauschen im Namen des/der Nutzer:in ohne das Passwörter oder andere kritische Daten ausgetauscht werden müssen.
+Durch diese Technologie wird dem Nutzenden alle Berechtigungen durch Sciebo RDS transparent gemacht. Ist die Dienstleistung durch Sciebo RDS nicht mehr erwünscht, können die Zugriffsrechte ohne weiteres durch den Nutzenden wieder entzogen werden.
 
-Zugangsdaten für einzelne Dienste
+Es ist nicht notwendig, dass sie alle Dienste aktivieren. Wählen Sie lediglich alle Dienste aus mit denen sie bereits arbeiten. Später können sie weiterhin Dienste hinzufügen oder entfernen.
 
-Muss ich alle Services / Dienste aktivieren, um Sciebo RDS nutzen zu können?
+**Services aktivieren / Deaktivieren**
 
-Was passiert mit meinen Daten, wenn ich einen Dienst deaktiviere?
+Um einen Dienst hinzuzufügen, klicken Sie bitte im linken Menü auf Dienste. Anschließend erhalten Sie eine Übersicht über alle verfügbaren Dienste. Wählen Sie den gewünschten Dienst aus. Anschließend fährt die Konfiguration für den gewählten Dienst darunter aus.
+Nun klicken Sie auf den Knopf *verbinden*: Es öffnet sich ein neuer Tab und sie können dort nun sehen, was der Dienst von Ihnen benötigt, um Sciebo RDS die Zugriffsrechte geben zu können. Bei den meisten Dienstleistungen wird dies ein Konto für den entsprechenden Dienst sein.
+
+Sobald Sie Sciebo RDS die Zugriffsrechte für ihren Account für den Dienst gegeben haben, wird alles im Hintergrund für Sie erledigt. Somit können Sie anschließend die Konfiguration für ein Projekt aufrufen und den eben angelegten Dienst hinterlegen.
+
+Sollten Sie ein Dienst deaktivieren wollen, so gehen sie wie bei aktivieren vor, klicken jedoch auf ein bereits aktivierten Dienst und dann auf *trennen*. Sciebo RDS wird den Zugriff zurückgeben. Sämtliche Daten, welche durch das Zugriffsrecht beim Dienst hochgeladen wurden, sind davon unberührt.
+Falls Sie sich sicher sein möchten, dass sämtliche Rechte Sciebo RDS entzogen werden, so müssen sie manuell im ehemals aktivierten Dienst diese Berechtigung entziehen. Es ist Sciebo RDS nicht bei allen Diensten möglich, dies automatisch zu tun.
 
 **Konto verwalten / löschen**
 
-Muss ich mein Sciebo RDS Konto regelmäßig verlängern (wie bei Sciebo)?
+Bei der ersten Verwendung von Sciebo RDS, haben sie ein Konto angelegt, worunter alle Dienstzugriffe verwaltet werden. Sie müssen dieses Konto nicht stetig verlängern. Solange Ihr Sciebo Account valide ist, wird auch Sciebo RDS aktiv sein.
+Sie können diesen Account löschen, womit sämtliche Daten von Sciebo RDS gelöscht werden. Daten, welche zuvor veröffentlicht wurden, sind davon unberührt. Auch alle Daten, welche in Sciebo liegen, werden dabei nicht angefasst.
 
-Konto löschen
-
-Was passiert mit meinen Daten, wenn ich meinen Sciebo RDS Account lösche?
-
-Neues Passwort?""",
+Sie können den Sciebo RDS Account löschen, indem sie unten links auf *Einstellungen* drücken und auf das erscheinende Fenster unten auf *RDS löschen* drücken. Dort werden die Konsequenzen noch einmal aufgezählt. Sobald das bestätigt wird, ist der Sciebo RDS unwiderbringlich gelöscht.""",
         },
         {
             "question": "Daten veröffentlichen",
@@ -56,8 +58,11 @@ Sollten Sie falsche Angaben gemacht haben bei den Metadaten oder der Konfigurati
 """
         }, {
             "question": "Metadaten verwalten",
-            "answer": """
-Ich habe falsche oder unvollständige (Meta)daten veröffentlicht, wie kann ich Daten ändern?
+            "answer": """Falls Sie falsche oder unvollständige (Meta)daten veröffentlicht haben, können diese nicht über Sciebo RDS bearbeitet werden. Falls der gewählte Dienst es zulässt, können die Daten dort manuell bearbeitet werden. Andernfalls erzeugen sie eine neue Veröffentlichung und machen dort die gewollten Änderungen publik.
+
+Aktuell lässt Sciebo RDS keine Aktualisierung von veröffentlichten Projekten zu. Dies liegt u.a. daran, dass viele Dienste einen speziellen Identifier (DOI) den Daten vergeben. Der Sinn dahinter ist, dass in Veröffentlichungen eine Referenz auf diese DOI gegeben werden kann und der Verfassende kann sich darauf verlassen, dass sich hinter der DOI der Inhalt verbirgt, welcher zur Veröffentlichung dort zu finden war.
+Könnten sich Inhalte hinter der DOI durch Aktualisierungen ändern, wäre der Sinn hinter diesen verfehlt. Einige Dienst (wie Zenodo) lassen jedoch eine Aktualisierung durch das Vergeben einer verwandten DOI zu. Sciebo RDS unterstützt dies aber zum aktuellen Zeitpunkt nicht.
+Dies könnte sich in Zukunft jedoch ändern.
             """
         }
     ],

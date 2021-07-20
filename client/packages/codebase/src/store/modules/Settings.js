@@ -13,6 +13,7 @@ const getDefaultState = () => {
         language: language(),
         finishedWizard: false,
         showAllProjects: false,
+        questions: {}
     }
 }
 
@@ -26,6 +27,9 @@ export default {
     getters: {
         getLanguage(state) {
             return urlParams.get('lang') || state.language;
+        },
+        getQuestions(state) {
+            return state.questions
         },
         isDarkMode(state) {
             if (state.deviceMode) {
@@ -67,6 +71,9 @@ export default {
         setDarkMode(state, payload) {
             state.darkMode = payload.darkMode
         },
+        setQuestions(state, payload) {
+            state.questions = payload.questions
+        },
         setDeviceMode(state, payload) {
             state.deviceMode = payload.deviceMode
         },
@@ -93,6 +100,11 @@ export default {
         setDarkMode(context, state) {
             context.commit('setDarkMode', {
                 darkMode: state.darkMode
+            })
+        },
+        setQuestions(context, state) {
+            context.commit('setQuestions', {
+                questions: state.questions
             })
         },
         setDeviceMode(context, state) {
