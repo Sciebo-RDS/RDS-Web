@@ -10,11 +10,15 @@
               color="light-green lighten-1"
               class="ma-2"
               small
-              ><translate> connected</translate>
+              ><translate key="7d7908fe-afa8-4bf2-8435-cd8069672d1a">
+                connected</translate
+              >
               <v-icon class="ml-2">mdi-link</v-icon>
             </v-chip>
             <v-chip v-else color="grey" class="ma-2" small>
-              <translate>not connected</translate>
+              <translate key="c4cd931f-852a-4d57-925a-31964bb6e862"
+                >not connected</translate
+              >
               <v-icon class="ml-2">mdi-link-off</v-icon>
             </v-chip>
           </v-row>
