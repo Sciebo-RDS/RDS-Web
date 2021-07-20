@@ -4,8 +4,8 @@
       <v-container flex>
         <v-row align="center" justify="center">
           <v-col>
-            <v-progress-circular indeterminate size="64"
-              ><translate>Wait</translate>
+            <v-progress-circular indeterminate size="64">
+              <translate>Wait</translate>
             </v-progress-circular>
           </v-col>
         </v-row>
