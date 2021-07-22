@@ -315,3 +315,16 @@ make l10n-compile
 ```
 
 Now, you have to build and distribute your client app again. In our case, it will be published through a docker container.
+
+# Docker Deployment
+
+We use an internal gitlab to build and store the docker container. But it is public available, so please take a look at our [gitlab registry](https://zivgitlab.uni-muenster.de/sciebo-rds/RDS-Web/-/packages) to get the container. The pipeline will be triggered for all branches, so you can easily create a pull request and take advantage of this "easy to use"-pipeline.
+
+You can use the RDS-Web docker container with this url: `zivgitlab.wwu.io/sciebo-rds/RDS-Web:<TAG>`. The following table show you all needed tags.
+
+| Tag            | Description                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| latest         | The latest build over all branches. This is not recommended for production use.                                                      |
+| main           | The latest build for the `main` branch. Not for production use.                                                                      |
+| `<NUMBER>`     | The build with pipeline-identifier `<NUMBER>`. For production use, set your wanted identifier, so you get always the same container. |
+| `<BRANCHNAME>` | The same like `main`, but for general branchnames.                                                                                   |
