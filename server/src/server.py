@@ -90,6 +90,13 @@ def informations():
     return json.dumps(data)
 
 
+@app.route("/faq")
+def questions():
+    from .questions import questions
+
+    return json.dumps(questions)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":

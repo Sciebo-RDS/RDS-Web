@@ -1,9 +1,17 @@
 <template>
   <v-row justify="center">
-    <v-card v-if="projects.length == 0" outlined tile>
-      <v-card-title v-translate>No projects found</v-card-title>
-      <v-card-text v-translate>
-        Set the filter or create a new one project.
+    <v-card
+      v-if="projects.length == 0 && userHasServicesConnected"
+      outlined
+      tile
+    >
+      <v-card-title>
+        <translate>No projects found</translate>
+      </v-card-title>
+      <v-card-text>
+        <translate>
+          Set the filter or create a new one project.
+        </translate>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -53,6 +61,7 @@
 import ProjectSetting from "./Setting.vue";
 import ProjectStatusChip from "./StatusChip.vue";
 import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -70,8 +79,18 @@ export default {
       allProjects: "getProjectlist",
       showAllProjects: "showAllProjects",
     }),
+    ...mapState({
+      userservicelist: (state) => state.RDSStore.userservicelist,
+    }),
     activeProjects() {
       return this.allProjects.filter((project) => project.status < 3);
+    },
+    userHasServicesConnected() {
+      //hardcoded filter for owncloud, change
+      if (this.userservicelist.length > 1) {
+        return true;
+      }
+      return false;
     },
   },
   methods: {
