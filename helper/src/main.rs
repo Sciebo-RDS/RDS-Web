@@ -26,8 +26,7 @@ fn main() {
             match env::var("USE_CASE_SERVICE_PORT_SERVICE") {
                 Ok(v) => v,
                 Err(_) => {
-                    eprintln!("Error: Envvar 'USE_CASE_SERVICE_PORT_SERVICE' not present, too.");
-                    return;
+                    panic!("Error: Envvar 'USE_CASE_SERVICE_PORT_SERVICE' not present, too.");
                 }
             }
         }
@@ -35,8 +34,7 @@ fn main() {
     let describo = match env::var("DESCRIBO_API_ENDPOINT") {
         Ok(v) => v,
         Err(_) => {
-            eprintln!("Error: Envvar 'DESCRIBO_API_ENDPOINT' not present.");
-            return;
+            panic!("Error: Envvar 'DESCRIBO_API_ENDPOINT' not present.");
         }
     };
 
