@@ -146,6 +146,7 @@ services:
   redis:
     image: redis:6
     container_name: owncloud_redis
+    hostname: owncloud_redis
     restart: always
     command: ["--databases", "1"]
     healthcheck:
