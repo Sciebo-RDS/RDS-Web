@@ -3,7 +3,7 @@ from flask_socketio import send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
 from .EasierRDS import parseDict
-from .app import socketio, clients
+from .app import socketio, clients, rc
 from .Describo import getSessionId
 import logging
 import functools
@@ -14,7 +14,6 @@ import jwt
 
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
-
 
 socket_blueprint = Blueprint("socket_blueprint", __name__)
 
@@ -88,7 +87,8 @@ def exchangeCodeData(data):
 
     # TODO exchange it in the background for user and redirect to wizard / projects
 
-    jwtEncode = jwt.encode(body, os.getenv("OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
+    jwtEncode = jwt.encode(body, os.getenv(
+        "OWNCLOUD_OAUTH_CLIENT_SECRET"), algorithm="HS256")
 
     urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
 
@@ -127,7 +127,6 @@ def connected():
     emit("ServiceList", httpManager.makeRequest("getServicesList"))
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
     emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-    requestSessionId()
 
 
 @socketio.on("disconnect")
@@ -348,13 +347,26 @@ def changePorts(jsonData):
 
 
 @socketio.event
-def requestSessionId():
+def requestSessionId(jsonData=None):
+    global rc
+    if jsonData is None:
+        jsonData = {}
+
     try:
         token = json.loads(httpManager.makeRequest(
             "getServiceForUser", {
                 "servicename": "port-owncloud"
             }
         ))["data"]["access_token"]
-        emit("SessionId", getSessionId(token))
+        sessionId = getSessionId(token, jsonData.get("folder"))
+
+        try:
+            rc.set(current_user.userId, sessionId)
+        except Exception as e:
+            LOGGER.error(e)
+        finally:
+            emit("SessionId", sessionId)
+
+        return sessionId
     except:
         pass

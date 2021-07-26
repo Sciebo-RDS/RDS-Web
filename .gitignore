@@ -39,3 +39,7 @@ web.config.json
 production-configuration.json
 /sign.sh
 /rds
+
+# rust
+
+target
