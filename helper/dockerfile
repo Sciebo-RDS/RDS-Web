@@ -7,7 +7,7 @@ RUN cargo install --path .
 
 FROM debian:buster-slim
 
-RUN apt-get update && apt install -y openssl rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt install -y openssl && apt-get clean autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 COPY --from=builder /usr/local/cargo/bin/helper /usr/local/bin/helper
 
 CMD ["helper"]
