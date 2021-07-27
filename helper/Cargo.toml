@@ -7,6 +7,7 @@ edition = "2018"
 
 [dependencies]
 redis = "0.21.0"
-http = "0.2"
+reqwest = { version = "0.11", features = ["blocking", "json"] }
 serde = {version ="1.0.126", features = ["derive"]}
+openssl = "0.10.35"
 serde_json = "1.0.64"

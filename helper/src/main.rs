@@ -1,6 +1,4 @@
-extern crate http;
 extern crate redis;
-extern crate serde;
 
 use helper::Config;
 use redis::Client;
@@ -23,22 +21,21 @@ fn main() {
         Ok(v) => format!("{}/port-service", v).to_string(),
         Err(_) => {
             eprintln!("Error: Envvar 'RDS_INSTALLATION_DOMAIN' not present. Trying 'USE_CASE_SERVICE_PORT_SERVICE'.");
-            match env::var("USE_CASE_SERVICE_PORT_SERVICE") {
-                Ok(v) => v,
-                Err(_) => {
-                    panic!("Error: Envvar 'USE_CASE_SERVICE_PORT_SERVICE' not present, too.");
-                }
-            }
+            env::var("USE_CASE_SERVICE_PORT_SERVICE")
+                .expect("Error: Envvar 'USE_CASE_SERVICE_PORT_SERVICE' not present, too.")
         }
     };
-    let describo = match env::var("DESCRIBO_API_ENDPOINT") {
-        Ok(v) => v,
-        Err(_) => {
-            panic!("Error: Envvar 'DESCRIBO_API_ENDPOINT' not present.");
-        }
-    };
+    let describo = env::var("DESCRIBO_API_ENDPOINT")
+        .expect("Error: Envvar 'DESCRIBO_API_ENDPOINT' not present.");
 
-    let config = helper::Config { client, describo };
+    let secret =
+        env::var("DESCRIBO_API_SECRET").expect("Error: Envvar 'DESCRIBO_API_SECRET' not present.");
+
+    let config = helper::Config {
+        client,
+        describo_url: describo,
+        describo_secret: secret,
+    };
 
     start(config).unwrap();
 }
