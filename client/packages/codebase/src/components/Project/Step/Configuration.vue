@@ -47,7 +47,7 @@
                 chips
               >
                 <template v-slot:prepend-item>
-                  <v-list-item ripple @click="toggle">
+                  <v-list-item ripple>
                     <v-list-item-action>
                       <v-icon
                         :color="
