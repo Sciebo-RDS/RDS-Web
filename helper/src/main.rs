@@ -51,5 +51,7 @@ fn start(config: Config) -> Result<(), String> {
     h2.join().unwrap();
     h3.join().unwrap();
 
+    println!("Gracefully shutdown. Bye...");
+
     Ok(())
 }

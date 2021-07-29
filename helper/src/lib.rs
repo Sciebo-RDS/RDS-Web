@@ -97,6 +97,11 @@ pub fn start_lookup_userid_in_redis(
             println!("got payload: {:?}", payload);
             let t: Token = serde_json::from_str(&payload).unwrap();
 
+            if t.service.servicename != "port-owncloud" {
+                println!("skip: It is not for owncloud");
+                continue;
+            }
+
             // lookup in redis for user_id to get sessionId
             let session_id: String = match con.get(&(t.user.username)) {
                 Ok(v) => v,
