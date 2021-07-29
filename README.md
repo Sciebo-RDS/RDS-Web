@@ -316,6 +316,10 @@ make l10n-compile
 
 Now, you have to build and distribute your client app again. In our case, it will be published through a docker container.
 
+# Token Storage <-> Describo decoupling
+
+Because of the mechanic behind describo, there is a need for a helper functionality. Describo needs some informations to setup a session. This session and the corresponding id will be presented to the user via websocket through the python server. At this point, describo already needs the access token from sciebo RDS, but this token will be refreshed every 60 minutes automatically, so the first access token will be invalid at this time. So there comes the helper functionality into play, which listens for such an event to update the corresponding session id, so the user does not take any notice of this procedure. The helper functionality is implemented in rust in the `helper` microservice`. The token storage publishes the event via the already used redis within a pubsub-key. The helper will take notice of this and lookup for the corresponding username and the session id for describo in redis (which will be placed by the python server for later usage for example in replicas). So the helper will make the request to update the new access token in describo without the need to create a separate thread in the python server. The rust helper microservice is so limited and easy, you can understand it without deep knowledge of rust. :) It is already build with replicants and many requests in pipeline in mind.
+
 # Docker Deployment
 
 We use an internal gitlab to build and store the docker container. But it is public available, so please take a look at our [gitlab registry](https://zivgitlab.uni-muenster.de/sciebo-rds/RDS-Web/-/packages) to get the container. The pipeline will be triggered for all branches, so you can easily create a pull request and take advantage of this "easy to use"-pipeline.
