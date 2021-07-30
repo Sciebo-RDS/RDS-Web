@@ -53,3 +53,19 @@ build:port_helper_describo_token_updater:
 
   extends:
     - .builds
+
+build:describo_online_api:
+  variables:
+    FOLDER: client/dev/describo-online
+    DOCKERFILENAME: Dockerfile.api-build
+
+  extends:
+    - .builds
+
+build:describo_online_ui:
+  variables:
+    FOLDER: "."
+    DOCKERFILENAME: Dockerfile.describo-ui
+
+  extends:
+    - .builds
