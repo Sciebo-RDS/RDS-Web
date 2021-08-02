@@ -3,7 +3,7 @@ extern crate serde;
 
 use redis::{Client, Commands};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use serde_json::json;
 use std::sync::mpsc;
 use std::thread::{self, JoinHandle};
 
@@ -29,7 +29,7 @@ pub struct Describo {
     token: String,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Config {
     pub client: Client,
     pub describo_url: String,
@@ -142,15 +142,22 @@ pub fn start_update_describo(
 
     let handle = thread::spawn(move || {
         for d in describo_rcv {
-            let mut map = HashMap::new();
-            map.insert("sessionId", d.session_id);
-            map.insert("access_token", d.token);
+            let request_body = json!({
+               "session": {
+                  "owncloud": {
+                      "access_token": d.token
+                  }
+               }
+            });
 
             let res = reqwest::blocking::Client::new()
-                .put(format!("{}/api/session/application", config.describo_url))
+                .put(format!(
+                    "{}/api/session/application/{}",
+                    config.describo_url, d.session_id
+                ))
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
-                .json(&map)
+                .json(&request_body)
                 .send();
 
             match res {
