@@ -1,11 +1,11 @@
-FROM alpine:3.10 AS staging
+FROM zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/alpine:3.10 AS staging
 WORKDIR /src
 RUN apk add findutils
 COPY client .
 RUN mkdir -p ./pkg/ \
     && find ./ -type d -name node_modules -prune -false -o \( -name "package.json" -o -name "yarn.lock" -o -name "package-lock.json" \)  -exec mkdir -p './pkg/{}' \; -exec cp -r '{}' './pkg/{}' \;
 
-FROM node:14-buster AS api-builder
+FROM zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/node:14-buster AS api-builder
 ARG VUE_APP_BASE_URL
 ENV VUE_APP_BASE_URL $VUE_APP_BASE_URL
 WORKDIR /srv
@@ -24,6 +24,6 @@ RUN echo "let publicPath = '/';\
 RUN tail -n +2 /srv/vue.config.js.bak >> /srv/vue.config.js
 RUN npm run build
 
-FROM nginx:latest
+FROM zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/nginx:latest
 COPY ./setup/misc/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=api-builder /srv/dist/ /usr/share/nginx/html
