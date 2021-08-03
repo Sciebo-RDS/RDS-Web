@@ -34,7 +34,7 @@ variables:
     - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker pull --quiet $CI_IMAGE_BRANCH || true
-    - docker build --cache-from $CI_IMAGE_BRANCH --tag $CI_IMAGE_LATEST --tag $CI_IMAGE_BRANCH  --tag $CI_IMAGE_JOBID --file=$DOCKERFILENAME $FOLDER
+    - docker build --cache-from $CI_IMAGE_BRANCH --tag $CI_IMAGE_LATEST --tag $CI_IMAGE_BRANCH  --tag $CI_IMAGE_JOBID --file=$DOCKERFILENAME .
     - docker push $CI_IMAGE_BRANCH
     - docker push $CI_IMAGE_LATEST
     - docker push $CI_IMAGE_JOBID
@@ -48,7 +48,7 @@ build:rds_web:
 
 build:port_helper_describo_token_updater:
   variables:
-    FOLDER: helper
+    FOLDER: helper/
     DOCKERFILENAME: dockerfile
 
   extends:
@@ -56,7 +56,7 @@ build:port_helper_describo_token_updater:
 
 build:describo_online_api:
   variables:
-    FOLDER: client/dev/describo-online
+    FOLDER: client/dev/describo-online/
     DOCKERFILENAME: Dockerfile.api-build
 
   extends:
