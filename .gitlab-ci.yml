@@ -13,7 +13,7 @@ variables:
   stage: build
 
   services:
-    - name: zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/docker:19.03-dind
+    - name: zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/docker:19.03-dind
       alias: docker
 
   tags:
