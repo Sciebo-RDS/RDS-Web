@@ -24,6 +24,7 @@ variables:
     CI_PROJECT_PATH: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
 
   script:
+    - cd $FOLDER
     - export DOCKERTAGNAME=$(echo "$CI_JOB_NAME" | cut -d":" -f2)
     - export CI_PROJECT_PATH=$CI_PROJECT_PATH/$DOCKERTAGNAME
     - export CI_IMAGE_LATEST=$CI_PROJECT_PATH:latest
@@ -40,7 +41,6 @@ variables:
 
 build:rds_web:
   variables:
-    FOLDER: "."
     DOCKERFILENAME: Dockerfile.rds-standalone
 
   extends:
@@ -64,7 +64,6 @@ build:describo_online_api:
 
 build:describo_online_ui:
   variables:
-    FOLDER: "."
     DOCKERFILENAME: Dockerfile.describo-ui
 
   extends:
