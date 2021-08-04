@@ -8,7 +8,7 @@ fn main() {
     println!("Starting up token synchronization between TokenStorage and Describo Online.");
 
     let redis_host = match env::var("REDIS_HELPER_HOST") {
-        Ok(val) => val,
+        Ok(val) => format!("{}-replicas", val),
         Err(_) => "localhost".to_string(),
     };
     let redis_port = match env::var("REDIS_HELPER_PORT") {
