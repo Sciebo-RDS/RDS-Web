@@ -22,11 +22,9 @@ variables:
   variables:
     CI_PROJECT_PATH: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME
 
-  before_script:
+  script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_SERVER_URL
     - docker info
-
-  script:
     - cd $FOLDER
     - export DOCKERTAGNAME=$(echo "$CI_JOB_NAME" | cut -d":" -f2)
     - export CI_PROJECT_PATH=$CI_PROJECT_PATH/$DOCKERTAGNAME
