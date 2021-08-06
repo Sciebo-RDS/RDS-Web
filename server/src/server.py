@@ -75,7 +75,7 @@ class User(UserMixin):
                 )
                 LOGGER.debug(data)
 
-                self.userId = data["username"]
+                self.userId = data["name"]
                 return
             raise ValueError
 
