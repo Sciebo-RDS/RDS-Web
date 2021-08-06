@@ -27,7 +27,7 @@ services:
 
   describoapi:
     container_name: describo_api
-    image: utseresearch/describo-online-api:latest
+    image: arkisto/describo-online-api:latest
     build:
       context: ../client/dev/describo-online
       dockerfile: Dockerfile.api-build
@@ -46,7 +46,7 @@ services:
 
   describoui:
     container_name: describo_ui
-    image: utseresearch/describo-online-ui:latest
+    image: arkisto/describo-online-ui:latest
     restart: always
     build:
       context: ../
