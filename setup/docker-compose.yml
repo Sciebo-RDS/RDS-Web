@@ -28,9 +28,6 @@ services:
   describoapi:
     container_name: describo_api
     image: arkisto/describo-online-api:latest
-    build:
-      context: ../client/dev/describo-online
-      dockerfile: Dockerfile.api-build
     hostname: api
     restart: always
     tty: true
@@ -48,11 +45,6 @@ services:
     container_name: describo_ui
     image: arkisto/describo-online-ui:latest
     restart: always
-    build:
-      context: ../
-      dockerfile: Dockerfile.describo-ui
-      args:
-        - VUE_APP_BASE_URL=/describo/
     hostname: ui
     depends_on:
       - describoapi
