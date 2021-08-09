@@ -48,7 +48,7 @@ data = {
     ],
     os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"): [
         ("getAllResearch", "{url}/user/{userId}",
-         "get", None, parseAllResearch, checkForEmpty, True),
+         "get", None, checkForEmpty, True),
         ("getResearch",
          "{url}/user/{userId}/research/{researchIndex}", "get", None, parseResearch),
         ("createResearch", "{url}/user/{userId}",

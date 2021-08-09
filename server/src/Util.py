@@ -7,7 +7,7 @@ def checkForEmpty(response):
     if response.status_code == 404:
         return []
     else:
-        return json.loads(response.text)
+        return parseAllResearch(json.loads(response.text))
 
 
 def parsePropBack(prop):
