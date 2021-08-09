@@ -129,9 +129,23 @@ export default {
     sourceRef: "https://www.research-data-services.de",
   }),
   mounted() {
-    if (this.$config.predefined_user) {
+    if (
+      this.$config.predefined_user ||
+      this.getInformations("port-owncloud", this.userservicelist) !== undefined
+    ) {
       this.finishWizard();
     }
+
+    let timer = setInterval(() => {
+      if (
+        this.getInformations("port-owncloud", this.userservicelist) !==
+        undefined
+      ) {
+        console.log("found ownCloud in storage");
+        clearInterval(timer);
+        this.finishWizard("/services");
+      }
+    }, 1000);
   },
   computed: {
     ...mapState({
@@ -155,7 +169,7 @@ export default {
   },
   methods: {
     clickGettingStarted() {
-      console.log(process.env)
+      console.log(process.env);
       if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
         this.clickedStarted = true;
       } else {
@@ -172,9 +186,12 @@ export default {
         this.overlay = true;
       }
     },
-    finishWizard() {
+    finishWizard(path = undefined) {
       this.$store.commit("setWizardFinished");
-      this.$router.push("/");
+      if (path == undefined) {
+        path = "/";
+      }
+      this.$router.push(path);
     },
   },
   components: { CredentialsInput, Frame },
