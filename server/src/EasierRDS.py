@@ -32,12 +32,23 @@ class HTTPRequest:
         self.url = url
         self.requestList = {}
 
-    def addRequest(self, key, url, method="get", beforeFunction=None, afterFunction=None):
+    def addRequest(self, key, url, method="get", beforeFunction=None, afterFunction=None, clear=False):
+        """This method adds a request to sciebo RDS.
+
+        Args:
+            key ([type]): [description]
+            url ([type]): [description]
+            method (str, optional): [description]. Defaults to "get".
+            beforeFunction ([type], optional): [description]. Defaults to None.
+            afterFunction ([type], optional): [description]. Defaults to None.
+            clear (bool, optional): True, if the functions should get the response object itself, instead of already json unserialized object. Defaults to False.
+        """
         self.requestList[key] = {
             "url": url,
             "method": method,
             "before": beforeFunction,
-            "after": afterFunction
+            "after": afterFunction,
+            "giveResponseObject": clear
         }
 
     def makeRequest(self, key, data=None):
@@ -105,8 +116,10 @@ class HTTPRequest:
                     pass
             else:
                 try:
+                    data = json.loads(
+                        response) if not reqConf["giveResponseObject"] else req
                     response = json.dumps(
-                        reqConf["after"](json.loads(response)))
+                        reqConf["after"](data))
                 except:
                     pass
 

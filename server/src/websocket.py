@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, render_template
 from flask_socketio import send, emit, disconnect, join_room, leave_room
 from flask_login import current_user, logout_user
-from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates
+from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
 from .app import socketio, clients, rc
 from .Describo import getSessionId
@@ -48,7 +48,7 @@ data = {
     ],
     os.getenv("CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research"): [
         ("getAllResearch", "{url}/user/{userId}",
-         "get", None, parseAllResearch),
+         "get", None, parseAllResearch, checkForEmpty, True),
         ("getResearch",
          "{url}/user/{userId}/research/{researchIndex}", "get", None, parseResearch),
         ("createResearch", "{url}/user/{userId}",
@@ -120,7 +120,9 @@ def authenticated_only(f):
 
 @socketio.on("connect")
 @authenticated_only
-def connected():
+def connected(*args, **kwargs):
+    print(f"args: {args}\nkwargs: {kwargs}")
+
     current_user.websocketId = request.sid
     clients[current_user.userId] = current_user
 
