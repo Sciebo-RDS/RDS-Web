@@ -10,7 +10,7 @@ requests = "*"
 eventlet = "==0.30.2"
 python-dotenv = "*"
 flask-cors = "*"
-pyjwt = "*"
+pyjwt = {extras = ["crypto"],version = "*"}
 flask-session = "*"
 redis-py-cluster = "*"
 
