@@ -362,12 +362,10 @@ def requestSessionId(jsonData=None):
         ))["data"]["access_token"]
         sessionId = getSessionId(token, jsonData.get("folder"))
 
-        try:
+        if rc is not None:
             rc.set(current_user.userId, sessionId)
-        except Exception as e:
-            LOGGER.error(e)
-        finally:
-            emit("SessionId", sessionId)
+
+        emit("SessionId", sessionId)
 
         return sessionId
     except:

@@ -31,14 +31,17 @@ startup_nodes = [
     }
 ]
 
-from redis import Redis
 
-rc = Redis(
-    **(startup_nodes[0]),
-    db=0,
-    decode_responses=True,
-)
+try:
+    from redis import Redis
 
+    rc = Redis(
+        **(startup_nodes[0]),
+        db=0,
+        decode_responses=True,
+    )
+except:
+    rc = None
 
 app = Flask(__name__,
             static_folder=os.getenv(

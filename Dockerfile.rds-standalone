@@ -23,6 +23,8 @@ EXPOSE 80
 ENV JSFOLDER=/usr/share/nginx/html/js/*.js
 
 ENV SOCKETIO_HOST=http://localhost:80
+ENV REDIS_HELPER_HOST=http://owncloud_redis
+ENV REDIS_HELPER_PORT=6379
 
 RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash supervisor
 RUN mkdir -p /run/nginx
