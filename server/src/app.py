@@ -26,27 +26,18 @@ redirect_url = "{}?response_type=token&client_id={}&redirect_uri={}".format(
 
 startup_nodes = [
     {
-        "host": os.getenv("REDIS_HOST", "localhost"),
-        "port": os.getenv("REDIS_PORT", "6379"),
+        "host": os.getenv("REDIS_HELPER_HOST", "localhost"),
+        "port": os.getenv("REDIS_HELPER_PORT", "6379"),
     }
 ]
-try:
-    from rediscluster import RedisCluster
 
-    rc = RedisCluster(
-        startup_nodes=startup_nodes,
-        decode_responses=True,
-        skip_full_coverage_check=True,
-        cluster_down_retry_attempts=1,
-    )
-except:
-    from redis import Redis
+from redis import Redis
 
-    rc = Redis(
-        **(startup_nodes[0]),
-        db=0,
-        decode_responses=True,
-    )
+rc = Redis(
+    **(startup_nodes[0]),
+    db=0,
+    decode_responses=True,
+)
 
 
 app = Flask(__name__,
