@@ -32,7 +32,7 @@ def getSessionId(access_token=None, folder=None):
         "Authorization": "Bearer {}".format(os.getenv("DESCRIBO_API_SECRET"))
     }
 
-    LOGGER.debug("send payload: {}".format(payload))
+    LOGGER.debug("send payload: {}, headers: {}".format(payload, headers))
 
     req = requests.post(
         os.getenv("DESCRIBO_API_ENDPOINT"),
