@@ -12,7 +12,7 @@ const dotenvArgs = {
 
 let publicPath = '/';
 if (process.env.NODE_ENV === 'production') {
-    publicPath = ".";
+    publicPath = process.env.VUE_APP_BASE_URL || "./";
 }
 
 module.exports = {
