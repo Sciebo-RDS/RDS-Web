@@ -7,7 +7,6 @@ RUN mkdir -p ./pkg/ \
 
 FROM zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/node:14-alpine3.10 AS web
 WORKDIR /app
-ARG VUE_APP_BASE_URL
 ENV VUE_APP_BASE_URL $VUE_APP_BASE_URL
 WORKDIR /app
 RUN apk add gettext
