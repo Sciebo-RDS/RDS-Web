@@ -1,7 +1,7 @@
 <template>
   <div>
     <Frame
-      :source="'/frames/' + $config.language + '/wizard.html'"
+      :source="'/frames/' + $config.language + '/start.html'"
       v-if="!clickedStarted"
     >
       <translate>Click here to</translate>&nbsp;
