@@ -40,4 +40,7 @@ def getSessionId(access_token=None, folder=None):
         headers=headers
     )
 
+    LOGGER.debug("response:\nheaders: {}\nbody: {}".format(
+        req.headers, req.text))
+
     return req.json().get("sessionId")
