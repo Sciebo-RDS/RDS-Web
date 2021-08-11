@@ -354,6 +354,8 @@ def requestSessionId(jsonData=None):
     if jsonData is None:
         jsonData = {}
 
+    sessionId = None
+
     try:
         token = json.loads(httpManager.makeRequest(
             "getServiceForUser", {
@@ -362,14 +364,18 @@ def requestSessionId(jsonData=None):
         ))["data"]["access_token"]
         sessionId = getSessionId(token, jsonData.get("folder"))
 
-        if rc is not None:
-            rc.set(current_user.userId, sessionId)
-
         LOGGER.debug(f"send sessionId: {sessionId}")
 
-        #emit("SessionId", sessionId)
+        emit("SessionId", sessionId)
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
 
-        LOGGER.debug(f"return sessionId: {sessionId}")
-        return sessionId
-    except:
-        pass
+    try:
+        LOGGER.debug("try to save sessionId in redis")
+        rc.set(current_user.userId, sessionId)
+    except Exception as e:
+        LOGGER.debug("saving sessionId in redis gone wrong")
+        LOGGER.error(e, exc_info=True)
+
+    LOGGER.debug(f"return sessionId: {sessionId}")
+    return sessionId
