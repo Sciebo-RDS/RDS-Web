@@ -61,6 +61,7 @@ export default {
             })
         },
         SOCKET_SessionId(context, state) {
+            console.log("got describo sessionId: ", state)
             context.commit('setSessionId', {
                 sessionID: state
             })

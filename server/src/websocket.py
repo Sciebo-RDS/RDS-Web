@@ -365,8 +365,11 @@ def requestSessionId(jsonData=None):
         if rc is not None:
             rc.set(current_user.userId, sessionId)
 
-        emit("SessionId", sessionId)
+        LOGGER.debug(f"send sessionId: {sessionId}")
 
+        #emit("SessionId", sessionId)
+
+        LOGGER.debug(f"return sessionId: {sessionId}")
         return sessionId
     except:
         pass
