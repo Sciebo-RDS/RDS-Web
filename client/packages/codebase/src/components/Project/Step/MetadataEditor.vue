@@ -13,6 +13,7 @@
       </v-row>
     </v-container>
     <iframe
+      v-if="!!sessionId"
       v-show="loadingStep >= 2"
       ref="describoWindow"
       :src="iframeSource"
@@ -122,7 +123,7 @@ export default {
       (sessionId) => {
         this.loadingStep = 1;
         this.sessionId = sessionId;
-        console.log("got sessiondId", sessionId);
+        console.log("got sessionId", sessionId);
       }
     );
 
