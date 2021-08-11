@@ -10,7 +10,9 @@ def getSessionId(access_token=None, folder=None):
     informations = session["informations"]
     data = {
         "user_id": informations["UID"],
-        "url": informations["webdav"],
+        "url": "{}/remote.php/dav".format(
+            os.getenv("OWNCLOUD_URL", "http://localhost:8000")
+        ),
     }
 
     if access_token is not None:
