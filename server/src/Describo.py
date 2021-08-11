@@ -19,15 +19,6 @@ def getSessionId(access_token=None, folder=None):
     if folder is not None and isinstance(folder, str):
         data["folder"] = folder
 
-    try:
-        if "user_id" not in informations:
-            informations["user_id"] = informations["UID"]
-
-        if "url" not in informations:
-            informations["url"] = informations["webdav"]
-    except Exception as e:
-        LOGGER.error(e, exc_info=True)
-
     payload = {
         "email": informations["email"],
         "name": informations["name"],
