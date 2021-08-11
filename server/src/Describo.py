@@ -19,6 +19,15 @@ def getSessionId(access_token=None, folder=None):
         os.getenv("OWNCLOUD_URL", "http://localhost:8000")
     )
 
+    try:
+        if "user_id" not in informations:
+            informations["user_id"] = informations["UID"]
+
+        if "url" not in informations:
+            informations["url"] = informations["webdav"]
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
+
     payload = {
         "email": informations["email"],
         "name": informations["name"],
