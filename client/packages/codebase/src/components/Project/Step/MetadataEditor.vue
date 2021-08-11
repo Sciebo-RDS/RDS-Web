@@ -115,12 +115,14 @@ export default {
     },
   },
   mounted() {
+    console.log("request describo sessionId");
     this.$socket.client.emit(
       "requestSessionId",
       { folder: this.filePath },
       (sessionId) => {
         this.loadingStep = 1;
         this.sessionId = sessionId;
+        console.log("got sessiondId", sessionId);
       }
     );
 
