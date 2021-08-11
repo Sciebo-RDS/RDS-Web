@@ -8,16 +8,16 @@ LOGGER = logging.getLogger()
 
 def getSessionId(access_token=None, folder=None):
     informations = session["informations"]
+    data = {
+        "user_id": informations["UID"],
+        "url": informations["webdav"],
+    }
 
     if access_token is not None:
-        informations["access_token"] = access_token
+        data["access_token"] = access_token
 
     if folder is not None and isinstance(folder, str):
-        informations["folder"] = folder
-
-    informations["url"] = "{}/remote.php/dav".format(
-        os.getenv("OWNCLOUD_URL", "http://localhost:8000")
-    )
+        data["folder"] = folder
 
     try:
         if "user_id" not in informations:
@@ -32,7 +32,7 @@ def getSessionId(access_token=None, folder=None):
         "email": informations["email"],
         "name": informations["name"],
         "session": {
-            "owncloud": informations
+            "owncloud": data
         }
     }
 
