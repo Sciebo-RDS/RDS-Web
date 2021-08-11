@@ -26,7 +26,7 @@ redirect_url = "{}?response_type=token&client_id={}&redirect_uri={}".format(
 
 startup_nodes = [
     {
-        "host": os.getenv("REDIS_HELPER_HOST", "localhost"),
+        "host": "{}-master".format(os.getenv("REDIS_HELPER_HOST", "localhost")),
         "port": os.getenv("REDIS_HELPER_PORT", "6379"),
     }
 ]
