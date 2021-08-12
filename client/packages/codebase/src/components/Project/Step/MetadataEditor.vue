@@ -31,7 +31,7 @@ import queryString from "querystring";
 export default {
   props: ["project"],
   data: () => ({
-    loading: false,
+    loading: true,
     loadingText: "",
     loadingStep: 0,
     sessionId: undefined,
