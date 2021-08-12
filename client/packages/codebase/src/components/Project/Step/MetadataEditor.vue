@@ -13,7 +13,6 @@
       </v-row>
     </v-container>
     <iframe
-      v-if="!!sessionId"
       v-show="loadingStep >= 2"
       ref="describoWindow"
       :src="iframeSource"
@@ -67,6 +66,7 @@ export default {
   },
   methods: {
     loaded() {
+      console.log("iframe loaded");
       this.loading = false;
       this.loadingStep = 2;
       clearInterval(loader);
