@@ -13,7 +13,7 @@
       </v-row>
     </v-container>
     <iframe
-      v-if="!loading"
+      v-if="loadingStep >= 1"
       v-show="loadingStep >= 2"
       ref="describoWindow"
       :src="iframeSource"
