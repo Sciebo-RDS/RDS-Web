@@ -19,10 +19,8 @@
       </v-card-actions>
     </v-card>
     <v-expansion-panels
-      accordion
       inset
       focusable
-      multiple
       v-model="panel"
       v-else
     >
