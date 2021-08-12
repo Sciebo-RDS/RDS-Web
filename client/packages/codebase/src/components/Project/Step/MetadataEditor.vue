@@ -69,7 +69,6 @@ export default {
       console.log("iframe loaded");
       this.loading = false;
       this.loadingStep = 2;
-      clearInterval(loader);
     },
     eventloop(event) {
       if (event.data.length > 0) {
