@@ -20,6 +20,7 @@
       height="500px"
       width="100%"
       style="border: 0px; left: 0px;"
+      @load="loaded()"
     ></iframe>
   </div>
 </template>
@@ -65,6 +66,11 @@ export default {
     },
   },
   methods: {
+    loaded() {
+      this.loading = false;
+      this.loadingStep = 2;
+      clearInterval(loader);
+    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
@@ -131,6 +137,10 @@ export default {
     this.loadingText = this.standardLoadingText;
     let counter = 0;
     let loader = setInterval(() => {
+      if (!this.loading) {
+        clearInterval(loader);
+      }
+
       if (counter > 30) {
         this.loadingText = this.$gettext(
           "Error while loading. Please contact an administator."
@@ -145,14 +155,6 @@ export default {
         counter += 1;
       }
     }, 1000);
-
-    this.$refs.describoWindow.addEventListener("load", () => {
-      if (!!this.sessionId) {
-        this.loading = false;
-        this.loadingStep = 2;
-        clearInterval(loader);
-      }
-    });
   },
   created() {
     window.addEventListener("message", this.eventloop);
