@@ -170,7 +170,7 @@ export default {
   methods: {
     clickGettingStarted() {
       console.log(process.env);
-      if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
+      if (process.env.NODE_ENV === "development" && this.currentStep > 1) {
         this.clickedStarted = true;
       } else {
         this.grantAccess(this.getInformations("port-owncloud"));
