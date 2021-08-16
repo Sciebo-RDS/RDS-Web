@@ -164,8 +164,11 @@ export default {
         } else {
           this.$root.$emit(
             "showsnackbar",
-            this.$gettext("There was an error, while we publish your project.")
+            this.$gettext(
+              "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
+            )
           );
+          this.publishInProgress = false;
         }
       });
     },
