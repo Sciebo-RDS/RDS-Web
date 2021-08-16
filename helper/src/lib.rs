@@ -93,7 +93,12 @@ pub fn start_lookup_userid_in_redis(
 
         for payload in payloads_rcv {
             println!("got payload: {:?}", payload);
-            let t: Token = serde_json::from_str(&payload).unwrap();
+            let t: Token;
+
+            match serde_json::from_str(&payload) {
+                Ok(v) => t = v,
+                _ => continue,
+            }
 
             if t.service.servicename != "port-owncloud" {
                 println!("skip: It is not for owncloud");
