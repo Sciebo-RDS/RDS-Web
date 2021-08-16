@@ -165,39 +165,47 @@ def saveResearch(research):
         return False
 
 
-@socketio.on("triggerSynchronization")
+@socketio.event
 @authenticated_only
 def triggerSynchronization(jsonData):
-    LOGGER.debug("trigger synch, data: {}".format(jsonData))
+    try:
+        LOGGER.debug("trigger synch, data: {}".format(jsonData))
 
-    research = json.loads(httpManager.makeRequest(
-        "getResearch", data=jsonData))
-    LOGGER.debug("start synchronization, research: {}".format(research))
-    for index, port in enumerate(research["portOut"]):
-        parsedBackPort = parsePortBack(port)
-        parsedBackPort["servicename"] = port["port"]
+        research = json.loads(httpManager.makeRequest(
+            "getResearch", data=jsonData))
+        LOGGER.debug("start synchronization, research: {}".format(research))
+        for index, port in enumerate(research["portOut"]):
+            parsedBackPort = parsePortBack(port)
+            parsedBackPort["servicename"] = port["port"]
 
-        createProjectResp = json.loads(httpManager.makeRequest(
-            "createProject", data=parsedBackPort))
+            createProjectResp = json.loads(httpManager.makeRequest(
+                "createProject", data=parsedBackPort))
 
-        LOGGER.debug("got response: {}".format(createProjectResp))
+            LOGGER.debug("got response: {}".format(createProjectResp))
 
-        if "customProperties" not in research["portOut"][index]:
-            research["portOut"][index]["properties"]["customProperties"] = {}
+            if "customProperties" not in research["portOut"][index]:
+                research["portOut"][index]["properties"]["customProperties"] = {}
 
-        research["portOut"][index]["properties"]["customProperties"].update(
-            createProjectResp
-        )
+            research["portOut"][index]["properties"]["customProperties"].update(
+                createProjectResp
+            )
 
-    LOGGER.debug("research before: {}, \nafter: {}".format(
-        research, parseResearchBack(research)))
-    saveResearch(parseResearchBack(research))
+        LOGGER.debug("research before: {}, \nafter: {}".format(
+            research, parseResearchBack(research)))
+        saveResearch(parseResearchBack(research))
 
-    httpManager.makeRequest("triggerMetadataSynchronization", data=jsonData)
-    httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
-    httpManager.makeRequest("finishResearch", data=jsonData)
+        httpManager.makeRequest(
+            "triggerMetadataSynchronization", data=jsonData)
+        httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
+        httpManager.makeRequest("finishResearch", data=jsonData)
 
-    LOGGER.debug("done synchronization, research: {}".format(research))
+        LOGGER.debug("done synchronization, research: {}".format(research))
+
+        return True
+
+    except Exception as e:
+        LOGGER.error(e, exc_info=True)
+        return False
 
 
 @socketio.on("addCredentials")
