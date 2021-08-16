@@ -13,15 +13,27 @@ struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct JSONUser {
+    r#type: String,
+    data: User,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Service {
     servicename: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct JSONService {
+    r#type: String,
+    data: Service,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Token {
-    service: Service,
+    service: JSONService,
     access_token: String,
-    user: User,
+    user: JSONUser,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -100,31 +112,28 @@ pub fn start_lookup_userid_in_redis(
         for payload in payloads_rcv {
             println!("got payload: {:?}", payload);
 
-            let t: Token = match serde_json::from_str::<JSONToken>(&payload) {
-                Ok(v) => v.data,
-                Err(e1) => match serde_json::from_str::<Token>(&payload) {
-                    Ok(v) => v,
-                    Err(e2) => {
-                        eprintln!("Payload error: \n{}\n\n{}", e1, e2);
-                        continue;
-                    }
-                },
+            let t: JSONToken = match serde_json::from_str(&payload) {
+                Ok(v) => v,
+                Err(e1) => {
+                    eprintln!("Payload error: \n{}", e1);
+                    continue;
+                }
             };
 
-            if t.service.servicename != "port-owncloud" {
+            if t.data.service.data.servicename != "port-owncloud" {
                 println!("skip: It is not for owncloud");
                 continue;
             }
 
             // lookup in redis for user_id to get sessionId
-            let session_id: String = match con.get(&(t.user.username)) {
+            let session_id: String = match con.get(&(t.data.user.data.username)) {
                 Ok(v) => v,
                 Err(err) => {
                     if err.is_connection_dropped() {
                         println!("Redis not available");
                         break;
                     }
-                    println!("key '{}' not found in redis.", t.user.username);
+                    println!("key '{}' not found in redis.", t.data.user.data.username);
                     continue;
                 }
             };
@@ -133,7 +142,7 @@ pub fn start_lookup_userid_in_redis(
             if sender
                 .send(Describo {
                     session_id,
-                    token: t.access_token,
+                    token: t.data.access_token,
                 })
                 .is_err()
             {
