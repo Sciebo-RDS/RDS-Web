@@ -201,6 +201,9 @@ def triggerSynchronization(jsonData):
 
         LOGGER.debug("done synchronization, research: {}".format(research))
 
+        # refresh projectlist for user
+        emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+
         return True
 
     except Exception as e:
