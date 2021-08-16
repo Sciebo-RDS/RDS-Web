@@ -1,6 +1,7 @@
 FROM zivgitlab.uni-muenster.de/sciebo-rds/dependency_proxy/containers/rust:1.53 as builder
 
 WORKDIR /app
+RUN mkdir src && echo "// dummy file" > ./src/lib.rs
 COPY Cargo.lock Cargo.toml ./
 
 RUN cargo install --path .
