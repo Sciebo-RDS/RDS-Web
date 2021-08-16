@@ -32,14 +32,12 @@ pub struct Describo {
 #[derive(Clone)]
 pub struct Config {
     pub client: Client,
+    pub redis_channel: String,
     pub describo_url: String,
     pub describo_secret: String,
 }
 
-pub fn start_redis_listener(
-    config: Config,
-    channel: String,
-) -> (mpsc::Receiver<String>, JoinHandle<()>) {
+pub fn start_redis_listener(config: Config) -> (mpsc::Receiver<String>, JoinHandle<()>) {
     let (sender, receiver) = mpsc::sync_channel(1000);
 
     let handle = thread::spawn(move || {
@@ -47,7 +45,7 @@ pub fn start_redis_listener(
 
         // subscribe redis key "TokenStorage_Refresh_Token", wait for data
         let mut pubsub = con.as_pubsub();
-        pubsub.subscribe(channel).unwrap();
+        pubsub.subscribe(config.redis_channel).unwrap();
 
         println!("Start redis listener");
 
