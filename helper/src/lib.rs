@@ -24,6 +24,12 @@ struct Token {
     user: User,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct JSONToken {
+    r#type: String,
+    data: Token,
+}
+
 pub struct Describo {
     session_id: String,
     token: String,
@@ -94,12 +100,15 @@ pub fn start_lookup_userid_in_redis(
         for payload in payloads_rcv {
             println!("got payload: {:?}", payload);
 
-            let t: Token = match serde_json::from_str(&payload) {
-                Ok(v) => v,
-                Err(e) => {
-                    eprintln!("Payload error: {}", e);
-                    continue;
-                }
+            let t: Token = match serde_json::from_str::<JSONToken>(&payload) {
+                Ok(v) => v.data,
+                Err(e1) => match serde_json::from_str::<Token>(&payload) {
+                    Ok(v) => v,
+                    Err(e2) => {
+                        eprintln!("Payload error: \n{}\n\n{}", e1, e2);
+                        continue;
+                    }
+                },
             };
 
             if t.service.servicename != "port-owncloud" {
