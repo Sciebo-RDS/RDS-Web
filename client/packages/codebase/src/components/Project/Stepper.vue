@@ -154,7 +154,20 @@ export default {
       let indexObject = {
         researchIndex: this.project["researchIndex"],
       };
-      this.$store.dispatch("triggerSynchronization", indexObject);
+      this.$store.dispatch("triggerSynchronization", indexObject, (result) => {
+        console.log("result was: ", result);
+        if (result) {
+          this.$root.$emit(
+            "showsnackbar",
+            this.$gettext("Your project was successfully published.")
+          );
+        } else {
+          this.$root.$emit(
+            "showsnackbar",
+            this.$gettext("There was an error, while we publish your project.")
+          );
+        }
+      });
     },
   },
 };

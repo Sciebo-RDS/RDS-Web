@@ -94,9 +94,9 @@ export default {
         changePorts(context, data) {
             this._vm.$socket.client.emit("changePorts", JSON.stringify(data))
         },
-        triggerSynchronization(context, data) {
+        triggerSynchronization(context, data, fn) {
             console.log("trigger synch data: ", data)
-            this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data))
+            this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data), fn)
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {

@@ -2,6 +2,7 @@
   <div>
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
+      <snackbar />
       <v-app-bar v-if="$vuetify.breakpoint.mobile" app flat class="d-lg-none">
         <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none" />
         <v-spacer />
@@ -106,6 +107,7 @@
 import { mapGetters } from "vuex";
 import overlay from "./components/Overlay.vue";
 import settingsmenu from "./components/Menu/Settings.vue";
+import snackbar from "./components/Snackbar.vue";
 
 export default {
   name: "App",
@@ -128,7 +130,7 @@ export default {
       overlayText: null,
     };
   },
-  components: { overlay, settingsmenu },
+  components: { overlay, settingsmenu, snackbar },
   methods: {},
   computed: {
     ...mapGetters({
