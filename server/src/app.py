@@ -1,4 +1,5 @@
-import threading
+import redis_pubsub_dict
+from rediscluster import RedisCluster
 from flask import Flask
 import uuid
 import os
@@ -43,12 +44,37 @@ try:
 except:
     rc = None
 
+
+if os.getenv("USE_LOCAL_DICTS", "False") == "True":
+    user_store = {}
+    clients = {}
+else:
+    startup_nodes_cluster = [
+        {
+            "host": os.getenv("REDIS_HOST", "localhost"),
+            "port": os.getenv("REDIS_PORT", "6379"),
+        }
+    ]
+
+    rcCluster = RedisCluster(
+        startup_nodes=startup_nodes_cluster,
+        decode_responses=True,
+        skip_full_coverage_check=True,
+        cluster_down_retry_attempts=1,
+    )
+
+    rcCluster.cluster_info()  # provoke an error message
+    user_store = redis_pubsub_dict.RedisDict(rcCluster, "web_userstore")
+    clients = redis_pubsub_dict.RedisDict(rcCluster, "web_clients")
+
 app = Flask(__name__,
             static_folder=os.getenv(
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
+
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", uuid.uuid4().hex)
-app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_TYPE'] = 'redis'
+app.config["SESSION_REDIS"] = rcCluster
 app.config["REMEMBER_COOKIE_HTTPONLY"] = False
 
 Session(app)
@@ -58,9 +84,3 @@ socketio = SocketIO(
     cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS")),
     manage_session=False
 )
-
-
-clients = {}
-
-# temporary user_store
-user_store = {}

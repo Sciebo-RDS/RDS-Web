@@ -46,7 +46,7 @@ web: describo
 	docker-compose -f client/dev/docker-compose.yml up -d
 	tmux new-session -d -s ocis "yarn --cwd ./client/dev/web install && yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve" || true
-	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || true
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run USE_LOCAL_DICTS="True" python starter.py; done" \; || true
 	@while [ $(shell curl  -sw '%{http_code}' localhost:8000) -gt 302 ]; do true; done;
 	@docker exec -it owncloud_server /bin/bash -c "cat config.php > config/config.php"
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email not@valid.tld"
@@ -62,7 +62,7 @@ ocis:
 	tmux new-session -d -s ocis "cd client/dev/ocis/ocis && OCIS_LOG_PRETTY=true OCIS_LOG_COLOR=true OCIS_LOG_LEVEL=DEBUG go run cmd/ocis/main.go server"\;\
 		 split-window -h "yarn --cwd ./client/dev/web serve"\;\
 		 split-window -h "yarn --cwd ./client workspace @rds/web serve"
-	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || test
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run USE_LOCAL_DICTS="True" python starter.py; done" \; || test
 	@echo "Wait 20s for server startup to kill web"
 	@sleep 20
 	tmux new-session -d "cd client/dev/ocis/ocis && go run cmd/ocis/main.go kill web"
@@ -76,7 +76,7 @@ classic: describo
 	cat ./client/packages/classic/dist/js/app.js >> ./client/packages/classic/php/js/app.js
 	echo "});" >> ./client/packages/classic/php/js/app.js
 	docker-compose -f client/dev/docker-compose.yml up -d
-	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \; || true
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run USE_LOCAL_DICTS="True" python starter.py; done" \; || true
 	@echo Wait for 20 Seconds to boot everything up.
 	while [ $(shell curl  -sw '%{http_code}' localhost:8000) -gt 302 ]; do true; done;
 	@docker exec -it owncloud_server /bin/bash -c "occ user:modify admin email not@valid.tld"
@@ -89,7 +89,7 @@ classic: describo
 
 standalone: describo
 	docker-compose -f client/dev/docker-compose.yml up -d
-	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run python starter.py; done" \;
+	tmux new-session -d -s standalone "cd client && while true; do yarn serve; done" \; split-window -h "cd server && while true; do pipenv run USE_LOCAL_DICTS="True" python starter.py; done" \;
 	@echo Wait for 20 Seconds to boot everything up.
 	@sleep 20
 	@docker exec -it owncloud_server /bin/bash -c "occ app:enable oauth2 && occ app:enable rds"

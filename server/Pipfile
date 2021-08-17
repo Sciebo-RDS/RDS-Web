@@ -13,6 +13,7 @@ flask-cors = "*"
 pyjwt = {extras = ["crypto"],version = "*"}
 flask-session = "*"
 redis-py-cluster = "*"
+redis-pubsub-dict = "*"
 
 [dev-packages]
 black = "==20.8b1"
