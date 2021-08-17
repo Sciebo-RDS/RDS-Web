@@ -58,7 +58,6 @@ else:
 
     rcCluster = RedisCluster(
         startup_nodes=startup_nodes_cluster,
-        decode_responses=True,
         skip_full_coverage_check=True,
         cluster_down_retry_attempts=1,
     )
