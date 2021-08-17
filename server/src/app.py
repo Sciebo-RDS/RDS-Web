@@ -44,10 +44,10 @@ try:
 except:
     rc = None
 
+clients = {}
 
 if os.getenv("USE_LOCAL_DICTS", "False") == "True":
     user_store = {}
-    clients = {}
 else:
     startup_nodes_cluster = [
         {
@@ -64,7 +64,7 @@ else:
 
     rcCluster.cluster_info()  # provoke an error message
     user_store = redis_pubsub_dict.RedisDict(rcCluster, "web_userstore")
-    clients = redis_pubsub_dict.RedisDict(rcCluster, "web_clients")
+    #clients = redis_pubsub_dict.RedisDict(rcCluster, "web_clients")
 
 app = Flask(__name__,
             static_folder=os.getenv(
