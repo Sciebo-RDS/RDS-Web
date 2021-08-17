@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <v-container fluid>
     <Frame
       :source="'/frames/' + $config.language + '/start.html'"
       v-if="!clickedStarted"
+      class="fill-height"
     >
       <translate>Click here to</translate>&nbsp;
       <v-btn color="primary" @click="clickGettingStarted">
@@ -109,7 +110,7 @@
         />
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>

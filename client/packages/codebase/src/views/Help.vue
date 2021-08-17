@@ -4,7 +4,7 @@
       indeterminate
       color="primary"
       size="64"
-      v-if="Object.keys(questions).length == 0"
+      v-if="Object.keys(questions).length === 0"
     >
       <translate>Wait</translate>
     </v-progress-circular>
