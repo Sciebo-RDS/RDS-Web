@@ -46,8 +46,24 @@ def proxy(host, path):
 
 
 class User(UserMixin):
-    def __init__(self, id, userId=None, websocketId=None, token=None):
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "websocketId": self.websocketId,
+            "userId": self.userId,
+            "token": self.token
+        }
+
+    @classmethod
+    def from_dict(cls, obj):
+        return cls(**obj)
+
+    def __init__(self, id=None, userId=None, websocketId=None, token=None):
         super().__init__()
+        if id is None:
+            raise ValueError("id needs to be set-")
+
         self.id = id
         self.websocketId = websocketId
         self.userId = userId
@@ -126,7 +142,7 @@ def login():
             LOGGER.error(e, exc_info=True)
 
     if user is not None:
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
         LOGGER.info("logged? {}".format(current_user.is_authenticated))
 
@@ -137,7 +153,7 @@ def login():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return user_store.get(user_id)
+    return User.from_dict(user_store.get(user_id))
 
 
 @app.route("/logout")
@@ -155,7 +171,7 @@ def index(path):
         user = User(
             id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID")
         )
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
 
     if "access_token" in request.args:
@@ -163,7 +179,7 @@ def index(path):
             id=uuid.uuid4(),
             token=request.args["access_token"]
         )
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
         return redirect("/")
 
