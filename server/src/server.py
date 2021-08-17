@@ -15,7 +15,6 @@ import requests
 import uuid
 import os
 import logging
-import uuid
 import os
 import jwt
 
@@ -133,7 +132,7 @@ def login():
             )
 
             user = User(
-                id=uuid.uuid4(),
+                id=str(uuid.uuid4()),
                 userId=decoded["name"]
             )
 
@@ -169,14 +168,14 @@ def index(path):
     if use_embed_mode and use_predefined_user:
         LOGGER.debug("skip authentication")
         user = User(
-            id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID")
+            id=str(uuid.uuid4()), userId=os.getenv("DEV_FLASK_USERID")
         )
         user_store[user.get_id()] = user.to_dict()
         login_user(user)
 
     if "access_token" in request.args:
         user = User(
-            id=uuid.uuid4(),
+            id=str(uuid.uuid4()),
             token=request.args["access_token"]
         )
         user_store[user.get_id()] = user.to_dict()
