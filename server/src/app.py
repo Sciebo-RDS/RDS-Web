@@ -1,4 +1,4 @@
-from prometheus_flask_exporter import GunicornPrometheusMetrics
+from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
