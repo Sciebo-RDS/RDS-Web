@@ -1,4 +1,4 @@
-from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_flask_exporter import GunicornPrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
@@ -81,9 +81,7 @@ app.config["REMEMBER_COOKIE_HTTPONLY"] = False
 app.config.update(flask_config)
 
 Session(app)
-metrics = PrometheusMetrics(app)
-
-metrics.start_http_server(9999)
+metrics = GunicornPrometheusMetrics(app)
 
 socketio = SocketIO(
     app,

@@ -39,7 +39,7 @@ COPY ./setup/misc/supervisord.rds.conf /etc/supervisor/supervisord.conf
 COPY ./setup/misc/start-nginx.nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
 COPY ./setup/misc/nginx/gunicorn.conf /etc/nginx/nginx.conf
-COPY ./server/starter.py /srv
+COPY ./server/starter.py ./server/gunicorn.conf.py /srv/
 COPY ./server/src /srv/src
 
 ENTRYPOINT [ "supervisord", "-c" , "/etc/supervisor/supervisord.conf"]
