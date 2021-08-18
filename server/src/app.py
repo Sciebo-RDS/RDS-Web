@@ -1,3 +1,4 @@
+from prometheus_flask_exporter import PrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
@@ -45,6 +46,7 @@ except:
     rc = None
 
 clients = {}
+flask_config = {}
 
 if os.getenv("USE_LOCAL_DICTS", "False") == "True":
     user_store = {}
@@ -66,17 +68,22 @@ else:
     user_store = redis_pubsub_dict.RedisDict(rcCluster, "web_userstore")
     #clients = redis_pubsub_dict.RedisDict(rcCluster, "web_clients")
 
+    flask_config['SESSION_TYPE'] = 'redis'
+    flask_config["SESSION_REDIS"] = rcCluster
+
 app = Flask(__name__,
             static_folder=os.getenv(
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", uuid.uuid4().hex)
-app.config['SESSION_TYPE'] = 'redis'
-app.config["SESSION_REDIS"] = rcCluster
 app.config["REMEMBER_COOKIE_HTTPONLY"] = False
+app.config.update(flask_config)
 
 Session(app)
+metrics = PrometheusMetrics(app)
+
+metrics.start_http_server(9999)
 
 socketio = SocketIO(
     app,

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8c7607b5631e7715455b83f9f692f9b491cad6144e597d901606d63a1a3bb4bd"
+            "sha256": "cdb3f145603f44dded37fc9fbc743ca520cde09c5f86dc33ab2e39261c961095"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -352,6 +352,21 @@
                 "sha256:fe07bc6735d08e492a327f496b7850e98cb4d112c56df69b0c844dbebcbb47f6"
             ],
             "version": "==1.0.2"
+        },
+        "prometheus-client": {
+            "hashes": [
+                "sha256:3a8baade6cb80bcfe43297e33e7623f3118d660d41387593758e2fb1ea173a86",
+                "sha256:b014bc76815eb1399da8ce5fc84b7717a3e63652b0c0f8804092c9363acab1b2"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==0.11.0"
+        },
+        "prometheus-flask-exporter": {
+            "hashes": [
+                "sha256:fc487e385d95cb5efd045d6a315c4ecf68c42661e7bfde0526af75ed3c4f8c1b"
+            ],
+            "index": "pypi",
+            "version": "==0.18.2"
         },
         "pycparser": {
             "hashes": [
