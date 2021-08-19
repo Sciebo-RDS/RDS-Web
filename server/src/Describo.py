@@ -45,4 +45,9 @@ def getSessionId(access_token=None, folder=None):
     LOGGER.debug("response:\nheaders: {}\nbody: {}".format(
         req.headers, req.text))
 
-    return req.json().get("sessionId")
+    describoPayload = {
+        "sessionId": req.json().get("sessionId"),
+        "payload": payload
+    }
+
+    return describoPayload

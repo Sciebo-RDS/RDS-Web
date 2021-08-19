@@ -373,7 +373,8 @@ def requestSessionId(jsonData=None):
                 "servicename": "port-owncloud"
             }
         ))["data"]["access_token"]
-        sessionId = getSessionId(token, jsonData.get("folder"))
+        describoObj = getSessionId(token, jsonData.get("folder"))
+        sessionId = describoObj["sessionId"]
 
         LOGGER.debug(f"send sessionId: {sessionId}")
 
@@ -383,7 +384,7 @@ def requestSessionId(jsonData=None):
 
     try:
         LOGGER.debug("try to save sessionId in redis")
-        rc.set(current_user.userId, sessionId)
+        rc.set(current_user.userId, json.dumps(describoObj))
     except Exception as e:
         LOGGER.debug("saving sessionId in redis gone wrong")
         LOGGER.error(e, exc_info=True)

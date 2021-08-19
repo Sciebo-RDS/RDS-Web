@@ -43,7 +43,7 @@ struct JSONToken {
 }
 
 pub struct Describo {
-    session_id: String,
+    describo_data: String,
     token: String,
 }
 
@@ -126,7 +126,7 @@ pub fn start_lookup_userid_in_redis(
             }
 
             // lookup in redis for user_id to get sessionId
-            let session_id: String = match con.get(&(t.data.user.data.username)) {
+            let describo_data: String = match con.get(&(t.data.user.data.username)) {
                 Ok(v) => v,
                 Err(err) => {
                     if err.is_connection_dropped() {
@@ -138,10 +138,10 @@ pub fn start_lookup_userid_in_redis(
                 }
             };
 
-            println!("found sessionId: {}", session_id);
+            println!("found describo: {}", describo_data);
             if sender
                 .send(Describo {
-                    session_id,
+                    describo_data,
                     token: t.data.access_token,
                 })
                 .is_err()
@@ -157,6 +157,8 @@ pub fn start_lookup_userid_in_redis(
     (receiver, handle)
 }
 
+use serde_json::Value;
+
 pub fn start_update_describo(
     config: Config,
     describo_rcv: mpsc::Receiver<Describo>,
@@ -165,18 +167,25 @@ pub fn start_update_describo(
 
     let handle = thread::spawn(move || {
         for d in describo_rcv {
-            let request_body = json!({
-               "session": {
-                  "owncloud": {
-                      "access_token": d.token
-                  }
-               }
-            });
+            let mut describo_data: Value = match serde_json::from_str(&d.describo_data) {
+                Ok(v) => v,
+                Err(e) => {
+                    eprintln!("invalid parsing: {}", e);
+                    continue;
+                }
+            };
+
+            describo_data["payload"]["session"]["owncloud"]["access_token"] = json!(d.token);
+
+            let session_id = &describo_data["sessionId"];
+            let payload = &describo_data["payload"];
+
+            let request_body = json!(payload);
 
             let res = reqwest::blocking::Client::new()
                 .put(format!(
                     "{}/api/session/application/{}",
-                    config.describo_url, d.session_id
+                    config.describo_url, session_id
                 ))
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
