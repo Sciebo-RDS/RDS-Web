@@ -3,7 +3,6 @@ extern crate serde;
 
 use redis::{Client, Commands};
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::sync::mpsc;
 use std::thread::{self, JoinHandle};
 
