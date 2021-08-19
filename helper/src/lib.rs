@@ -179,8 +179,8 @@ pub fn start_update_describo(
 
             let session_id = &describo_data["sessionId"];
             let payload = &describo_data["payload"];
-
-            let request_body = serde_json::to_string(&payload).unwrap();
+            let request_body = payload.to_string();
+            
             println!(
                 "Sent:\nsessionId: {}\npayload: {}",
                 session_id, request_body
