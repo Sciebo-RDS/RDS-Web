@@ -189,10 +189,7 @@ pub fn start_update_describo(
             );
 
             let res = reqwest::blocking::Client::new()
-                .put(format!(
-                    "{}/api/session/application/{}",
-                    config.describo_url, session_id
-                ))
+                .put(format!("{}/{}", config.describo_url, session_id))
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
                 .json(&request_body)
