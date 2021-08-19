@@ -180,7 +180,11 @@ pub fn start_update_describo(
             let session_id = &describo_data["sessionId"];
             let payload = &describo_data["payload"];
 
-            let request_body = json!(payload);
+            let request_body = serde_json::to_string(&payload).unwrap();
+            println!(
+                "Sent:\nsessionId: {}\npayload: {}",
+                session_id, request_body
+            );
 
             let res = reqwest::blocking::Client::new()
                 .put(format!(
