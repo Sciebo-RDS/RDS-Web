@@ -180,16 +180,17 @@ pub fn start_update_describo(
             describo_data["payload"]["session"]["owncloud"]["access_token"] =
                 serde_json::Value::String(d.token);
 
-            let session_id = &describo_data["sessionId"].to_string();
-            let request_body = &describo_data["payload"].to_string();
+            let session_id = describo_data["sessionId"].as_str().unwrap().to_string();
+            let request_body = describo_data["payload"].to_string();
+            let describo_url = format!("{}/{}", config.describo_url, session_id);
 
             println!(
-                "Sent: sessionId: {}, secret: {}\npayload: {}",
-                session_id, config.describo_secret, request_body
+                "Sent: url: {}, sessionId: {}, secret: {}\npayload: {}",
+                describo_url, session_id, config.describo_secret, request_body
             );
 
             let res = reqwest::blocking::Client::new()
-                .put(format!("{}/{}", config.describo_url, session_id))
+                .put(describo_url)
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
                 .json(&request_body)
