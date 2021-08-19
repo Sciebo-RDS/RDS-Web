@@ -180,7 +180,7 @@ pub fn start_update_describo(
             describo_data["payload"]["session"]["owncloud"]["access_token"] =
                 serde_json::Value::String(d.token);
 
-            let session_id = &describo_data["sessionId"].as_str().unwrap();
+            let session_id = &describo_data["sessionId"].to_string();
             let request_body = &describo_data["payload"].to_string();
 
             println!(
