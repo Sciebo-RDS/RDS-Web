@@ -177,10 +177,10 @@ pub fn start_update_describo(
 
             describo_data["payload"]["session"]["owncloud"]["access_token"] = json!(d.token);
 
-            let session_id = &describo_data["sessionId"];
+            let session_id = &describo_data["sessionId"].as_str().unwrap();
             let payload = &describo_data["payload"];
             let request_body = payload.to_string();
-            
+
             println!(
                 "Sent:\nsessionId: {}\npayload: {}",
                 session_id, request_body
