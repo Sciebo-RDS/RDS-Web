@@ -180,7 +180,7 @@ pub fn start_update_describo(
                 serde_json::Value::String(d.token);
 
             let session_id = describo_data["sessionId"].as_str().unwrap().to_string();
-            let request_body = describo_data["payload"].to_string();
+            let request_body = &describo_data["payload"];
             let describo_url = format!("{}/{}", config.describo_url, session_id);
 
             println!(
@@ -192,7 +192,7 @@ pub fn start_update_describo(
                 .put(describo_url)
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
-                .json(&request_body)
+                .json(request_body)
                 .send();
 
             match res {
