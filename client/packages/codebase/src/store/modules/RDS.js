@@ -97,6 +97,7 @@ export default {
         triggerSynchronization(context, data, fn) {
             console.log("trigger sync data: ", data)
             this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data), (response) => {
+                console.log("got response: ", response)
                 fn(response)
             })
         },

@@ -173,6 +173,7 @@ def triggerSynchronization(jsonData):
 
         research = json.loads(httpManager.makeRequest(
             "getResearch", data=jsonData))
+
         LOGGER.debug("start synchronization, research: {}".format(research))
         for index, port in enumerate(research["portOut"]):
             parsedBackPort = parsePortBack(port)
@@ -199,10 +200,10 @@ def triggerSynchronization(jsonData):
         httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
         httpManager.makeRequest("finishResearch", data=jsonData)
 
-        LOGGER.debug("done synchronization, research: {}".format(research))
-
         # refresh projectlist for user
         emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+        
+        LOGGER.debug("done synchronization, research: {}".format(research))
 
         return True
 
