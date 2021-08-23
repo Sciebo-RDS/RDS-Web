@@ -1,6 +1,20 @@
 <template>
-  <div class="ma-0 pa-0 fill-height fullsize">
-    <iframe :src="source" class="ma-0 pa-0 fullsize" />
+  <div
+    class="ma-0 pa-0 fill-height fullsize"
+    style="height: 100%; width: 100%; border: 0px"
+  >
+    <iframe
+      :src="source"
+      class="ma-0 pa-0 fullsize"
+      style="
+        position: absolute;
+        top: 0px;
+        height: 100%;
+        width: 100%;
+        border: 0px;
+        overflow-x: hidden;
+      "
+    />
 
     <v-card
       class="text-center pa-2"
