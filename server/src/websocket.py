@@ -202,13 +202,13 @@ def triggerSynchronization(jsonData):
 
         # refresh projectlist for user
         emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-        
+
         LOGGER.debug("done synchronization, research: {}".format(research))
 
         return True
 
     except Exception as e:
-        LOGGER.error(e, exc_info=True)
+        LOGGER.error(f"error in sync: {e}", exc_info=True)
         return False
 
 
