@@ -21,7 +21,8 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
 iframe {
   position: absolute;
   top: 0px;
