@@ -118,7 +118,7 @@ tracing = FlaskTracing(tracer_obj, True, app)
 th = TracingHandler(tracer_obj)
 th.setLevel(logging.DEBUG)
 
-logging.getLogger("").addHandler(th)
+logging.getLogger().addHandler(th)
 ### Tracing end ###
 
 app.config.update(flask_config)
