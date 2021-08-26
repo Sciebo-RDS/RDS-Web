@@ -102,11 +102,11 @@ def exchangeCodeData(data):
 def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
-        with tracer_obj.start_active_span('websocket span of log method') as scope:
-            print("start tracing")
+        with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
             return fn(*args, **kwargs)
 
     return wrapped
+
 
 @trace_this
 def authenticated_only(f):
