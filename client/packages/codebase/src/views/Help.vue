@@ -17,7 +17,7 @@
       :key="category"
       style="padding-top:30px;"
     >
-      {{ category }}
+      <div class="text-h6" v-text="category" />
       <v-expansion-panel
         v-for="(answer, question) in questions"
         :key="answer"
