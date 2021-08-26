@@ -15,13 +15,10 @@
       v-else
       v-for="(questions, category) in help_categories[this.$config.language]"
       :key="category"
-      style="padding-top:30px;"
+      style="padding-top: 30px"
     >
       <div class="text-h6" v-text="category" />
-      <v-expansion-panel
-        v-for="(answer, question) in questions"
-        :key="answer"
-      >
+      <v-expansion-panel v-for="(answer, question) in questions" :key="answer">
         <v-expansion-panel-header>
           {{ question }}
         </v-expansion-panel-header>
@@ -65,6 +62,7 @@ export default {
   },
   methods: {
     markdown(text) {
+      console.log("markdown text:", text);
       const html = marked(text, { renderer });
 
       return DOMPurify.sanitize(html, { ADD_ATTR: ["target"] });
