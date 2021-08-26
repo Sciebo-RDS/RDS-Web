@@ -17,6 +17,7 @@ redis-pubsub-dict = "*"
 prometheus-flask-exporter = "*"
 flask-opentracing = "*"
 opentracing-instrumentation = "*"
+jaeger-client = "*"
 
 [dev-packages]
 black = "==20.8b1"
