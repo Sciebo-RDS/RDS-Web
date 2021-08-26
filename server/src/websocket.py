@@ -15,8 +15,6 @@ import jwt
 logging.basicConfig(level=logging.DEBUG)
 LOGGER = logging.getLogger()
 
-socket_blueprint = Blueprint("socket_blueprint", __name__)
-
 
 def refreshUserServices():
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))

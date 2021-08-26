@@ -9,7 +9,7 @@ from flask_login import (
     current_user,
 )
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
-from .websocket import socket_blueprint, exchangeCodeData, RDSNamespace
+from .websocket import exchangeCodeData, RDSNamespace
 import json
 import requests
 import uuid
