@@ -187,7 +187,6 @@ def index(path):
             if exchangeCodeData(request.args):
                 return app.send_static_file("exchangeCode.html")
             return app.send_static_file("exchangeCode_error.html")
-        return app.send_static_file(path)
 
     if use_embed_mode or current_user.is_authenticated:
         if use_proxy:
