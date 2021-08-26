@@ -9,7 +9,7 @@ from flask_login import (
     current_user,
 )
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
-from .websocket import socket_blueprint, exchangeCodeData
+from .websocket import socket_blueprint, exchangeCodeData, RDSNamespace
 import json
 import requests
 import uuid
@@ -26,7 +26,7 @@ LOGGER = logging.getLogger()
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "index"
-app.register_blueprint(socket_blueprint)
+socketio.on_namespace(RDSNamespace("/"))
 
 req = requests.get(
     "{}/apps/rds/api/1.0/publickey".format(

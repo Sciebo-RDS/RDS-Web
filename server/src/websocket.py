@@ -1,9 +1,9 @@
 from flask import Blueprint, request, redirect, render_template
-from flask_socketio import send, emit, disconnect, join_room, leave_room
+from flask_socketio import send, emit, disconnect, join_room, leave_room, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc
+from .app import socketio, clients, rc, tracing, tracer_obj
 from .Describo import getSessionId
 import logging
 import functools
@@ -99,6 +99,16 @@ def exchangeCodeData(data):
     return req.status_code < 400
 
 
+def trace_this(fn):
+    @functools.wraps(fn)
+    def wrapped(*args, **kwargs):
+        with tracer_obj.start_active_span('websocket span of log method') as scope:
+            print("start tracing")
+            return fn(*args, **kwargs)
+
+    return wrapped
+
+@trace_this
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
@@ -116,31 +126,6 @@ def authenticated_only(f):
             return f(*args, **kwargs)
 
     return wrapped
-
-
-@socketio.on("connect")
-@authenticated_only
-def connected(*args, **kwargs):
-    print(f"args: {args}\nkwargs: {kwargs}")
-
-    current_user.websocketId = request.sid
-    clients[current_user.userId] = current_user
-
-    emit("ServiceList", httpManager.makeRequest("getServicesList"))
-    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
-    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-
-
-@socketio.on("disconnect")
-def disconnect():
-    LOGGER.info("disconnected")
-
-    try:
-        LOGGER.debug("LOGOUT")
-        # logout_user()
-        # del clients[current_user.userId]
-    except Exception as e:
-        LOGGER.error(e, exc_info=True)
 
 
 def saveResearch(research):
@@ -165,230 +150,244 @@ def saveResearch(research):
         return False
 
 
-@socketio.event
-@authenticated_only
-def triggerSynchronization(jsonData):
-    try:
-        LOGGER.debug("trigger synch, data: {}".format(jsonData))
+class RDSNamespace(Namespace):
+    @authenticated_only
+    def on_connect(self, data):
+        current_user.websocketId = request.sid
+        clients[current_user.userId] = current_user
 
-        research = json.loads(httpManager.makeRequest(
-            "getResearch", data=jsonData))
-
-        LOGGER.debug("start synchronization, research: {}".format(research))
-        for index, port in enumerate(research["portOut"]):
-            parsedBackPort = parsePortBack(port)
-            parsedBackPort["servicename"] = port["port"]
-
-            createProjectResp = json.loads(httpManager.makeRequest(
-                "createProject", data=parsedBackPort))
-
-            LOGGER.debug("got response: {}".format(createProjectResp))
-
-            if "customProperties" not in research["portOut"][index]:
-                research["portOut"][index]["properties"]["customProperties"] = {}
-
-            research["portOut"][index]["properties"]["customProperties"].update(
-                createProjectResp
-            )
-
-        LOGGER.debug("research before: {}, \nafter: {}".format(
-            research, parseResearchBack(research)))
-        saveResearch(parseResearchBack(research))
-
-        httpManager.makeRequest(
-            "triggerMetadataSynchronization", data=jsonData)
-        httpManager.makeRequest("triggerFileSynchronization", data=jsonData)
-        httpManager.makeRequest("finishResearch", data=jsonData)
-
-        # refresh projectlist for user
+        emit("ServiceList", httpManager.makeRequest("getServicesList"))
+        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
         emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
-        LOGGER.debug("done synchronization, research: {}".format(research))
+    def on_disconnect(self):
+        LOGGER.info("disconnected")
 
-        return True
+        try:
+            LOGGER.debug("LOGOUT")
+            # logout_user()
+            del clients[current_user.userId]
+        except Exception as e:
+            LOGGER.error(e, exc_info=True)
 
-    except Exception as e:
-        LOGGER.error(f"error in sync: {e}", exc_info=True)
-        return False
+    @authenticated_only
+    def on_triggerSynchronization(self, jsonData):
+        try:
+            LOGGER.debug("trigger synch, data: {}".format(jsonData))
 
+            research = json.loads(httpManager.makeRequest(
+                "getResearch", data=jsonData))
 
-@socketio.on("addCredentials")
-@authenticated_only
-def credentials(jsonData):
-    jsonData = json.loads(jsonData)
+            LOGGER.debug(
+                "start synchronization, research: {}".format(research))
+            for index, port in enumerate(research["portOut"]):
+                parsedBackPort = parsePortBack(port)
+                parsedBackPort["servicename"] = port["port"]
 
-    body = {
-        "servicename": jsonData["servicename"],
-        "username": jsonData["username"],
-        "password": jsonData["password"],
-        "userId": current_user.userId
-    }
+                createProjectResp = json.loads(httpManager.makeRequest(
+                    "createProject", data=parsedBackPort))
 
-    if not body["username"]:
-        body["username"] = "---"
+                LOGGER.debug("got response: {}".format(createProjectResp))
 
-    urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE", f"{url}/port-service")
-    req = requests.post(f"{urlPort}/credentials", json=body,
-                        verify=os.getenv("VERIFY_SSL", "False") == "True")
-    LOGGER.debug(req.text)
+                if "customProperties" not in research["portOut"][index]:
+                    research["portOut"][index]["properties"]["customProperties"] = {}
 
-    # update userserviceslist on client
-    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+                research["portOut"][index]["properties"]["customProperties"].update(
+                    createProjectResp
+                )
 
-    return req.status_code < 300
+            LOGGER.debug("research before: {}, \nafter: {}".format(
+                research, parseResearchBack(research)))
+            saveResearch(parseResearchBack(research))
 
+            httpManager.makeRequest(
+                "triggerMetadataSynchronization", data=jsonData)
+            httpManager.makeRequest(
+                "triggerFileSynchronization", data=jsonData)
+            httpManager.makeRequest("finishResearch", data=jsonData)
 
-@socketio.on("exchangeCode")
-@authenticated_only
-def exchangeCode(jsonData):
-    jsonData = json.loads(jsonData)
+            # refresh projectlist for user
+            emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
-    req = exchangeCodeData(jsonData)
-    LOGGER.debug(req.text)
+            LOGGER.debug("done synchronization, research: {}".format(research))
 
-    # update userserviceslist on client
-    emit("UserServiceList", httpManager.makeRequest("getUserServices"))
+            return True
 
-    return req.status_code < 300
+        except Exception as e:
+            LOGGER.error(f"error in sync: {e}", exc_info=True)
+            return False
 
+    @authenticated_only
+    def on_addCredentials(self, jsonData):
+        jsonData = json.loads(jsonData)
 
-@socketio.event
-@authenticated_only
-def changePorts(jsonData):
-    """
-    return {
-        researchIndex: researchIndex,
-        import: {
-            add: [{name: "port-owncloud", filepath:"/photosForschung/"}],
-        },
-        export: {
-            add: [{name: "port-zenodo"} ],
-            remove: ["port-reva", "port-osf"],
-            change: [{name: "port-owncloud", filepath:"/photosForschung/"},
-                {name: "port-zenodo", projectId:"12345"}]
+        body = {
+            "servicename": jsonData["servicename"],
+            "username": jsonData["username"],
+            "password": jsonData["password"],
+            "userId": current_user.userId
         }
-    }"""
-    if jsonData is None:
-        return
 
-    jsonData = json.loads(jsonData)
-    researchIndex = jsonData["researchIndex"]
+        if not body["username"]:
+            body["username"] = "---"
 
-    user = current_user.userId
-    urlResearch = os.getenv(
-        "CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research")
+        urlPort = os.getenv("USE_CASE_SERVICE_PORT_SERVICE",
+                            f"{url}/port-service")
+        req = requests.post(f"{urlPort}/credentials", json=body,
+                            verify=os.getenv("VERIFY_SSL", "False") == "True")
+        LOGGER.debug(req.text)
 
-    def transformPorts(portList):
-        data = []
-        for port in portList:
-            obj = {
-                "port": port["servicename"],
-                "properties": []
-            }
+        # update userserviceslist on client
+        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
 
-            if "filepath" in port:
-                obj["properties"].append(
-                    {
-                        "portType": "fileStorage",
-                        "value": True
-                    }
-                )
-                obj["properties"].append({
-                    "portType": "customProperties",
-                    "value": [{
-                        "key": "filepath",
-                        "value": port["filepath"]
-                    }]
-                })
-            else:
-                obj["properties"].append(
-                    {
-                        "portType": "metadata",
-                        "value": True
-                    }
-                )
+        return req.status_code < 300
 
-            if "projectId" in port:
-                obj["properties"].append({
-                    "portType": "customProperties",
-                    "value": [{
-                        "key": "projectId",
-                        "value": port["projectId"]
-                    }]
-                })
-            data.append(obj)
-        LOGGER.debug(f"transform data: {data}")
-        return data
+    @authenticated_only
+    def on_exchangeCode(self, jsonData):
+        jsonData = json.loads(jsonData)
 
-    crossPort = {
-        "import": "imports",
-        "export": "exports"
-    }
+        req = exchangeCodeData(jsonData)
+        LOGGER.debug(req.text)
 
-    for portOutLight, portOutRight in crossPort.items():
-        for method in ["add", "change"]:
-            for port in transformPorts(jsonData[portOutLight][method]):
-                requests.post(
-                    f"{urlResearch}/user/{user}/research/{researchIndex}/{portOutRight}",
-                    json=port,
-                    verify=os.getenv("VERIFY_SSL", "False") == "True"
-                )
+        # update userserviceslist on client
+        emit("UserServiceList", httpManager.makeRequest("getUserServices"))
 
-    def getIdPortListForRemoval(portList):
-        """Get Id Port list
-        Works only with remove command.
+        return req.status_code < 300
+
+    @authenticated_only
+    def on_changePorts(self, jsonData):
         """
-        retPortList = []
-        for portType in crossPort.values():
-            ports = requests.get(
-                f"{urlResearch}/user/{user}/research/{researchIndex}/{portType}",
-                verify=os.getenv("VERIFY_SSL", "False") == "True").json()
-            for index, port in enumerate(ports):
-                for givenPort in portList:
-                    if port["port"] == givenPort["servicename"]:
-                        retPortList.append((portType, index))
-                        break
-        return retPortList
-
-    for t in crossPort.keys():
-        for portType, portId in getIdPortListForRemoval(jsonData[t]["remove"]):
-            LOGGER.debug(f"type: {portType}, id: {portId}")
-            requests.delete(
-                f"{urlResearch}/user/{user}/research/{researchIndex}/{portType}/{portId}",
-                verify=os.getenv("VERIFY_SSL", "False") == "True")
-
-    emit("ProjectList", httpManager.makeRequest("getAllResearch"))
-
-
-@socketio.event
-def requestSessionId(jsonData=None):
-    global rc
-    if jsonData is None:
-        jsonData = {}
-
-    sessionId = None
-
-    try:
-        token = json.loads(httpManager.makeRequest(
-            "getServiceForUser", {
-                "servicename": "port-owncloud"
+        return {
+            researchIndex: researchIndex,
+            import: {
+                add: [{name: "port-owncloud", filepath:"/photosForschung/"}],
+            },
+            export: {
+                add: [{name: "port-zenodo"} ],
+                remove: ["port-reva", "port-osf"],
+                change: [{name: "port-owncloud", filepath:"/photosForschung/"},
+                    {name: "port-zenodo", projectId:"12345"}]
             }
-        ))["data"]["access_token"]
-        describoObj = getSessionId(token, jsonData.get("folder"))
-        sessionId = describoObj["sessionId"]
+        }"""
+        if jsonData is None:
+            return
 
-        LOGGER.debug(f"send sessionId: {sessionId}")
+        jsonData = json.loads(jsonData)
+        researchIndex = jsonData["researchIndex"]
 
-        emit("SessionId", sessionId)
-    except Exception as e:
-        LOGGER.error(e, exc_info=True)
+        user = current_user.userId
+        urlResearch = os.getenv(
+            "CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research")
 
-    try:
-        LOGGER.debug("try to save sessionId in redis")
-        rc.set(current_user.userId, json.dumps(describoObj))
-    except Exception as e:
-        LOGGER.debug("saving sessionId in redis gone wrong")
-        LOGGER.error(e, exc_info=True)
+        def transformPorts(portList):
+            data = []
+            for port in portList:
+                obj = {
+                    "port": port["servicename"],
+                    "properties": []
+                }
 
-    LOGGER.debug(f"return sessionId: {sessionId}")
-    return sessionId
+                if "filepath" in port:
+                    obj["properties"].append(
+                        {
+                            "portType": "fileStorage",
+                            "value": True
+                        }
+                    )
+                    obj["properties"].append({
+                        "portType": "customProperties",
+                        "value": [{
+                            "key": "filepath",
+                            "value": port["filepath"]
+                        }]
+                    })
+                else:
+                    obj["properties"].append(
+                        {
+                            "portType": "metadata",
+                            "value": True
+                        }
+                    )
+
+                if "projectId" in port:
+                    obj["properties"].append({
+                        "portType": "customProperties",
+                        "value": [{
+                            "key": "projectId",
+                            "value": port["projectId"]
+                        }]
+                    })
+                data.append(obj)
+            LOGGER.debug(f"transform data: {data}")
+            return data
+
+        crossPort = {
+            "import": "imports",
+            "export": "exports"
+        }
+
+        for portOutLight, portOutRight in crossPort.items():
+            for method in ["add", "change"]:
+                for port in transformPorts(jsonData[portOutLight][method]):
+                    requests.post(
+                        f"{urlResearch}/user/{user}/research/{researchIndex}/{portOutRight}",
+                        json=port,
+                        verify=os.getenv("VERIFY_SSL", "False") == "True"
+                    )
+
+        def getIdPortListForRemoval(portList):
+            """Get Id Port list
+            Works only with remove command.
+            """
+            retPortList = []
+            for portType in crossPort.values():
+                ports = requests.get(
+                    f"{urlResearch}/user/{user}/research/{researchIndex}/{portType}",
+                    verify=os.getenv("VERIFY_SSL", "False") == "True").json()
+                for index, port in enumerate(ports):
+                    for givenPort in portList:
+                        if port["port"] == givenPort["servicename"]:
+                            retPortList.append((portType, index))
+                            break
+            return retPortList
+
+        for t in crossPort.keys():
+            for portType, portId in getIdPortListForRemoval(jsonData[t]["remove"]):
+                LOGGER.debug(f"type: {portType}, id: {portId}")
+                requests.delete(
+                    f"{urlResearch}/user/{user}/research/{researchIndex}/{portType}/{portId}",
+                    verify=os.getenv("VERIFY_SSL", "False") == "True")
+
+        emit("ProjectList", httpManager.makeRequest("getAllResearch"))
+
+    def on_requestSessionId(self, jsonData=None):
+        global rc
+        if jsonData is None:
+            jsonData = {}
+
+        sessionId = None
+
+        try:
+            token = json.loads(httpManager.makeRequest(
+                "getServiceForUser", {
+                    "servicename": "port-owncloud"
+                }
+            ))["data"]["access_token"]
+            describoObj = getSessionId(token, jsonData.get("folder"))
+            sessionId = describoObj["sessionId"]
+
+            LOGGER.debug(f"send sessionId: {sessionId}")
+
+            emit("SessionId", sessionId)
+        except Exception as e:
+            LOGGER.error(e, exc_info=True)
+
+        try:
+            LOGGER.debug("try to save sessionId in redis")
+            rc.set(current_user.userId, json.dumps(describoObj))
+        except Exception as e:
+            LOGGER.debug("saving sessionId in redis gone wrong")
+            LOGGER.error(e, exc_info=True)
+
+        LOGGER.debug(f"return sessionId: {sessionId}")
+        return sessionId
