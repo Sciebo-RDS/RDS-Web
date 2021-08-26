@@ -1,4 +1,4 @@
-from src.server import app, socketio, use_predefined_user
+from src.server import app, socketio
 import os
 
 from pathlib import Path
