@@ -8,6 +8,7 @@ enable_stdio_inheritance = True
 capture_output = True
 errorlog = "/var/log/gunicorn.error.log"
 accesslog = "/var/log/gunicorn.access.log"
+worker_class = "eventlet"
 
 
 def when_ready(server):
