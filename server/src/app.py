@@ -118,8 +118,10 @@ install_all_patches()
 th = TracingHandler(tracer_obj)
 th.setLevel(logging.DEBUG)
 
-logging.getLogger("").addHandler(th)
-logging.getLogger().addHandler(th)
+LOGGER = logging.getLogger()
+LOGGER.addHandler(th)
+app.logger.handlers = LOGGER.handlers
+app.logger.setLevel(LOGGER.level)
 ### Tracing end ###
 
 app.config.update(flask_config)

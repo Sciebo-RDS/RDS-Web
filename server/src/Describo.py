@@ -1,9 +1,7 @@
 import os
 import requests
 from flask import session
-import logging
-
-LOGGER = logging.getLogger()
+from .app import app
 
 
 def getSessionId(access_token=None, folder=None):
@@ -34,7 +32,7 @@ def getSessionId(access_token=None, folder=None):
         "Authorization": "Bearer {}".format(os.getenv("DESCRIBO_API_SECRET"))
     }
 
-    LOGGER.debug("send payload: {}, headers: {}".format(payload, headers))
+    app.logger.debug("send payload: {}, headers: {}".format(payload, headers))
 
     req = requests.post(
         os.getenv("DESCRIBO_API_ENDPOINT"),
@@ -42,7 +40,7 @@ def getSessionId(access_token=None, folder=None):
         headers=headers
     )
 
-    LOGGER.debug("response:\nheaders: {}\nbody: {}".format(
+    app.logger.debug("response:\nheaders: {}\nbody: {}".format(
         req.headers, req.text))
 
     describoPayload = {

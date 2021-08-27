@@ -3,7 +3,7 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, tracing, tracer_obj
+from .app import socketio, clients, rc, tracing, tracer_obj, app
 from .Describo import getSessionId
 import logging
 import functools
@@ -11,9 +11,6 @@ import os
 import json
 import requests
 import jwt
-
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger()
 
 
 def refreshUserServices():
@@ -92,7 +89,7 @@ def exchangeCodeData(data):
 
     req = requests.post(f"{urlPort}/exchange", json={"jwt": jwtEncode},
                         verify=os.getenv("VERIFY_SSL", "False") == "True")
-    LOGGER.debug(req.text)
+    app.logger.debug(req.text)
 
     return req.status_code < 400
 
@@ -101,9 +98,9 @@ def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
-            LOGGER.debug("start tracer span")
+            app.logger.debug("start tracer span")
             res = fn(*args, **kwargs)
-            LOGGER.debug("finish tracer span")
+            app.logger.debug("finish tracer span")
             return res
 
     return wrapped
@@ -113,7 +110,7 @@ def trace_this(fn):
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        LOGGER.debug("logged? {}, {}, {}".format(
+        app.logger.debug("logged? {}, {}, {}".format(
             current_user.is_authenticated, args, kwargs))
 
         emit("LoginStatus", json.dumps({
@@ -142,13 +139,13 @@ def saveResearch(research):
             for port in research[portType]:
                 req = requests.post(f"{researchUrl}/{portUrl}", json=port,
                                     verify=os.getenv("VERIFY_SSL", "False") == "True")
-                LOGGER.debug("sent port: {}, status code: {}".format(
+                app.logger.debug("sent port: {}, status code: {}".format(
                     port, req.status_code
                 ))
 
         return True
     except Exception as e:
-        LOGGER.error("Error: {}".format(e), exc_info=True)
+        app.logger.error("Error: {}".format(e), exc_info=True)
         return False
 
 
@@ -163,24 +160,24 @@ class RDSNamespace(Namespace):
         emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
     def on_disconnect(self):
-        LOGGER.info("disconnected")
+        app.logger.info("disconnected")
 
         try:
-            LOGGER.debug("LOGOUT")
+            app.logger.debug("LOGOUT")
             # logout_user()
             del clients[current_user.userId]
         except Exception as e:
-            LOGGER.error(e, exc_info=True)
+            app.logger.error(e, exc_info=True)
 
     @authenticated_only
     def on_triggerSynchronization(self, jsonData):
         try:
-            LOGGER.debug("trigger synch, data: {}".format(jsonData))
+            app.logger.debug("trigger synch, data: {}".format(jsonData))
 
             research = json.loads(httpManager.makeRequest(
                 "getResearch", data=jsonData))
 
-            LOGGER.debug(
+            app.logger.debug(
                 "start synchronization, research: {}".format(research))
             for index, port in enumerate(research["portOut"]):
                 parsedBackPort = parsePortBack(port)
@@ -189,7 +186,7 @@ class RDSNamespace(Namespace):
                 createProjectResp = json.loads(httpManager.makeRequest(
                     "createProject", data=parsedBackPort))
 
-                LOGGER.debug("got response: {}".format(createProjectResp))
+                app.logger.debug("got response: {}".format(createProjectResp))
 
                 if "customProperties" not in research["portOut"][index]:
                     research["portOut"][index]["properties"]["customProperties"] = {}
@@ -198,7 +195,7 @@ class RDSNamespace(Namespace):
                     createProjectResp
                 )
 
-            LOGGER.debug("research before: {}, \nafter: {}".format(
+            app.logger.debug("research before: {}, \nafter: {}".format(
                 research, parseResearchBack(research)))
             saveResearch(parseResearchBack(research))
 
@@ -211,12 +208,13 @@ class RDSNamespace(Namespace):
             # refresh projectlist for user
             emit("ProjectList", httpManager.makeRequest("getAllResearch"))
 
-            LOGGER.debug("done synchronization, research: {}".format(research))
+            app.logger.debug(
+                "done synchronization, research: {}".format(research))
 
             return True
 
         except Exception as e:
-            LOGGER.error(f"error in sync: {e}", exc_info=True)
+            app.logger.error(f"error in sync: {e}", exc_info=True)
             return False
 
     @authenticated_only
@@ -237,7 +235,7 @@ class RDSNamespace(Namespace):
                             f"{url}/port-service")
         req = requests.post(f"{urlPort}/credentials", json=body,
                             verify=os.getenv("VERIFY_SSL", "False") == "True")
-        LOGGER.debug(req.text)
+        app.logger.debug(req.text)
 
         # update userserviceslist on client
         emit("UserServiceList", httpManager.makeRequest("getUserServices"))
@@ -249,7 +247,7 @@ class RDSNamespace(Namespace):
         jsonData = json.loads(jsonData)
 
         req = exchangeCodeData(jsonData)
-        LOGGER.debug(req.text)
+        app.logger.debug(req.text)
 
         # update userserviceslist on client
         emit("UserServiceList", httpManager.makeRequest("getUserServices"))
@@ -320,7 +318,7 @@ class RDSNamespace(Namespace):
                         }]
                     })
                 data.append(obj)
-            LOGGER.debug(f"transform data: {data}")
+            app.logger.debug(f"transform data: {data}")
             return data
 
         crossPort = {
@@ -355,7 +353,7 @@ class RDSNamespace(Namespace):
 
         for t in crossPort.keys():
             for portType, portId in getIdPortListForRemoval(jsonData[t]["remove"]):
-                LOGGER.debug(f"type: {portType}, id: {portId}")
+                app.logger.debug(f"type: {portType}, id: {portId}")
                 requests.delete(
                     f"{urlResearch}/user/{user}/research/{researchIndex}/{portType}/{portId}",
                     verify=os.getenv("VERIFY_SSL", "False") == "True")
@@ -378,18 +376,18 @@ class RDSNamespace(Namespace):
             describoObj = getSessionId(token, jsonData.get("folder"))
             sessionId = describoObj["sessionId"]
 
-            LOGGER.debug(f"send sessionId: {sessionId}")
+            app.logger.debug(f"send sessionId: {sessionId}")
 
             emit("SessionId", sessionId)
         except Exception as e:
-            LOGGER.error(e, exc_info=True)
+            app.logger.error(e, exc_info=True)
 
         try:
-            LOGGER.debug("try to save sessionId in redis")
+            app.logger.debug("try to save sessionId in redis")
             rc.set(current_user.userId, json.dumps(describoObj))
         except Exception as e:
-            LOGGER.debug("saving sessionId in redis gone wrong")
-            LOGGER.error(e, exc_info=True)
+            app.logger.debug("saving sessionId in redis gone wrong")
+            app.logger.error(e, exc_info=True)
 
-        LOGGER.debug(f"return sessionId: {sessionId}")
+        app.logger.debug(f"return sessionId: {sessionId}")
         return sessionId

@@ -4,10 +4,7 @@ import os
 import json
 import re
 from flask_login import current_user
-from .app import use_predefined_user
-
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger()
+from .app import use_predefined_user, app
 
 
 def parseDict(data, socketio=None, httpManager=None):
@@ -73,12 +70,12 @@ class HTTPRequest:
 
         data["url"] = self.url
 
-        LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
+        app.logger.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         sendEmptyData = False
 
         group = re.findall(r"{\w*}", reqConf["url"])
-        LOGGER.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
+        app.logger.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
             reqConf["url"], group, len(group), len(
                 data), len(group) == len(data)
         ))
@@ -87,7 +84,7 @@ class HTTPRequest:
 
         url = reqConf["url"].format(**data)
 
-        LOGGER.debug(f"empty data: {sendEmptyData}")
+        app.logger.debug(f"empty data: {sendEmptyData}")
 
         parameters = {
             "verify": os.getenv("VERIFY_SSL", "False") == "True"
@@ -96,13 +93,13 @@ class HTTPRequest:
         if not sendEmptyData:
             parameters["json"] = data
 
-        LOGGER.debug("request url: {}".format(url))
+        app.logger.debug("request url: {}".format(url))
         req = getattr(requests, reqConf["method"])(
             url, **parameters
         )
 
         response = req.text
-        LOGGER.debug(
+        app.logger.debug(
             "status_code: {}, content: {}".format(req.status_code, response))
 
         if req.status_code >= 300:
@@ -143,7 +140,7 @@ class HTTPManager:
                     try:
                         return service.makeRequest(key, *args)
                     except Exception as e:
-                        LOGGER.error(
+                        app.logger.error(
                             "make request error: {}".format(e), exc_info=True)
                 return reqFn
 

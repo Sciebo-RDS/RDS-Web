@@ -14,14 +14,11 @@ import json
 import requests
 import uuid
 import os
-import logging
 import os
 import jwt
 
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
 
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -88,7 +85,7 @@ class User(UserMixin):
                 data = jwt.decode(
                     text, publickey, algorithms=["RS256"]
                 )
-                LOGGER.debug(data)
+                app.logger.debug(data)
 
                 self.userId = data["name"]
                 return
@@ -120,9 +117,9 @@ def login():
     try:
         reqData = request.get_json()
     except Exception as e:
-        LOGGER.error(e, exc_info=True)
+        app.logger.error(e, exc_info=True)
         reqData = request.form
-    LOGGER.debug("reqdata: {}".format(reqData))
+    app.logger.debug("reqdata: {}".format(reqData))
 
     user = None
     if publickey != "":
@@ -138,12 +135,12 @@ def login():
 
             session["informations"] = decoded
         except Exception as e:
-            LOGGER.error(e, exc_info=True)
+            app.logger.error(e, exc_info=True)
 
     if user is not None:
         user_store[user.get_id()] = user.to_dict()
         login_user(user)
-        LOGGER.info("logged? {}".format(current_user.is_authenticated))
+        app.logger.info("logged? {}".format(current_user.is_authenticated))
 
         return "", 201
 
@@ -166,7 +163,7 @@ def logout():
 @app.route("/<path:path>")
 def index(path):
     if use_embed_mode and use_predefined_user:
-        LOGGER.debug("skip authentication")
+        app.logger.debug("skip authentication")
         user = User(
             id=str(uuid.uuid4()), userId=os.getenv("DEV_FLASK_USERID")
         )
