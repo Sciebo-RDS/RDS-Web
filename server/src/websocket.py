@@ -124,7 +124,8 @@ def authenticated_only(f):
         if not current_user.is_authenticated:
             disconnect()
         else:
-            return f(*args, **kwargs)
+            with tracer_obj.start_active_span(f'Websocket {f.__name__}') as scope:
+                return f(*args, **kwargs)
 
     return wrapped
 
