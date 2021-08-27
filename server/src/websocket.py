@@ -1,7 +1,7 @@
-from flask import Blueprint, request, redirect, render_template
-from flask_socketio import send, emit, disconnect, join_room, leave_room, Namespace
+from flask import request
+from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
-from .Util import parseResearch, parseAllResearch, parseResearchBack, parseAllResearchBack, parsePortBack, removeDuplicates, checkForEmpty
+from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
 from .app import socketio, clients, rc, tracing, tracer_obj
 from .Describo import getSessionId
@@ -101,7 +101,10 @@ def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
-            return fn(*args, **kwargs)
+            LOGGER.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            LOGGER.debug("finish tracer span")
+            return res
 
     return wrapped
 
@@ -110,7 +113,7 @@ def trace_this(fn):
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        LOGGER.info("logged? {}, {}, {}".format(
+        LOGGER.debug("logged? {}, {}, {}".format(
             current_user.is_authenticated, args, kwargs))
 
         emit("LoginStatus", json.dumps({
