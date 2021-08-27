@@ -20,7 +20,7 @@
     </v-card>
     <v-expansion-panels inset focusable v-model="panel" v-else>
       <v-expansion-panel
-        v-for="project in projects"
+        v-for="(project, i) in projects"
         :key="project.researchIndex"
       >
         <v-expansion-panel-header>
@@ -41,7 +41,7 @@
           <ProjectSetting
             @delete-project="deleteProject(project.researchIndex)"
             :project="project"
-            v-if="panel === project.researchIndex"
+            v-if="panel === i"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
