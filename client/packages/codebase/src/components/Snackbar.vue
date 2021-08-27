@@ -1,6 +1,6 @@
 <template>
   <v-snackbar v-model="snackbar" :multi-line="multiLine">
-    {{ text }}
+    {{ message }}
 
     <template v-slot:action="{ attrs }">
       <v-btn color="red" text v-bind="attrs" @click="hide()">
@@ -12,10 +12,12 @@
 
 <script>
 export default {
-  components: {
-    text: "Hey there, i am the snackbar.",
-    snackbar: false,
-    multiLine: true,
+  data() {
+    return {
+      message: "Hey there, i am the snackbar.",
+      snackbar: false,
+      multiLine: true,
+    };
   },
   methods: {
     show() {
@@ -28,9 +30,9 @@ export default {
       this.snackbar = !this.snackbar;
     },
   },
-  onMounted() {
-    this.$root.$on("showsnackbar", (text) => {
-      this.text = text;
+  beforeMount() {
+    this.$root.$on("showsnackbar", (message) => {
+      this.message = message;
       this.show();
     });
     this.$root.$on("hidesnackbar", () => {
