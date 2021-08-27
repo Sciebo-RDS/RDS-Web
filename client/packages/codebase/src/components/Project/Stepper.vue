@@ -158,20 +158,17 @@ export default {
         },
         (result) => {
           console.log("result was: ", result);
+
+          let text = this.$gettext(
+            "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
+          );
           if (result) {
-            this.$root.$emit(
-              "showsnackbar",
-              this.$gettext("Your project was successfully published.")
-            );
+            text = this.$gettext("Your project was successfully published.");
           } else {
-            this.$root.$emit(
-              "showsnackbar",
-              this.$gettext(
-                "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
-              )
-            );
             this.publishInProgress = false;
           }
+
+          this.$root.$emit("showsnackbar", text);
         }
       );
     },
