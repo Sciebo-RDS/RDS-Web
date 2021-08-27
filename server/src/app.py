@@ -110,15 +110,18 @@ config = jConfig(
     ),
 )
 
-tracer_obj = config.initialize_tracer()
-tracing = FlaskTracing(tracer_obj, True, app)
 
-install_all_patches()
-# add a TracingHandler for Logging
-LOGGER = logging.getLogger("gunicorn.error")
-app.logger.handlers.extend(LOGGER.handlers)
-app.logger.addHandler(TracingHandler(tracer_obj))
-### Tracing end ###
+if __name__ != '__main__':
+    tracer_obj = config.initialize_tracer()
+    tracing = FlaskTracing(tracer_obj, True, app)
+
+    install_all_patches()
+    # add a TracingHandler for Logging
+    gunicorn_logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers.extend(gunicorn_logger.handlers)
+    app.logger.addHandler(TracingHandler(tracer_obj))
+    app.logger.setLevel(gunicorn_logger.level)
+    ### Tracing end ###
 
 app.config.update(flask_config)
 
