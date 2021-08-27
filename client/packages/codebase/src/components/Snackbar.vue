@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="snackbar" :multi-line="multiLine">
+  <v-snackbar v-model="snackbar" :multi-line="multiLine" :timeout="timeout">
     {{ message }}
 
     <template v-slot:action="{ attrs }">
@@ -17,6 +17,7 @@ export default {
       message: "Hey there, i am the snackbar.",
       snackbar: false,
       multiLine: true,
+      timeout: -1,
     };
   },
   methods: {
