@@ -1,4 +1,6 @@
+from opentracing_instrumentation import request_context
 import logging
+
 
 class TracingHandler(logging.StreamHandler):
     def __init__(self, use_tracer):
@@ -6,10 +8,8 @@ class TracingHandler(logging.StreamHandler):
         self.tracer = use_tracer
 
     def emit(self, record):
-        from opentracing_instrumentation import request_context
         span = request_context.get_current_span()
-        
+
         if span is not None:
             msg = self.format(record)
             span.log_kv({logging.getLevelName(record.levelno): msg})
-

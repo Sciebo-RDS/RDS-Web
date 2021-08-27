@@ -110,14 +110,15 @@ config = jConfig(
     ),
 )
 
-install_all_patches()
 tracer_obj = config.initialize_tracer()
 tracing = FlaskTracing(tracer_obj, True, app)
 
+install_all_patches()
 # add a TracingHandler for Logging
 th = TracingHandler(tracer_obj)
 th.setLevel(logging.DEBUG)
 
+logging.getLogger("").addHandler(th)
 logging.getLogger().addHandler(th)
 ### Tracing end ###
 
