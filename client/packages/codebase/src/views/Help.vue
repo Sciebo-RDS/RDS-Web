@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     markdown(text) {
-      console.log("markdown text:", text);
       const html = marked(text, { renderer });
 
       return DOMPurify.sanitize(html, { ADD_ATTR: ["target"] });

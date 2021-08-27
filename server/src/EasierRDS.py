@@ -153,8 +153,7 @@ class HTTPManager:
         for service in self.services:
             try:
                 return service.makeRequest(*args, **kwargs)
-            except Exception as e:
-                LOGGER.error(
-                    "make request error while service search: {}".format(e), exc_info=True)
+            except:
+                pass
 
         raise ValueError("no service implements the given url.")
