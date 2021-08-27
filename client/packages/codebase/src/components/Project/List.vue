@@ -20,7 +20,7 @@
     </v-card>
     <v-expansion-panels inset focusable v-model="panel" v-else>
       <v-expansion-panel
-        v-for="(project, i) in projects"
+        v-for="project in projects"
         :key="project.researchIndex"
       >
         <v-expansion-panel-header>
