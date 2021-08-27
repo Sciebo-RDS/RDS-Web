@@ -41,7 +41,7 @@
           <ProjectSetting
             @delete-project="deleteProject(project.researchIndex)"
             :project="project"
-            v-if="panel === i"
+            v-if="panel === project.researchIndex"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
