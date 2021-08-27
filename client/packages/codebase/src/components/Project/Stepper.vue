@@ -151,6 +151,8 @@ export default {
     publishProject() {
       this.publishInProgress = true;
 
+      this.$root.$emit("showsnackbar", this.$gettext("The publishing process will be executed now. We will inform you, when finished or something goes wrong."));
+
       this.$socket.client.emit(
         "triggerSynchronization",
         {
