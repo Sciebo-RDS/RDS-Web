@@ -151,26 +151,29 @@ export default {
     publishProject() {
       this.publishInProgress = true;
 
-      let indexObject = {
-        researchIndex: this.project["researchIndex"],
-      };
-      this.$store.dispatch("triggerSynchronization", indexObject, (result) => {
-        console.log("result was: ", result);
-        if (result) {
-          this.$root.$emit(
-            "showsnackbar",
-            this.$gettext("Your project was successfully published.")
-          );
-        } else {
-          this.$root.$emit(
-            "showsnackbar",
-            this.$gettext(
-              "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
-            )
-          );
-          this.publishInProgress = false;
+      this.$socket.client.emit(
+        "triggerSynchronization",
+        {
+          researchIndex: this.project["researchIndex"],
+        },
+        (result) => {
+          console.log("result was: ", result);
+          if (result) {
+            this.$root.$emit(
+              "showsnackbar",
+              this.$gettext("Your project was successfully published.")
+            );
+          } else {
+            this.$root.$emit(
+              "showsnackbar",
+              this.$gettext(
+                "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
+              )
+            );
+            this.publishInProgress = false;
+          }
         }
-      });
+      );
     },
   },
 };
