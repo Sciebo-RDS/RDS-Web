@@ -122,9 +122,7 @@ export default {
       (newValue) => {
         this.projects = this.getProjects();
 
-        let val = this.panel;
-        let diffCount = this.allProjects.length - this.activeProjects.length;
-        this.panel = val + diffCount;
+        this.panel = undefined;
       }
     );
 
