@@ -4,7 +4,13 @@ import os
 import json
 import re
 from flask_login import current_user
-from .app import use_predefined_user, app
+from .app import use_predefined_user, app, use_tests_folder
+
+
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
 
 
 def parseDict(data, socketio=None, httpManager=None):
@@ -70,7 +76,8 @@ class HTTPRequest:
 
         data["url"] = self.url
 
-        app.logger.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
+        app.logger.debug(
+            "key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         sendEmptyData = False
 
@@ -94,9 +101,17 @@ class HTTPRequest:
             parameters["json"] = data
 
         app.logger.debug("request url: {}".format(url))
-        req = getattr(requests, reqConf["method"])(
-            url, **parameters
-        )
+
+        if use_tests_folder:
+            req = AttrDict({
+                "text": open("tests/{}.json".format(url.split("{}/".format(os.getenv("RDS_INSTALLATION_DOMAIN")))[-1])).read(),
+                "status_code": 200,
+            })
+
+        else:
+            req = getattr(requests, reqConf["method"])(
+                url, **parameters
+            )
 
         response = req.text
         app.logger.debug(
@@ -150,7 +165,7 @@ class HTTPManager:
         for service in self.services:
             try:
                 return service.makeRequest(*args, **kwargs)
-            except:
-                pass
+            except Exception as e:
+                app.logger.error(e, exc_info=True)
 
         raise ValueError("no service implements the given url.")

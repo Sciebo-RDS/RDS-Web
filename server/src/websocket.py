@@ -326,14 +326,23 @@ class RDSNamespace(Namespace):
             "export": "exports"
         }
 
-        for portOutLight, portOutRight in crossPort.items():
+        for portOutLeft, portOutRight in crossPort.items():
             for method in ["add", "change"]:
-                for port in transformPorts(jsonData[portOutLight][method]):
+                for port in transformPorts(jsonData[portOutLeft][method]):
                     requests.post(
                         f"{urlResearch}/user/{user}/research/{researchIndex}/{portOutRight}",
                         json=port,
                         verify=os.getenv("VERIFY_SSL", "False") == "True"
                     )
+
+        try:
+            requests.put(
+                f"{urlResearch}/user/{user}/research/{researchIndex}/researchname",
+                json={"researchname": jsonData["researchname"]},
+                verify=os.getenv("VERIFY_SSL", "False") == "True"
+            )
+        except:
+            pass
 
         def getIdPortListForRemoval(portList):
             """Get Id Port list

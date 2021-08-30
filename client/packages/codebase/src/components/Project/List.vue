@@ -19,13 +19,13 @@
       </v-card-actions>
     </v-card>
     <v-expansion-panels inset focusable v-model="panel" v-else>
-      <v-expansion-panel
-        v-for="project in projects"
-        :key="project.researchIndex"
-      >
+      <v-expansion-panel v-for="(project, i) in projects" :key="i">
         <v-expansion-panel-header>
           <v-row>
-            <v-col cols="auto">
+            <v-col cols="auto" v-if="!!project.researchname">
+              {{ project.researchname }}
+            </v-col>
+            <v-col cols="auto" v-else>
               <translate
                 :translate-params="{
                   researchIndex: project.researchIndex + 1,
@@ -41,7 +41,7 @@
           <ProjectSetting
             @delete-project="deleteProject(project.researchIndex)"
             :project="project"
-            v-if="panel === project.researchIndex"
+            v-if="panel === i"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
