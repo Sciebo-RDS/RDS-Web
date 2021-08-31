@@ -150,6 +150,7 @@ export default {
     });
   },
   beforeDestroy() {
+    this.$store.dispatch("requestProjectList");
     this.unwatch();
   },
 };
