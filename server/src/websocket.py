@@ -255,6 +255,23 @@ class RDSNamespace(Namespace):
         return req.status_code < 300
 
     @authenticated_only
+    def on_changeResearchname(self, jsonData):
+        if jsonData is None:
+            return
+
+        jsonData = json.loads(jsonData)
+        researchIndex = jsonData["researchIndex"]
+        user = current_user.userId
+        urlResearch = os.getenv(
+            "CENTRAL_SERVICE_RESEARCH_MANAGER", f"{url}/research")
+
+        requests.put(
+            f"{urlResearch}/user/{user}/research/{researchIndex}/researchname",
+            json={"researchname": jsonData["researchname"]},
+            verify=os.getenv("VERIFY_SSL", "False") == "True"
+        )
+
+    @authenticated_only
     def on_changePorts(self, jsonData):
         """
         return {
@@ -334,15 +351,6 @@ class RDSNamespace(Namespace):
                         json=port,
                         verify=os.getenv("VERIFY_SSL", "False") == "True"
                     )
-
-        try:
-            requests.put(
-                f"{urlResearch}/user/{user}/research/{researchIndex}/researchname",
-                json={"researchname": jsonData["researchname"]},
-                verify=os.getenv("VERIFY_SSL", "False") == "True"
-            )
-        except:
-            pass
 
         def getIdPortListForRemoval(portList):
             """Get Id Port list

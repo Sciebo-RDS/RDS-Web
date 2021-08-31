@@ -11,8 +11,11 @@
             </v-card-subtitle>
 
             <v-card-actions>
-              <v-text-field label="Working title" v-model="workingTitle">
-              </v-text-field>
+              <v-text-field
+                label="Working title"
+                @input="changeResearchname"
+                v-model="workingTitle"
+              />
             </v-card-actions>
           </v-card>
           <v-card flat>
@@ -133,6 +136,9 @@ export default {
     window.removeEventListener("message", this.eventloop);
   },
   methods: {
+    changeResearchname() {
+      this.$emit("changeResearchname", this.workingTitle);
+    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
