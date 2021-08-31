@@ -11,11 +11,15 @@ msgid "(opens a new window)"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:8
-msgid "1. Which folder do you want to publish?"
+msgid "1. Enter your working title here"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:30
-msgid "2. Which Services do you want to publish to?"
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:18
+msgid "2. Which folder do you want to publish?"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:38
+msgid "3. Which Services do you want to publish to?"
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:11
@@ -58,6 +62,11 @@ msgstr ""
 msgid "Click here to"
 msgstr ""
 
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Snackbar.vue:6
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Snackbar.vue:2
+msgid "Close"
+msgstr ""
+
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:31
 msgid "Collapse all"
 msgstr ""
@@ -94,7 +103,7 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:14
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:12
 msgid "Create a new project"
 msgstr ""
 
@@ -102,7 +111,7 @@ msgstr ""
 msgid "created"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:20
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:28
 msgid "Current Folder: %{filePath}"
 msgstr ""
 
@@ -127,7 +136,7 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:90
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:108
 msgid "Editor loading"
 msgstr ""
 
@@ -139,7 +148,7 @@ msgstr ""
 msgid "Enter your credentials for %{ parsedServicename }."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:95
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/MetadataEditor.vue:117
 msgid "Error while loading. Please contact an administator."
 msgstr ""
 
@@ -189,11 +198,11 @@ msgstr ""
 msgid "In this card, you manage your access to services via RDS."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/App.vue:49
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/App.vue:50
 msgid "initialization..."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/App.vue:137
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/App.vue:141
 msgid "item"
 msgstr ""
 
@@ -225,7 +234,7 @@ msgstr ""
 msgid "No projects found"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:11
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/List.vue:12
 msgid "not connected"
 msgstr ""
 
@@ -237,7 +246,7 @@ msgstr ""
 msgid "Permit RDS to access your ownCloud files."
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:23
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/List.vue:24
 msgid "Project %{ researchIndex }"
 msgstr ""
 
@@ -298,14 +307,14 @@ msgstr ""
 msgid "Save selection and activate services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:47
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:55
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:10
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:12
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Selector.vue:8
 msgid "Select All"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:14
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:24
 msgid "Select Folder"
 msgstr ""
 
@@ -317,7 +326,7 @@ msgstr ""
 msgid "Select services"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:122
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:147
 msgid "Select your Services"
 msgstr ""
 
@@ -350,12 +359,20 @@ msgstr ""
 msgid "Settings for theme"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:38
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Projects.vue:46
 msgid "show past projects"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:72
+msgid "The publishing process will be executed now. We will inform you, when finished or something goes wrong."
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Menu/Settings.vue:86
 msgid "Theme"
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:82
+msgid "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
 msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Service/Editor.vue:46
@@ -399,7 +416,8 @@ msgstr ""
 msgid "Using DeviceMode?"
 msgstr ""
 
-#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Overlay.vue:6
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Overlay.vue:7
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Help.vue:3
 msgid "Wait"
 msgstr ""
 
@@ -417,4 +435,8 @@ msgstr ""
 
 #: /home/physicx/Projects/rds-web/client/packages/codebase/src/views/Wizard.vue:72
 msgid "You configure RDS properly."
+msgstr ""
+
+#: /home/physicx/Projects/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:86
+msgid "Your project was successfully published."
 msgstr ""
