@@ -97,7 +97,7 @@ def exchangeCodeData(data):
 def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
-        with app.app.test_request_context('/socket.io'):
+        with app.test_request_context('/socket.io'):
             with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
                 app.logger.debug("start tracer span")
                 res = fn(*args, **kwargs)
