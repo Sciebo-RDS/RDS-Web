@@ -10,7 +10,7 @@ export default {
             },
             defaultLanguage: 'en',
             translations: translations,
-            silent: true,
+            silent: true
         })
     }
 }

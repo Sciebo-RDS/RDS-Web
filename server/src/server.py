@@ -9,25 +9,21 @@ from flask_login import (
     current_user,
 )
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
-from .websocket import socket_blueprint, exchangeCodeData
+from .websocket import exchangeCodeData, RDSNamespace
 import json
 import requests
 import uuid
 import os
-import logging
-import uuid
 import os
 import jwt
 
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
 
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "index"
-app.register_blueprint(socket_blueprint)
+socketio.on_namespace(RDSNamespace("/"))
 
 req = requests.get(
     "{}/apps/rds/api/1.0/publickey".format(
@@ -46,8 +42,24 @@ def proxy(host, path):
 
 
 class User(UserMixin):
-    def __init__(self, id, userId=None, websocketId=None, token=None):
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "websocketId": self.websocketId,
+            "userId": self.userId,
+            "token": self.token
+        }
+
+    @classmethod
+    def from_dict(cls, obj):
+        return cls(**obj)
+
+    def __init__(self, id=None, userId=None, websocketId=None, token=None):
         super().__init__()
+        if id is None:
+            raise ValueError("id needs to be set-")
+
         self.id = id
         self.websocketId = websocketId
         self.userId = userId
@@ -73,9 +85,9 @@ class User(UserMixin):
                 data = jwt.decode(
                     text, publickey, algorithms=["RS256"]
                 )
-                LOGGER.debug(data)
+                app.logger.debug(data)
 
-                self.userId = data["username"]
+                self.userId = data["name"]
                 return
             raise ValueError
 
@@ -90,6 +102,13 @@ def informations():
     return json.dumps(data)
 
 
+@app.route("/faq")
+def questions():
+    from .questions import questions
+
+    return json.dumps(questions)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
@@ -98,9 +117,9 @@ def login():
     try:
         reqData = request.get_json()
     except Exception as e:
-        LOGGER.error(e, exc_info=True)
+        app.logger.error(e, exc_info=True)
         reqData = request.form
-    LOGGER.debug("reqdata: {}".format(reqData))
+    app.logger.debug("reqdata: {}".format(reqData))
 
     user = None
     if publickey != "":
@@ -110,18 +129,18 @@ def login():
             )
 
             user = User(
-                id=uuid.uuid4(),
+                id=str(uuid.uuid4()),
                 userId=decoded["name"]
             )
 
             session["informations"] = decoded
         except Exception as e:
-            LOGGER.error(e, exc_info=True)
+            app.logger.error(e, exc_info=True)
 
     if user is not None:
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
-        LOGGER.info("logged? {}".format(current_user.is_authenticated))
+        app.logger.info("logged? {}".format(current_user.is_authenticated))
 
         return "", 201
 
@@ -130,7 +149,7 @@ def login():
 
 @login_manager.user_loader
 def load_user(user_id):
-    return user_store.get(user_id)
+    return User.from_dict(user_store.get(user_id))
 
 
 @app.route("/logout")
@@ -144,19 +163,19 @@ def logout():
 @app.route("/<path:path>")
 def index(path):
     if use_embed_mode and use_predefined_user:
-        LOGGER.debug("skip authentication")
+        app.logger.debug("skip authentication")
         user = User(
-            id=uuid.uuid4(), userId=os.getenv("DEV_FLASK_USERID")
+            id=str(uuid.uuid4()), userId=os.getenv("DEV_FLASK_USERID")
         )
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
 
     if "access_token" in request.args:
         user = User(
-            id=uuid.uuid4(),
+            id=str(uuid.uuid4()),
             token=request.args["access_token"]
         )
-        user_store[user.get_id()] = user
+        user_store[user.get_id()] = user.to_dict()
         login_user(user)
         return redirect("/")
 

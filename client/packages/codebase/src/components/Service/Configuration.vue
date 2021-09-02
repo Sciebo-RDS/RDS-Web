@@ -39,16 +39,26 @@
         <v-card flat>
           <v-card-actions>
             <v-col class="text-right">
-              <v-btn @click="1" color="warning" v-if="userUses(service)">
+              <v-btn
+                @click="removeAccess(service)"
+                color="warning"
+                v-if="userUses(service)"
+              >
                 <v-icon class="mr-2">mdi-link-variant-off</v-icon>
-                <translate class="mr-1">
+                <translate
+                  key="fae8840f-6d5c-48bf-b8de-860c686cc089"
+                  class="mr-1"
+                >
                   Disconnect
                 </translate>
                 {{ service.name }}
               </v-btn>
-              <v-btn @click="removeAccess(service)" color="primary" v-else>
+              <v-btn @click="grantAccess(service)" color="primary" v-else>
                 <v-icon class="mr-2">mdi-link-variant</v-icon>
-                <translate class="mr-1">
+                <translate
+                  key="aa3413aa-a9c7-495d-b022-66c7923c67a5"
+                  class="mr-1"
+                >
                   Connect
                 </translate>
                 {{ service.name }}
@@ -58,18 +68,45 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="overlay"
+      persistent
+      max-width="500px"
+      :z-index="zIndex"
+      @keydown.esc="overlay = false"
+    >
+      <v-card shaped outlined raised>
+        <CredentialsInput
+          ref="credinput"
+          :showUsername="username"
+          :showPassword="password"
+          :servicename="servicename"
+          v-on:closecredentials="overlay = false"
+        />
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import CredentialsInput from "../Settings/CredentialsInput.vue";
 
 export default {
   props: ["service"],
+  components: { CredentialsInput },
   computed: {
     ...mapState({
       userservicelist: (state) => state.RDSStore.userservicelist,
     }),
+  },
+  data() {
+    return {
+      overlay: false,
+      username: "",
+      password: "",
+      servicename: "",
+    };
   },
   methods: {
     userUses(service) {

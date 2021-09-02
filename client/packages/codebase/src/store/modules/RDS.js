@@ -61,12 +61,18 @@ export default {
             })
         },
         SOCKET_SessionId(context, state) {
+            console.log("got describo sessionId: ", state)
             context.commit('setSessionId', {
                 sessionID: state
             })
         },
-        requestSessionId() {
-            this._vm.$socket.client.emit("requestSessionId")
+        requestSessionId(context) {
+            this._vm.$socket.client.emit("requestSessionId", (sessionId) => {
+                console.log("got describo sessionId: ", sessionId)
+                context.commit('setSessionId', {
+                    sessionID: sessionId
+                })
+            })
         },
         setLocation(context, data) {
             // TODO get and remove port-owncloud first and add it with new location!
@@ -88,9 +94,15 @@ export default {
         changePorts(context, data) {
             this._vm.$socket.client.emit("changePorts", JSON.stringify(data))
         },
-        triggerSynchronization(context, data){
-            console.log("trigger synch data: ", data)
-            this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data))
+        changeResearchname(context, data) {
+            this._vm.$socket.client.emit("changeResearchname", JSON.stringify(data))
+        },
+        triggerSynchronization(context, data, fn) {
+            console.log("trigger sync data: ", data)
+            this._vm.$socket.client.emit("triggerSynchronization", JSON.stringify(data), (response) => {
+                console.log("got response: ", response)
+                fn(response)
+            })
         },
         requestUserServiceList(context) {
             this._vm.$socket.client.emit("getUserServices", (response) => {

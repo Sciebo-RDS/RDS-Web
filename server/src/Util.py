@@ -1,5 +1,13 @@
 
 import copy
+import json
+
+
+def checkForEmpty(response):
+    if response.status_code == 404:
+        return []
+    else:
+        return parseAllResearch(json.loads(response.text))
 
 
 def parsePropBack(prop):

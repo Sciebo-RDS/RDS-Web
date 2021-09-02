@@ -7,14 +7,25 @@
         <v-col>
           <v-card flat>
             <v-card-subtitle v-translate>
-              1. Which folder do you want to publish?
+              1. Enter your working title here
+            </v-card-subtitle>
+
+            <v-card-actions>
+              <v-text-field
+                label="Working title"
+                @input="changeResearchname"
+                v-model="workingTitle"
+              />
+            </v-card-actions>
+          </v-card>
+          <v-card flat>
+            <v-card-subtitle v-translate>
+              2. Which folder do you want to publish?
             </v-card-subtitle>
 
             <v-card-actions>
               <v-btn @click="togglePicker">
-                <translate>
-                  Select Folder
-                </translate>
+                <translate> Select Folder </translate>
               </v-btn>
             </v-card-actions>
             <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
@@ -31,7 +42,7 @@
         <v-col>
           <v-card flat>
             <v-card-subtitle v-translate>
-              2. Which Services do you want to publish to?
+              3. Which Services do you want to publish to?
             </v-card-subtitle>
             <v-card-text>
               <v-select
@@ -47,7 +58,7 @@
                 chips
               >
                 <template v-slot:prepend-item>
-                  <v-list-item ripple @click="toggle">
+                  <v-list-item ripple>
                     <v-list-item-action>
                       <v-icon
                         :color="
@@ -81,6 +92,7 @@ export default {
   data: () => ({
     selectedPorts: [],
     currentFilePath: "",
+    workingTitle: "",
   }),
   computed: {
     ...mapGetters({
@@ -112,6 +124,8 @@ export default {
       portHas(this.project.portOut, port.servicename)
     );
 
+    this.workingTitle = this.project.researchname;
+
     this.currentFilePath = this.filepath(this.project);
     window.addEventListener("message", this.eventloop);
     if (!this.project.portIn.length) {
@@ -122,6 +136,9 @@ export default {
     window.removeEventListener("message", this.eventloop);
   },
   methods: {
+    changeResearchname() {
+      this.$emit("changeResearchname", this.workingTitle);
+    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
@@ -156,6 +173,11 @@ export default {
           change: [],
         },
       };
+
+      if (this.workingTitle !== this.project.researchname) {
+        changes["researchname"] = this.workingTitle;
+      }
+
       return changes;
     },
     computeRemoveOut() {

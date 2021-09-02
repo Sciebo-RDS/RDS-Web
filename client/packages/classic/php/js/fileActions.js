@@ -22,8 +22,8 @@
         }
         throw new Error(`${response.status} ${response.statusText}`);
       }).then((response) => {
-        const data = JSON.parse(response)
-        OC.rds.config = { url: data.cloudURL, server: data.cloudURL }
+        const data = JSON.parse(response);
+        OC.rds.config = { url: data.cloudURL, server: data.cloudURL, informations: data.jwt }
         resolve(OC.rds.config)
       }).catch((error) => {
         console.log("error in informations:", error)
@@ -36,36 +36,20 @@
     })
 
     config.finally(() => {
-      let login = new Promise((resolve, reject) => {
-        fetch(`${OC.rds.config.server}/login`, { credentials: "include" })
-          .then((response) => {
-            if (response.ok) {
-              OC.rds.loggedIn = true
-              resolve(true)
-              self.resolve(true)
-            } else {
-              reject("user not logged in")
-            }
-          })
-      })
-
-      login.catch(() => {
-        $.get(OC.generateUrl("/apps/rds/api/1.0/informations"))
-          .done((response) => {
-            $.ajax({
-              type: "post",
-              url: `${OC.rds.config.server}/login`,
-              data: { "informations": response.jwt },
-              crossDomain: true,
-              xhrFields: {
-                withCredentials: true
-              },
-            })
-              .done(() => {
-                OC.rds.loggedIn = true
-                self.resolve(true)
-              })
-          })
+      $.ajax({
+        type: "post",
+        url: `${OC.rds.config.server}/login`,
+        contentType: "application/json",
+        data: JSON.stringify(OC.rds.config),
+        crossDomain: true,
+        xhrFields: {
+          withCredentials: true
+        },
+      }).done(() => {
+        OC.rds.loggedIn = true
+        self.resolve(true)
+      }).fail(() => {
+        self.reject("user not logged in")
       })
     });
   })

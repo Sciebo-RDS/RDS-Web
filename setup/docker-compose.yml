@@ -27,10 +27,7 @@ services:
 
   describoapi:
     container_name: describo_api
-    image: utseresearch/describo-online-api:latest
-    build:
-      context: ../client/dev/describo-online
-      dockerfile: Dockerfile.api-build
+    image: arkisto/describo-online-api:latest
     hostname: api
     restart: always
     tty: true
@@ -46,13 +43,8 @@ services:
 
   describoui:
     container_name: describo_ui
-    image: utseresearch/describo-online-ui:latest
+    image: arkisto/describo-online-ui:latest
     restart: always
-    build:
-      context: ../
-      dockerfile: Dockerfile.describo-ui
-      args:
-        - VUE_APP_BASE_URL=/describo/
     hostname: ui
     depends_on:
       - describoapi
@@ -146,6 +138,7 @@ services:
   redis:
     image: redis:6
     container_name: owncloud_redis
+    hostname: owncloud_redis
     restart: always
     command: ["--databases", "1"]
     healthcheck:

@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <v-container fluid>
     <Frame
       :source="'/frames/' + $config.language + '/start.html'"
       v-if="!clickedStarted"
+      class="fill-height"
     >
       <translate>Click here to</translate>&nbsp;
       <v-btn color="primary" @click="clickGettingStarted">
@@ -109,7 +110,7 @@
         />
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -129,9 +130,23 @@ export default {
     sourceRef: "https://www.research-data-services.de",
   }),
   mounted() {
-    if (this.$config.predefined_user) {
+    if (
+      this.$config.predefined_user ||
+      this.getInformations("port-owncloud", this.userservicelist) !== undefined
+    ) {
       this.finishWizard();
     }
+
+    let timer = setInterval(() => {
+      if (
+        this.getInformations("port-owncloud", this.userservicelist) !==
+        undefined
+      ) {
+        console.log("found ownCloud in storage");
+        clearInterval(timer);
+        this.finishWizard("/services");
+      }
+    }, 1000);
   },
   computed: {
     ...mapState({
@@ -155,10 +170,11 @@ export default {
   },
   methods: {
     clickGettingStarted() {
-      if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
+      console.log(process.env);
+      if (process.env.NODE_ENV === "development" && this.currentStep > 1) {
         this.clickedStarted = true;
       } else {
-        grantAccess(getInformations("port-owncloud"));
+        this.grantAccess(this.getInformations("port-owncloud"));
       }
     },
     grantAccess(service) {
@@ -171,9 +187,12 @@ export default {
         this.overlay = true;
       }
     },
-    finishWizard() {
+    finishWizard(path = undefined) {
       this.$store.commit("setWizardFinished");
-      this.$router.push("/");
+      if (path == undefined) {
+        path = "/";
+      }
+      this.$router.push(path);
     },
   },
   components: { CredentialsInput, Frame },

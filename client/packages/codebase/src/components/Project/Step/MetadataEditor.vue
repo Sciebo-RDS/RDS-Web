@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <v-container flex v-if="loading">
+    <v-container flex v-if="loadingStep < 2">
       <v-row>
         <v-col>
           <v-progress-circular indeterminate color="primary" />
@@ -13,12 +13,14 @@
       </v-row>
     </v-container>
     <iframe
-      v-show="!loading"
+      v-if="loadingStep >= 1"
+      v-show="loadingStep >= 2"
       ref="describoWindow"
       :src="iframeSource"
       height="500px"
       width="100%"
-      style="border: 0px;"
+      style="border: 0px; left: 0px;"
+      @load="loaded()"
     ></iframe>
   </div>
 </template>
@@ -31,6 +33,8 @@ export default {
   data: () => ({
     loading: true,
     loadingText: "",
+    loadingStep: 0,
+    sessionId: undefined,
   }),
   computed: {
     editor() {
@@ -42,7 +46,7 @@ export default {
     iframeSource() {
       const query = queryString.stringify({
         embed: 1,
-        sid: this.$store.getters.getSessionId,
+        sid: this.sessionId,
       });
       return `${this.$config.describo}?${query}`;
     },
@@ -62,6 +66,11 @@ export default {
     },
   },
   methods: {
+    loaded() {
+      console.log("iframe loaded");
+      this.loading = false;
+      this.loadingStep = 2;
+    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
@@ -113,10 +122,25 @@ export default {
     },
   },
   mounted() {
+    console.log("request describo sessionId");
+    this.$socket.client.emit(
+      "requestSessionId",
+      { folder: this.filePath },
+      (sessionId) => {
+        this.loadingStep = 1;
+        this.sessionId = sessionId;
+        console.log("got sessionId", sessionId);
+      }
+    );
+
     this.standardLoadingText = this.$gettext("Editor loading");
     this.loadingText = this.standardLoadingText;
     let counter = 0;
     let loader = setInterval(() => {
+      if (!this.loading) {
+        clearInterval(loader);
+      }
+
       if (counter > 30) {
         this.loadingText = this.$gettext(
           "Error while loading. Please contact an administator."
@@ -131,11 +155,6 @@ export default {
         counter += 1;
       }
     }, 1000);
-
-    this.$refs.describoWindow.addEventListener("load", () => {
-      this.loading = false;
-      clearInterval(loader);
-    });
   },
   created() {
     window.addEventListener("message", this.eventloop);

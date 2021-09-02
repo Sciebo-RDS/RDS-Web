@@ -2,6 +2,7 @@
   <div>
     <v-app id="inspire">
       <overlay :subtext="overlayText" />
+      <snackbar />
       <v-app-bar v-if="$vuetify.breakpoint.mobile" app flat class="d-lg-none">
         <v-app-bar-nav-icon @click="drawer = !drawer" class="d-lg-none" />
         <v-spacer />
@@ -38,7 +39,10 @@
 
         <v-divider />
 
-        <v-list class="d-flex flex-column mb-10">
+        <v-list
+          class="d-flex flex-column mb-10"
+          style="box-sizing: border-box; overflow: auto;"
+        >
           <v-list-item-group v-model="model" mandatory color="indigo">
             <v-list-item
               v-for="(item, i) in views"
@@ -103,6 +107,7 @@
 import { mapGetters } from "vuex";
 import overlay from "./components/Overlay.vue";
 import settingsmenu from "./components/Menu/Settings.vue";
+import snackbar from "./components/Snackbar.vue";
 
 export default {
   name: "App",
@@ -125,7 +130,7 @@ export default {
       overlayText: null,
     };
   },
-  components: { overlay, settingsmenu },
+  components: { overlay, settingsmenu, snackbar },
   methods: {},
   computed: {
     ...mapGetters({
@@ -162,6 +167,15 @@ export default {
     this.$config.language = this.getLanguage;
 
     this.$vuetify.theme.dark = this.$store.getters.isDarkMode;
+
+    Vue.prototype.$http
+      .get(`${Vue.config.server}/faq`)
+      .then((response) => {
+        this.$store.commit("setQuestions", {
+          questions: response.data,
+        });
+      })
+      .catch(() => {});
   },
 };
 </script>

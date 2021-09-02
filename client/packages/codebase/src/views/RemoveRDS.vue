@@ -41,7 +41,10 @@ export default {
     uninstallRDS() {
       this.$store.dispatch(
         "removeService",
-        this.getInformations("port-owncloud")
+        this.getInformations(
+          "port-owncloud",
+          this.$store.getters.getUserServiceList
+        )
       );
       this.$store.commit("setWizardFinished", { wizard: false });
       this.$router.push({ name: "Wizard" });
