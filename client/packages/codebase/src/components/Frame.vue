@@ -1,16 +1,24 @@
 <template>
-  <div class="ma-0 pa-0 fill-height height:100%; width:100%;">
+  <div
+    class="ma-0 pa-0 fill-height fullsize"
+    style="height: 100%; width: 100%; border: 0px"
+  >
     <iframe
       :src="source"
-      class="ma-0 pa-0"
-      frameborder="0"
-      height="100%"
-      width="100%"
+      class="ma-0 pa-0 fullsize"
+      style="
+        position: absolute;
+        top: 0px;
+        height: 100%;
+        width: 100%;
+        border: 0px;
+        overflow-x: hidden;
+      "
     />
 
     <v-card
       class="text-center pa-2"
-      style="width:100%; position: absolute; bottom: 0px;"
+      style="width: 100%; position: absolute; bottom: 0px"
       tile
       flat
       v-if="!!$slots.default"
@@ -27,7 +35,8 @@ export default {
   },
 };
 </script>
-<style>
+
+<style scoped>
 iframe {
   position: absolute;
   top: 0px;
@@ -35,5 +44,11 @@ iframe {
   width: 100%;
   border: none;
   overflow-x: hidden;
+}
+
+.fullsize {
+  height: 100%;
+  width: 100%;
+  border: 0px;
 }
 </style>

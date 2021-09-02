@@ -44,6 +44,13 @@ build:rds_web:
   variables:
     DOCKERFILENAME: Dockerfile.rds-standalone
 
+  only:
+    changes:
+      - server/*
+      - server/**/*
+      - client/*
+      - client/**/*
+
   extends:
     - .builds
 
@@ -51,6 +58,11 @@ build:port_helper_describo_token_updater:
   variables:
     FOLDER: helper/
     DOCKERFILENAME: dockerfile
+
+  only:
+    changes:
+      - helper/*
+      - helper/**/*
 
   extends:
     - .builds

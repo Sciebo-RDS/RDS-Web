@@ -9,9 +9,7 @@
         <translate>No projects found</translate>
       </v-card-title>
       <v-card-text>
-        <translate>
-          Set the filter or create a new one project.
-        </translate>
+        <translate> Set the filter or create a new one project. </translate>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -20,11 +18,14 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-expansion-panels inset focusable multiple v-model="panel" v-else>
+    <v-expansion-panels inset focusable v-model="panel" v-else>
       <v-expansion-panel v-for="(project, i) in projects" :key="i">
         <v-expansion-panel-header>
           <v-row>
-            <v-col cols="auto">
+            <v-col cols="auto" v-if="!!project.researchname">
+              {{ project.researchname }}
+            </v-col>
+            <v-col cols="auto" v-else>
               <translate
                 :translate-params="{
                   researchIndex: project.researchIndex + 1,
@@ -40,7 +41,8 @@
           <ProjectSetting
             @delete-project="deleteProject(project.researchIndex)"
             :project="project"
-          ></ProjectSetting>
+            v-if="panel === i"
+          />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -120,14 +122,7 @@ export default {
       (newValue) => {
         this.projects = this.getProjects();
 
-        let diffCount = this.allProjects.length - this.activeProjects.length;
-        this.panel = this.panel.map((val) => {
-          let temp = newValue ? val + diffCount : val - diffCount;
-
-          if (temp >= 0) {
-            return temp;
-          }
-        });
+        this.panel = undefined;
       }
     );
 
@@ -155,6 +150,7 @@ export default {
     });
   },
   beforeDestroy() {
+    this.$store.dispatch("requestProjectList");
     this.unwatch();
   },
 };

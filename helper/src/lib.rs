@@ -3,7 +3,6 @@ extern crate serde;
 
 use redis::{Client, Commands};
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use std::sync::mpsc;
 use std::thread::{self, JoinHandle};
 
@@ -13,33 +12,49 @@ struct User {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct JSONUser {
+    r#type: String,
+    data: User,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Service {
     servicename: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct JSONService {
+    r#type: String,
+    data: Service,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Token {
-    service: Service,
+    service: JSONService,
     access_token: String,
-    user: User,
+    user: JSONUser,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct JSONToken {
+    r#type: String,
+    data: Token,
 }
 
 pub struct Describo {
-    session_id: String,
+    describo_data: String,
     token: String,
 }
 
 #[derive(Clone)]
 pub struct Config {
     pub client: Client,
+    pub redis_channel: String,
     pub describo_url: String,
     pub describo_secret: String,
 }
 
-pub fn start_redis_listener(
-    config: Config,
-    channel: String,
-) -> (mpsc::Receiver<String>, JoinHandle<()>) {
+pub fn start_redis_listener(config: Config) -> (mpsc::Receiver<String>, JoinHandle<()>) {
     let (sender, receiver) = mpsc::sync_channel(1000);
 
     let handle = thread::spawn(move || {
@@ -47,7 +62,7 @@ pub fn start_redis_listener(
 
         // subscribe redis key "TokenStorage_Refresh_Token", wait for data
         let mut pubsub = con.as_pubsub();
-        pubsub.subscribe(channel).unwrap();
+        pubsub.subscribe(config.redis_channel).unwrap();
 
         println!("Start redis listener");
 
@@ -95,31 +110,38 @@ pub fn start_lookup_userid_in_redis(
 
         for payload in payloads_rcv {
             println!("got payload: {:?}", payload);
-            let t: Token = serde_json::from_str(&payload).unwrap();
 
-            if t.service.servicename != "port-owncloud" {
+            let t: JSONToken = match serde_json::from_str(&payload) {
+                Ok(v) => v,
+                Err(e1) => {
+                    eprintln!("Payload error: \n{}", e1);
+                    continue;
+                }
+            };
+
+            if t.data.service.data.servicename != "port-owncloud" {
                 println!("skip: It is not for owncloud");
                 continue;
             }
 
             // lookup in redis for user_id to get sessionId
-            let session_id: String = match con.get(&(t.user.username)) {
+            let describo_data: String = match con.get(&(t.data.user.data.username)) {
                 Ok(v) => v,
                 Err(err) => {
                     if err.is_connection_dropped() {
                         println!("Redis not available");
                         break;
                     }
-                    println!("key '{}' not found in redis.", t.user.username);
+                    println!("key '{}' not found in redis.", t.data.user.data.username);
                     continue;
                 }
             };
 
-            println!("found sessionId: {}", session_id);
+            println!("found describo: {}", describo_data);
             if sender
                 .send(Describo {
-                    session_id,
-                    token: t.access_token,
+                    describo_data,
+                    token: t.data.access_token,
                 })
                 .is_err()
             {
@@ -134,6 +156,8 @@ pub fn start_lookup_userid_in_redis(
     (receiver, handle)
 }
 
+use serde_json::Value;
+
 pub fn start_update_describo(
     config: Config,
     describo_rcv: mpsc::Receiver<Describo>,
@@ -142,22 +166,33 @@ pub fn start_update_describo(
 
     let handle = thread::spawn(move || {
         for d in describo_rcv {
-            let request_body = json!({
-               "session": {
-                  "owncloud": {
-                      "access_token": d.token
-                  }
-               }
-            });
+            let mut describo_data: Value = match serde_json::from_str(&d.describo_data) {
+                Ok(v) => v,
+                Err(e) => {
+                    eprintln!("invalid parsing: {}", e);
+                    continue;
+                }
+            };
+
+            println!("Got token: {}\n describo_data: {}", d.token, describo_data);
+
+            describo_data["payload"]["session"]["owncloud"]["access_token"] =
+                serde_json::Value::String(d.token);
+
+            let session_id = describo_data["sessionId"].as_str().unwrap().to_string();
+            let request_body = &describo_data["payload"];
+            let describo_url = format!("{}/{}", config.describo_url, session_id);
+
+            println!(
+                "Sent: url: {}, sessionId: {}, secret: {}\npayload: {}",
+                describo_url, session_id, config.describo_secret, request_body
+            );
 
             let res = reqwest::blocking::Client::new()
-                .put(format!(
-                    "{}/api/session/application/{}",
-                    config.describo_url, d.session_id
-                ))
+                .put(describo_url)
                 .bearer_auth(&config.describo_secret)
                 .header("Content-Type", "application/json")
-                .json(&request_body)
+                .json(request_body)
                 .send();
 
             match res {

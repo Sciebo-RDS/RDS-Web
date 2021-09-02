@@ -19,7 +19,11 @@
     <v-stepper-items>
       <v-stepper-content step="1">
         <v-card class="mb-12" height="auto" flat>
-          <StepConfiguration :project="project" @changePorts="receiveChanges" />
+          <StepConfiguration
+            :project="project"
+            @changePorts="receiveChanges"
+            @changeResearchname="receiveResearchname"
+          />
         </v-card>
 
         <v-btn text disabled> <translate>Back</translate> </v-btn>
@@ -97,6 +101,7 @@ export default {
       configurationLockState: true,
       publishInProgress: false,
       publishText: this.$gettext("Publish"),
+      researchName: undefined,
     };
   },
   watch: {
@@ -111,6 +116,9 @@ export default {
     this.configurationLockState = this.getInitialConfigurationLockState();
   },
   methods: {
+    receiveResearchname(researchname) {
+      this.researchName = researchname;
+    },
     getInitialConfigurationLockState() {
       if (!!this.project.portOut.length && !!this.project["portIn"]) {
         return false;
@@ -143,6 +151,14 @@ export default {
       this.configurationLockState = this.setConfigurationLock(pChanges);
     },
     sendChanges() {
+      if (this.project["researchname"] !== this.researchName) {
+        this.$store.dispatch("changeResearchname", {
+          researchIndex: this.project["researchIndex"],
+          researchname: this.researchName,
+        });
+        this.project["researchname"] = this.researchName;
+      }
+
       if (Object.keys(this.changes).length > 0) {
         this.$store.dispatch("changePorts", this.changes);
         this.changes = {};
@@ -151,10 +167,33 @@ export default {
     publishProject() {
       this.publishInProgress = true;
 
-      let indexObject = {
-        researchIndex: this.project["researchIndex"],
-      };
-      this.$store.dispatch("triggerSynchronization", indexObject);
+      this.$root.$emit(
+        "showsnackbar",
+        this.$gettext(
+          "The publishing process will be executed now. We will inform you, when finished or something goes wrong."
+        )
+      );
+
+      this.$socket.client.emit(
+        "triggerSynchronization",
+        {
+          researchIndex: this.project["researchIndex"],
+        },
+        (result) => {
+          console.log("result was: ", result);
+
+          let text = this.$gettext(
+            "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
+          );
+          if (result) {
+            text = this.$gettext("Your project was successfully published.");
+          } else {
+            this.publishInProgress = false;
+          }
+
+          this.$root.$emit("showsnackbar", text);
+        }
+      );
     },
   },
 };

@@ -4,20 +4,26 @@
       indeterminate
       color="primary"
       size="64"
-      v-if="Object.keys(questions).length == 0"
+      v-if="Object.keys(help_categories).length === 0"
     >
       <translate>Wait</translate>
     </v-progress-circular>
-    <v-expansion-panels inset focusable multiple v-model="panel" v-else>
-      <v-expansion-panel
-        v-for="(item, i) in questions[this.$config.language]"
-        :key="i"
-      >
+    <v-expansion-panels
+      inset
+      focusable
+      multiple
+      v-else
+      v-for="(questions, category) in help_categories[this.$config.language]"
+      :key="category"
+      style="padding-top: 30px"
+    >
+      <div class="text-h6" v-text="category" />
+      <v-expansion-panel v-for="(answer, question) in questions" :key="answer">
         <v-expansion-panel-header>
-          {{ item.question }}
+          {{ question }}
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <span v-html="markdown(item.answer)" />
+          <span v-html="markdown(answer)" />
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -47,7 +53,7 @@ renderer.link = (href, title, text) => {
 export default {
   name: "Help",
   computed: {
-    ...mapGetters({ questions: "getQuestions" }),
+    ...mapGetters({ help_categories: "getQuestions" }),
   },
   data() {
     return {

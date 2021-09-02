@@ -4,10 +4,13 @@ import os
 import json
 import re
 from flask_login import current_user
-from .app import use_predefined_user
+from .app import use_predefined_user, app, use_tests_folder
 
-logging.basicConfig(level=logging.DEBUG)
-LOGGER = logging.getLogger()
+
+class AttrDict(dict):
+    def __init__(self, *args, **kwargs):
+        super(AttrDict, self).__init__(*args, **kwargs)
+        self.__dict__ = self
 
 
 def parseDict(data, socketio=None, httpManager=None):
@@ -73,12 +76,13 @@ class HTTPRequest:
 
         data["url"] = self.url
 
-        LOGGER.debug("key: {}, data: {}, req: {}".format(key, data, reqConf))
+        app.logger.debug(
+            "key: {}, data: {}, req: {}".format(key, data, reqConf))
 
         sendEmptyData = False
 
         group = re.findall(r"{\w*}", reqConf["url"])
-        LOGGER.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
+        app.logger.debug("url: {}, found groups: {}, len groups: {}, len data: {}, equal: {}".format(
             reqConf["url"], group, len(group), len(
                 data), len(group) == len(data)
         ))
@@ -87,7 +91,7 @@ class HTTPRequest:
 
         url = reqConf["url"].format(**data)
 
-        LOGGER.debug(f"empty data: {sendEmptyData}")
+        app.logger.debug(f"empty data: {sendEmptyData}")
 
         parameters = {
             "verify": os.getenv("VERIFY_SSL", "False") == "True"
@@ -96,13 +100,21 @@ class HTTPRequest:
         if not sendEmptyData:
             parameters["json"] = data
 
-        LOGGER.debug("request url: {}".format(url))
-        req = getattr(requests, reqConf["method"])(
-            url, **parameters
-        )
+        app.logger.debug("request url: {}".format(url))
+
+        if use_tests_folder:
+            req = AttrDict({
+                "text": open("tests/{}.json".format(url.split("{}/".format(os.getenv("RDS_INSTALLATION_DOMAIN")))[-1])).read(),
+                "status_code": 200,
+            })
+
+        else:
+            req = getattr(requests, reqConf["method"])(
+                url, **parameters
+            )
 
         response = req.text
-        LOGGER.debug(
+        app.logger.debug(
             "status_code: {}, content: {}".format(req.status_code, response))
 
         if req.status_code >= 300:
@@ -143,7 +155,7 @@ class HTTPManager:
                     try:
                         return service.makeRequest(key, *args)
                     except Exception as e:
-                        LOGGER.error(
+                        app.logger.error(
                             "make request error: {}".format(e), exc_info=True)
                 return reqFn
 
@@ -154,7 +166,6 @@ class HTTPManager:
             try:
                 return service.makeRequest(*args, **kwargs)
             except Exception as e:
-                LOGGER.error(
-                    "make request error while service search: {}".format(e), exc_info=True)
+                app.logger.error(e, exc_info=True)
 
         raise ValueError("no service implements the given url.")

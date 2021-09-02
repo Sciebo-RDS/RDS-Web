@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <v-container fluid>
     <Frame
       :source="'/frames/' + $config.language + '/start.html'"
       v-if="!clickedStarted"
+      class="fill-height"
     >
       <translate>Click here to</translate>&nbsp;
       <v-btn color="primary" @click="clickGettingStarted">
@@ -109,7 +110,7 @@
         />
       </v-card>
     </v-dialog>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -170,7 +171,7 @@ export default {
   methods: {
     clickGettingStarted() {
       console.log(process.env);
-      if (process.env.NODE_ENV == "development" && this.currentStep > 1) {
+      if (process.env.NODE_ENV === "development" && this.currentStep > 1) {
         this.clickedStarted = true;
       } else {
         this.grantAccess(this.getInformations("port-owncloud"));

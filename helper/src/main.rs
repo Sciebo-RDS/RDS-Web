@@ -31,8 +31,11 @@ fn main() {
     let secret =
         env::var("DESCRIBO_API_SECRET").expect("Error: Envvar 'DESCRIBO_API_SECRET' not present.");
 
+    let channel = env::var("REDIS_CHANNEL").expect("Error: Envvar 'REDIS_CHANNEL' not present.");
+
     let config = helper::Config {
         client,
+        redis_channel: channel,
         describo_url: describo,
         describo_secret: secret,
     };
@@ -42,8 +45,7 @@ fn main() {
 
 fn start(config: Config) -> Result<(), String> {
     // make request put method to describo to update access_token for sid
-    let (redis, h1) =
-        helper::start_redis_listener(config.clone(), "TokenStorage_Refresh_Token".to_string());
+    let (redis, h1) = helper::start_redis_listener(config.clone());
     let (describo, h2) = helper::start_lookup_userid_in_redis(config.clone(), redis);
     let h3 = helper::start_update_describo(config.clone(), describo);
 

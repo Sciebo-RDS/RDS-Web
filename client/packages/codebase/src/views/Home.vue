@@ -1,12 +1,5 @@
 <template>
-  <div class="home">
-    <!--<v-layout column align-end wrap v-if="userHasServicesConnected">
-      at least one service is connected
-    </v-layout>-->
-    <v-layout>
-      <Frame :source="'/frames/' + $config.language + '/welcome.html'"></Frame>
-    </v-layout>
-  </div>
+  <Frame :source="frameSource" />
 </template>
 
 <script>
@@ -24,6 +17,9 @@ export default {
     };
   },
   computed: {
+    frameSource() {
+      return "/frames/" + this.$config.language + "/welcome.html";
+    },
     userHasServicesConnected() {
       //hardcoded filter for owncloud, change
       if (this.userservicelist.length > 1) {
