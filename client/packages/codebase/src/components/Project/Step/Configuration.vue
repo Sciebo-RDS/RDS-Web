@@ -12,12 +12,14 @@
 
             <v-card-actions>
               <v-text-field
-                label="Working title"
+                :label="$gettext('Working title')"
                 @input="changeResearchname"
                 v-model="workingTitle"
               />
             </v-card-actions>
           </v-card>
+        </v-col>
+        <v-col>
           <v-card flat>
             <v-card-subtitle v-translate>
               2. Which folder do you want to publish?
@@ -27,8 +29,7 @@
               <v-btn @click="togglePicker">
                 <translate> Select Folder </translate>
               </v-btn>
-            </v-card-actions>
-            <v-card-subtitle style="padding-top: 0px" v-if="!!currentFilePath">
+            <div style="padding-left: 10px; padding-top: 0px" v-if="!!currentFilePath">
               <translate
                 :translate-params="{
                   filePath: currentFilePath,
@@ -36,7 +37,8 @@
               >
                 Current Folder: %{filePath}
               </translate>
-            </v-card-subtitle>
+            </div>
+            </v-card-actions>
           </v-card>
         </v-col>
         <v-col>
@@ -57,25 +59,6 @@
                 multiple
                 chips
               >
-                <template v-slot:prepend-item>
-                  <v-list-item ripple>
-                    <v-list-item-action>
-                      <v-icon
-                        :color="
-                          selectedPorts.length > 0 ? 'indigo darken-4' : ''
-                        "
-                      >
-                        {{ icon }}
-                      </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                      <v-list-item-title v-translate>
-                        Select All
-                      </v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2"></v-divider>
-                </template>
               </v-select>
             </v-card-text>
           </v-card>
