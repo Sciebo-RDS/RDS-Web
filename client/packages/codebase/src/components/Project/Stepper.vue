@@ -100,8 +100,7 @@ export default {
       changes: {},
       configurationLockState: true,
       publishInProgress: false,
-      publishText: this.$gettext("Publish"),
-      researchName: undefined,
+      researchName: this.project.researchname,
     };
   },
   watch: {
