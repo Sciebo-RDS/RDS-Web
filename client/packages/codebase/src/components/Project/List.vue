@@ -32,8 +32,8 @@
                 }"
               >
                 Project %{ researchIndex }
-              </translate></v-col
-            >
+              </translate>
+            </v-col>
             <ProjectStatusChip v-bind:status="project.status" />
           </v-row>
         </v-expansion-panel-header>
