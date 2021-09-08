@@ -5,11 +5,16 @@
       <!--<v-card-subtitle>Please select the services you want to publish to: </v-card-subtitle>-->
       <v-row>
         <v-col>
-          <v-card flat>
+          <v-card
+            flat
+            outlined
+            class="mb-12 text-center d-flex flex-column"
+            height="150px"
+          >
             <v-card-subtitle v-translate>
               1. Enter your working title here
             </v-card-subtitle>
-
+            <v-spacer></v-spacer>
             <v-card-actions>
               <v-text-field
                 :label="$gettext('Working title')"
@@ -20,33 +25,48 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card flat>
+          <v-card
+            flat
+            outlined
+            class="mb-12 text-center d-flex flex-column"
+            height="150px"
+          >
             <v-card-subtitle v-translate>
               2. Which folder do you want to publish?
             </v-card-subtitle>
-
-            <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-card-actions class="mb-5 pl-5">
               <v-btn @click="togglePicker">
                 <translate> Select Folder </translate>
               </v-btn>
-            <div style="padding-left: 10px; padding-top: 0px" v-if="!!currentFilePath">
-              <translate
-                :translate-params="{
-                  filePath: currentFilePath,
-                }"
+
+              <div
+                class="pl-4 pt-0"
+                v-if="!!currentFilePath"
               >
-                Current Folder: %{filePath}
-              </translate>
-            </div>
+                <translate
+                  :translate-params="{
+                    filePath: currentFilePath,
+                  }"
+                >
+                  Current Folder: %{filePath}
+                </translate>
+              </div>
             </v-card-actions>
           </v-card>
         </v-col>
         <v-col>
-          <v-card flat>
+          <v-card
+            flat
+            outlined
+            class="mb-12 text-center d-flex flex-column"
+            height="150px"
+          >
             <v-card-subtitle v-translate>
               3. Which Services do you want to publish to?
             </v-card-subtitle>
-            <v-card-text>
+            <v-spacer></v-spacer>
+            <v-card-actions>
               <v-select
                 v-model="selectedPorts"
                 @change="emitChanges"
@@ -60,7 +80,7 @@
                 chips
               >
               </v-select>
-            </v-card-text>
+            </v-card-actions>
           </v-card>
         </v-col>
       </v-row>
