@@ -144,7 +144,7 @@ export default {
       ) {
         console.log("found ownCloud in storage");
         clearInterval(timer);
-        this.finishWizard("/services");
+        this.finishWizard();
       }
     }, 1000);
   },
