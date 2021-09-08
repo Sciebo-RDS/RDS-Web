@@ -27,10 +27,8 @@
         </v-card>
 
         <v-btn text disabled> <translate>Back</translate> </v-btn>
-        <v-btn v-if="configurationLockState" disabled>
-          <translate>Continue</translate>
-        </v-btn>
-        <v-btn v-else color="primary" @click="[sendChanges(), (e1 = 2)]">
+
+        <v-btn :disabled="configurationLockState" color="primary" @click="[sendChanges(), (e1 = 2)]">
           <translate>Continue</translate>
         </v-btn>
       </v-stepper-content>
@@ -62,12 +60,9 @@
           <translate>Back</translate>
         </v-btn>
 
-        <v-btn
-          color="success"
-          @click="publishProject"
-          :disabled="publishInProgress"
-        >
-          {{ publishText }}
+        <v-btn :disabled="publishInProgress" color="success" @click="publishProject">
+          <translate v-if="publishInProgress">In progress...</translate>
+          <translate v-else>Publish</translate>
         </v-btn>
       </v-stepper-content>
     </v-stepper-items>
@@ -102,13 +97,6 @@ export default {
       publishInProgress: false,
       researchName: this.project.researchname,
     };
-  },
-  watch: {
-    publishInProgress(value) {
-      this.publishText = value
-        ? this.$gettext("In progress...")
-        : this.$gettext("Publish");
-    },
   },
   props: ["project"],
   beforeMount() {
@@ -150,12 +138,12 @@ export default {
       this.configurationLockState = this.setConfigurationLock(pChanges);
     },
     sendChanges() {
-      if (this.project["researchname"] !== this.researchName) {
+      if (this.project.researchname !== this.researchName) {
         this.$store.dispatch("changeResearchname", {
           researchIndex: this.project["researchIndex"],
           researchname: this.researchName,
         });
-        this.project["researchname"] = this.researchName;
+        this.project.researchname = this.researchName;
       }
 
       if (Object.keys(this.changes).length > 0) {
@@ -179,8 +167,6 @@ export default {
           researchIndex: this.project["researchIndex"],
         },
         (result) => {
-          console.log("result was: ", result);
-
           let text = this.$gettext(
             "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
           );
