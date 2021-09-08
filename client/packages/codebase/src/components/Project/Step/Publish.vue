@@ -1,9 +1,15 @@
 <template>
   <v-container>
     <v-card flat>
-      <v-card-title v-translate> Publish your project </v-card-title>
-      <v-card-subtitle v-translate>
+      <v-card-title>
+        <translate>
+        Publish your project 
+        </translate> 
+        </v-card-title>
+      <v-card-subtitle>
+        <translate>
         Make sure your settings are correct!
+        </translate>
       </v-card-subtitle>
       <v-card-text>
         <!-- replace with logic-->
