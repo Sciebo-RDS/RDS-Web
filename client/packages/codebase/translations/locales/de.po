@@ -19,11 +19,11 @@ msgstr "(öffnet ein neues Fenster)"
 msgid "1. Enter your working title here"
 msgstr "1. Arbeitstitel des Projektes"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:17
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:19
 msgid "2. Which folder do you want to publish?"
 msgstr "2. Welcher Ordner soll veröffentlicht werden?"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:37
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:39
 msgid "3. Which Services do you want to publish to?"
 msgstr "3. Wohin willst Du die Daten veröffentlichen?"
 
@@ -45,8 +45,8 @@ msgid "Are you sure?"
 msgstr "Bist Du Dir sicher?"
 
 #: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:24
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:39
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:53
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:37
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:51
 msgid "Back"
 msgstr "Zurück"
 
@@ -101,9 +101,8 @@ msgstr "Erlaube RDS den Zugang zu deinem %{name} Konto."
 msgid "connected"
 msgstr "verbunden"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:26
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:29
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:43
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:27
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:41
 #: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/views/Wizard.vue:66
 msgid "Continue"
 msgstr "Weiter"
@@ -116,7 +115,7 @@ msgstr "Erstelle ein Projekt"
 msgid "created"
 msgstr "Erstellt"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:27
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:28
 msgid "Current Folder: %{filePath}"
 msgstr "Aktueller Ordner: %{filePath}"
 
@@ -198,7 +197,7 @@ msgstr ""
 msgid "If you want to reuse this service, you need to add it again."
 msgstr "Falls Du diesen Dienst später erneut nutzen willst, musst Du ihn wieder hinzufügen."
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:24
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:55
 msgid "In progress..."
 msgstr "In Bearbeitung..."
 
@@ -218,7 +217,7 @@ msgstr "Item"
 msgid "Language"
 msgstr "Sprache ändern"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Publish.vue:4
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Publish.vue:9
 msgid "Make sure your settings are correct!"
 msgstr "Alle Projektinformationen im Überblick."
 
@@ -263,12 +262,11 @@ msgid "Projects"
 msgstr "Projekte"
 
 #: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:15
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:17
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:25
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:56
 msgid "Publish"
 msgstr "Veröffentlichen"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Publish.vue:3
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Publish.vue:4
 msgid "Publish your project"
 msgstr "Veröffentliche dein Projekt"
 
@@ -315,14 +313,12 @@ msgstr "Zugangsdaten speichern"
 msgid "Save selection and activate services"
 msgstr "Dienste anpassen"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:54
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:10
 #: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Service/Selector.vue:12
 #: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Service/Selector.vue:8
 msgid "Select All"
 msgstr "Alle auswählen"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:23
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:25
 msgid "Select Folder"
 msgstr "Ordner wählen"
 
@@ -334,7 +330,7 @@ msgstr "Sprache ändern"
 msgid "Select services"
 msgstr "Wähle deine Dienste aus"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:148
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:144
 msgid "Select your Services"
 msgstr "Wähle deine Dienste aus"
 
@@ -371,7 +367,7 @@ msgstr "Aussehen ändern"
 msgid "show past projects"
 msgstr "Zeige alte Projekte"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:86
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:78
 msgid "The publishing process will be executed now. We will inform you, when finished or something goes wrong."
 msgstr "Das Projekt wird nun veröffentlicht. Bei Erfolg oder Abbruch wirst Du hier entsprechend darüber benachrichtigt."
 
@@ -379,7 +375,7 @@ msgstr "Das Projekt wird nun veröffentlicht. Bei Erfolg oder Abbruch wirst Du h
 msgid "Theme"
 msgstr "Aussehen"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:99
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:92
 msgid "There was an error, while we publish your project. Please check, if you have enter all fields in metadata step."
 msgstr "Ein Fehler ist im Veröffentlichungsprozess aufgetreten. Bitte überprüfe, ob Du alle Metadatenfelder ausgefüllt hast."
 
@@ -437,7 +433,7 @@ msgstr "Webseite"
 msgid "Wizard"
 msgstr "Helfer"
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:62
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Step/Configuration.vue:59
 msgid "Working title"
 msgstr "Arbeitstitel"
 
@@ -449,6 +445,6 @@ msgstr "Ja, ich möchte den RDS Zugang löschen."
 msgid "You configure RDS properly."
 msgstr "RDS korrekt konfiguriert."
 
-#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:103
+#: /home/physicx/Projects/ScieboRDS/rds-web/client/packages/codebase/src/components/Project/Stepper.vue:96
 msgid "Your project was successfully published."
 msgstr "Das Projekt wurde erfolgreich veröffentlicht"
