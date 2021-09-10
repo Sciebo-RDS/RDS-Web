@@ -100,6 +100,10 @@ export default {
   },
   props: ["project"],
   beforeMount() {
+    if (this.project.status > 1) {
+      this.e1 = 2;
+    }
+
     this.configurationLockState = this.getInitialConfigurationLockState();
   },
   methods: {
