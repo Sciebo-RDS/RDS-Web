@@ -1,10 +1,10 @@
 <template>
   <v-card flat color="transparent">
-    <v-chip v-if="this.status == '0'" color="grey lighten-3" class="ma-2" small>
+    <v-chip v-if="this.status == '1'" color="grey lighten-3" class="ma-2" small>
       <translate>created</translate>
     </v-chip>
     <v-chip
-      v-else-if="this.status == '1' || this.status == '2'"
+      v-else-if="this.status == '2'"
       color="blue lighten-3"
       class="ma-2"
       small
