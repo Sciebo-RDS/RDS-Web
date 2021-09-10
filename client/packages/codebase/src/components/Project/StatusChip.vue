@@ -1,6 +1,6 @@
 <template>
   <v-card flat color="transparent">
-    <v-chip v-if="this.status == '1'" color="grey lighten-3" class="ma-2" small>
+    <v-chip v-if="this.status == '1'" color="lighten-3" class="ma-2" small>
       <translate>created</translate>
     </v-chip>
     <v-chip
