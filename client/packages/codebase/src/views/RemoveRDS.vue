@@ -46,8 +46,9 @@ export default {
           this.$store.getters.getUserServiceList
         )
       );
-      this.$store.commit("setWizardFinished", { wizard: false });
       this.$store.commit("resetState");
+      this.$store.dispatch("requestUserServiceList");
+      this.$store.commit("setWizardFinished", { wizard: false });
       this.$router.push({ name: "Wizard" });
     },
   },
