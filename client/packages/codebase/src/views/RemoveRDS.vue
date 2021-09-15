@@ -47,7 +47,9 @@ export default {
         )
       );
       this.$store.commit("resetState");
-      this.$store.dispatch("requestUserServiceList");
+      this.$socket.client.close();
+      this.auth.login();
+      this.$store.dispatch("getServicesList");
       this.$store.commit("setWizardFinished", { wizard: false });
       this.$router.push({ name: "Wizard" });
     },
