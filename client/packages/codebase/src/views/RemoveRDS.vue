@@ -48,6 +48,20 @@ export default {
       );
       this.$store.commit("resetState");
       this.$socket.client.close();
+      this.auth.loggedIn = false;
+      this.auth.isLoading = false;
+
+      this.overlayText = this.$gettext("initialization...");
+      this.$root.$emit("showoverlay");
+      var checkLoginStatus = setInterval(() => {
+        this.$root.$emit("showoverlay");
+        if (!this.auth.isLoading) {
+          clearInterval(checkLoginStatus);
+          this.overlayText = undefined;
+          this.$root.$emit("hideoverlay");
+        }
+      }, 500);
+
       this.auth.login();
       this.$store.dispatch("getServicesList");
       this.$store.commit("setWizardFinished", { wizard: false });
