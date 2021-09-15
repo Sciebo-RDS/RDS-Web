@@ -21,7 +21,10 @@ export default {
         setUserServiceList: (state, payload) => { state.userservicelist = payload.servicelist },
         setServiceList: (state, payload) => { state.servicelist = payload.servicelist },
         setProjectList: (state, payload) => { state.projectlist = payload.projectlist },
-        setSessionId: (state, payload) => { state.sessionID = payload.sessionID }
+        setSessionId: (state, payload) => { state.sessionID = payload.sessionID },
+        resetState(state) {
+            Object.assign(state, getDefaultState())
+        },
     },
     actions: {
         SOCKET_UserServiceList(context, state) {

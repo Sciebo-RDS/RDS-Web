@@ -47,6 +47,7 @@ export default {
         )
       );
       this.$store.commit("setWizardFinished", { wizard: false });
+      this.$store.commit("resetState");
       this.$router.push({ name: "Wizard" });
     },
   },
