@@ -55,11 +55,7 @@ export default {
       this.$root.$emit("showoverlay");
       var checkLoginStatus = setInterval(() => {
         this.$root.$emit("showoverlay");
-        if (
-          !this.auth.isLoading &&
-          this.getInformations("port-owncloud", this.userservicelist) !==
-            undefined
-        ) {
+        if (!this.auth.isLoading) {
           clearInterval(checkLoginStatus);
           this.overlayText = undefined;
           this.$root.$emit("hideoverlay");
