@@ -64,7 +64,8 @@ flask_config = {
     'SESSION_TYPE': 'filesystem',
     "SECRET_KEY": os.getenv("SECRET_KEY", uuid.uuid4().hex),
     "REMEMBER_COOKIE_HTTPONLY": False,
-    "SESSION_PERMANENT": True
+    "SESSION_PERMANENT": True,
+    'DEBUG': True
 }
 
 if os.getenv("USE_LOCAL_DICTS", "False") == "True":
@@ -119,7 +120,7 @@ tracing = FlaskTracing(tracer_obj, True, app)
 install_all_patches()
 
 # add a TracingHandler for Logging
-gunicorn_logger = logging.getLogger("gunicorn.debug")
+gunicorn_logger = logging.getLogger("gunicorn.error")
 app.logger.handlers.extend(gunicorn_logger.handlers)
 app.logger.addHandler(TracingHandler(tracer_obj))
 app.logger.setLevel(gunicorn_logger.level)
