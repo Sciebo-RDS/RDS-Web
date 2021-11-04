@@ -3,7 +3,7 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, tracer_obj, app
+from .app import socketio, clients, rc, app
 from .Describo import getSessionId
 import logging
 import functools
@@ -11,6 +11,7 @@ import os
 import json
 import requests
 import jwt
+import opentracing
 from RDS import FileTransferMode
 
 
@@ -99,7 +100,7 @@ def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
         with app.test_request_context('/socket.io'):
-            with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
+            with opentracing.tracer.start_active_span(f'Websocket {fn.__name__}') as scope:
                 app.logger.debug("start tracer span")
                 res = fn(*args, **kwargs)
                 app.logger.debug("finish tracer span")
