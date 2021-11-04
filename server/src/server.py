@@ -14,8 +14,8 @@ from flask_login import (
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
 from .websocket import exchangeCodeData, RDSNamespace
 import json
-import gevent.monkey
-gevent.monkey.patch_all(ssl=False)
+import eventlet
+eventlet.monkey_patch()
 import requests
 
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
