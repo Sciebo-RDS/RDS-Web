@@ -25,6 +25,9 @@ def child_exit(server, worker):
 
 
 def post_fork(server, worker):
+    import eventlet
+    eventlet.monkey_patch()
+
     tracer_config = {
         "sampler": {"type": "const", "param": 1, },
         "local_agent": {
