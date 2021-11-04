@@ -4,6 +4,7 @@ from jaeger_client import Config as jConfig
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 from flask_opentracing import FlaskTracing
 from src.TracingHandler import TracingHandler
+from src.app import app
 
 bind = "127.0.0.1:5000"
 workers = multiprocessing.cpu_count() * 2 + 1
@@ -24,7 +25,6 @@ def child_exit(server, worker):
 
 
 def post_fork(server, worker):
-    ### Tracing begin ###
     tracer_config = {
         "sampler": {"type": "const", "param": 1, },
         "local_agent": {
@@ -43,5 +43,5 @@ def post_fork(server, worker):
     )
 
     tracer_obj = config.initialize_tracer()
-    tracing = FlaskTracing(tracer_obj, True, worker.app)
+    tracing = FlaskTracing(tracer_obj, True, app)
     worker.app.logger.handlers.extend(TracingHandler(tracer_obj))
