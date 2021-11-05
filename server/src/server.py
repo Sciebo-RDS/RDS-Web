@@ -26,7 +26,7 @@ socketio.on_namespace(RDSNamespace("/"))
 req = requests.get(
     "{}/apps/rds/api/1.0/publickey".format(
         os.getenv("OWNCLOUD_URL",
-                  "https://10.14.29.60/owncloud/index.php")
+                  "https://sciebords.uni-muenster.de")
     ),
     verify=os.getenv("VERIFY_SSL", "False") == "True"
 ).json()
