@@ -9,7 +9,7 @@ FROM node:14 AS web
 WORKDIR /app
 ENV VUE_APP_BASE_URL $VUE_APP_BASE_URL
 WORKDIR /app
-RUN apt update -y && apt install gettext -y
+RUN apt update -y && apt install gettext-base -y
 COPY --from=staging /src/pkg ./
 RUN yarn install --non-interactive
 COPY client .
@@ -27,12 +27,12 @@ ENV REDIS_HELPER_HOST=http://owncloud_redis
 ENV REDIS_HELPER_PORT=6379
 ENV PROMETHEUS_MULTIPROC_DIR=/tmp
 
-RUN apt update -y && apt install nginx -y
+RUN apt update -y && apt install nginx gettext-base -y
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
 RUN pip install pipenv supervisor==4.2.2
 
-COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
+COPY ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
 
 COPY --from=web /app/packages/standalone/dist /usr/share/nginx/html
