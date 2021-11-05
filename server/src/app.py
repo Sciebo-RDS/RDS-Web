@@ -1,11 +1,6 @@
-import logging
 from opentracing_instrumentation.client_hooks import install_all_patches
 
-from flask import request
-from functools import wraps
-import opentracing
-
-from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
+from prometheus_flask_exporter import PrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
@@ -15,8 +10,14 @@ import json
 from flask_socketio import SocketIO
 from flask_session import Session
 
+from jaeger_client import Config as jConfig
+from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
+from flask_opentracing import FlaskTracing
+from src.TracingHandler import TracingHandler
+
 from pathlib import Path
 from dotenv import load_dotenv
+
 env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=env_path)
 
@@ -93,16 +94,31 @@ app = Flask(__name__,
             )
 
 
+metrics = PrometheusMetrics(app)
 install_all_patches()
-gunicorn_logger = logging.getLogger("gunicorn.error")
-app.logger.handlers.extend(gunicorn_logger.handlers)
-app.logger.setLevel(gunicorn_logger.level)
-app.config.update(flask_config)
 
-try:
-    metrics = GunicornPrometheusMetrics(app)
-except:
-    print("error in prometheus setup")
+tracer_config = {
+    "local_agent": {
+        "reporting_host": "jaeger-agent",
+        "reporting_port": 5775,
+    },
+    "logging": True,
+}
+
+
+config = jConfig(
+    config=tracer_config,
+    service_name=f"RDSWebConnexionPlus",
+    metrics_factory=PrometheusMetricsFactory(
+        namespace=f"RDSWebConnexionPlus"
+    ),
+)
+
+tracer_obj = config.initialize_tracer()
+tracing = FlaskTracing(tracer_obj, True, app)
+app.logger.handlers.append(TracingHandler(tracer_obj))
+
+app.config.update(flask_config)
 Session(app)
 
 socketio = SocketIO(
