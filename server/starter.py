@@ -1,7 +1,6 @@
 from gevent import monkey
 monkey.patch_all()
 
-
 from src.server import app, socketio
 import os
 from pathlib import Path
