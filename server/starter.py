@@ -1,5 +1,8 @@
-from gevent import monkey
-monkey.patch_all()
+try:
+    from gevent import monkey
+    monkey.patch_all()
+except ImportError:
+    pass
 
 from src.server import app, socketio
 import os
