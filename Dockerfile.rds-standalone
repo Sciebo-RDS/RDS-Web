@@ -30,7 +30,7 @@ ENV PROMETHEUS_MULTIPROC_DIR=/tmp
 RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
-RUN pip install setuptools wheel setuptools-rust gunicorn pipenv supervisor==4.2.2
+RUN pip install setuptools wheel setuptools-rust gunicorn[eventlet] pipenv supervisor==4.2.2
 
 COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
