@@ -11,7 +11,6 @@ import os
 import json
 import requests
 import jwt
-import opentracing
 from RDS import FileTransferMode
 
 
