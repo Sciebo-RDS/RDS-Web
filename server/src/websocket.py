@@ -109,7 +109,7 @@ def trace_this(fn):
     return wrapped
 
 
-@trace_this
+#@trace_this
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
