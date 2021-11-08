@@ -6,4 +6,5 @@ do
   cat $file.bak | envsubst $EXISTING_VARS > $file
   rm $file.bak
 done
-nginx -g 'daemon off;'
+
+python starter.py
