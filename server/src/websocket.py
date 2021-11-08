@@ -99,12 +99,12 @@ def exchangeCodeData(data):
 def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
-        with app.test_request_context('/socket.io'):
-            with opentracing.tracer.start_active_span(f'Websocket {fn.__name__}') as scope:
-                app.logger.debug("start tracer span")
-                res = fn(*args, **kwargs)
-                app.logger.debug("finish tracer span")
-                return res
+        #with app.test_request_context('/socket.io'):
+        with opentracing.tracer.start_active_span(f'Websocket {fn.__name__}') as scope:
+            app.logger.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            app.logger.debug("finish tracer span")
+            return res
 
     return wrapped
 
