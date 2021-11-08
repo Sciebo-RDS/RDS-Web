@@ -7,4 +7,4 @@ do
   rm $file.bak
 done
 
-python starter.py
+gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 -b 0.0.0.0:8080 --access-logfile "-" --log-file "-" --log-level "debug" starter:app
