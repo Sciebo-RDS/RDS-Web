@@ -1,21 +1,15 @@
 from flask_login import LoginManager
 from flask_cors import CORS
-from opentracing_instrumentation.client_hooks import install_all_patches
 
 from prometheus_flask_exporter import PrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
 import uuid
-import logging
 import os
 import json
 from flask_socketio import SocketIO
 from flask_session import Session
-
-from jaeger_client import Config as jConfig
-from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
-
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -96,28 +90,6 @@ app = Flask(__name__,
             )
 
 metrics = PrometheusMetrics(app)
-
-install_all_patches()
-
-tracer_config = {
-    "local_agent": {
-        "reporting_host": "jaeger-agent",
-        "reporting_port": 5775,
-    },
-    "logging": True,
-}
-
-
-config = jConfig(
-    config=tracer_config,
-    service_name=f"RDSWebConnexionPlus",
-    metrics_factory=PrometheusMetricsFactory(
-        namespace=f"RDSWebConnexionPlus"
-    ),
-)
-
-tracer_obj = config.initialize_tracer()
-
 app.config.update(flask_config)
 
 Session(app)
