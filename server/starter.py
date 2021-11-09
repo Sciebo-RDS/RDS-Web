@@ -20,6 +20,7 @@ if __name__ == "__main__":
                  port=8080,
                  log_output=True
                  )
+
 else:
     from flask_opentracing import FlaskTracing
     from src.TracingHandler import TracingHandler
