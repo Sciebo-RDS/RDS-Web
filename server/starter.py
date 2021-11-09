@@ -5,7 +5,7 @@ try:
 except ImportError:
     pass
 
-from src.server import app, socketio, tracer_obj
+from src.server import app, socketio
 import os
 import logging
 from pathlib import Path
