@@ -97,22 +97,19 @@ def exchangeCodeData(data):
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        with tracer_obj.start_active_span(f'Websocket {f.__name__}') as scope:
-            app.logger.debug("start tracer span")
-            app.logger.debug("logged? {}, {}, {}".format(
-                current_user.is_authenticated, args, kwargs))
+        app.logger.debug("logged? {}, {}, {}".format(
+            current_user.is_authenticated, args, kwargs))
 
-            emit("LoginStatus", json.dumps({
-                "status": current_user.is_authenticated,
-                "user": current_user.userId
-            }))
+        emit("LoginStatus", json.dumps({
+            "status": current_user.is_authenticated,
+            "user": current_user.userId
+        }))
 
-            if not current_user.is_authenticated:
-                disconnect()
-            else:
-                res = f(*args, **kwargs)
-                app.logger.debug("finish tracer span")
-                return res
+        if not current_user.is_authenticated:
+            disconnect()
+        else:
+            res = f(*args, **kwargs)
+            return res
 
     return wrapped
 
@@ -142,6 +139,8 @@ def saveResearch(research):
 class RDSNamespace(Namespace):
     @authenticated_only
     def on_connect(self, data):
+        app.logger.debug("connects to websocket")
+
         current_user.websocketId = request.sid
         clients[current_user.userId] = current_user
 
