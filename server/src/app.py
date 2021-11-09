@@ -1,3 +1,5 @@
+from flask_login import LoginManager
+from flask_cors import CORS
 from opentracing_instrumentation.client_hooks import install_all_patches
 
 from prometheus_flask_exporter import PrometheusMetrics
@@ -13,8 +15,7 @@ from flask_session import Session
 
 from jaeger_client import Config as jConfig
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
-from flask_opentracing import FlaskTracing
-from src.TracingHandler import TracingHandler
+
 
 from pathlib import Path
 from dotenv import load_dotenv
@@ -116,15 +117,13 @@ config = jConfig(
 )
 
 tracer_obj = config.initialize_tracer()
-tracing = FlaskTracing(tracer_obj, True, app)
-
-gunicorn_logger = logging.getLogger("gunicorn.error")
-app.logger.handlers.extend(gunicorn_logger.handlers)
-app.logger.handlers.append(TracingHandler(tracer_obj))
-app.logger.setLevel(gunicorn_logger.level)
 
 app.config.update(flask_config)
+
 Session(app)
+CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
+login_manager = LoginManager(app)
+login_manager.login_view = "index"
 
 socketio = SocketIO(
     app,
