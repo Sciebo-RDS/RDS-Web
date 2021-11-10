@@ -15,7 +15,6 @@ flask-session = "*"
 redis-py-cluster = "*"
 redis-pubsub-dict = "*"
 prometheus-flask-exporter = "*"
-research-data-services-common = {extras = ["flask"], version = "*"}
 gunicorn = {extras = ["eventlet"], version = "*"}
 
 [dev-packages]
