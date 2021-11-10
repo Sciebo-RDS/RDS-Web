@@ -11,6 +11,7 @@ import os
 import json
 import requests
 import jwt
+from RDS import FileTransferMode
 
 
 def refreshUserServices():
@@ -182,6 +183,11 @@ class RDSNamespace(Namespace):
             for index, port in enumerate(research["portOut"]):
                 parsedBackPort = parsePortBack(port)
                 parsedBackPort["servicename"] = port["port"]
+
+                if FileTransferMode(parsedBackPort["fileTransferMode"]) == FileTransferMode.passive:
+                    continue
+
+
 
                 createProjectResp = json.loads(httpManager.makeRequest(
                     "createProject", data=parsedBackPort))

@@ -137,5 +137,6 @@ Session(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS")),
-    manage_session=False
+    manage_session=False,
+    logger=True
 )
