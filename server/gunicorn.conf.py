@@ -17,3 +17,8 @@ def when_ready(server):
 
 def child_exit(server, worker):
     GunicornPrometheusMetrics.mark_process_dead_on_child_exit(worker.pid)
+
+
+def post_fork(server, worker):
+    import eventlet
+    eventlet.monkey_patch()
