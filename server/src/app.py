@@ -1,6 +1,4 @@
 import logging
-from flask import request
-from functools import wraps
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
