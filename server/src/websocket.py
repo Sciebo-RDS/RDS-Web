@@ -183,6 +183,9 @@ class RDSNamespace(Namespace):
                 parsedBackPort = parsePortBack(port)
                 parsedBackPort["servicename"] = port["port"]
 
+                if parsedBackPort["fileTransferMode"] == 1:
+                    continue
+
                 createProjectResp = json.loads(httpManager.makeRequest(
                     "createProject", data=parsedBackPort))
 
