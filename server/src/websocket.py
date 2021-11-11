@@ -92,6 +92,18 @@ def exchangeCodeData(data):
     return req.status_code < 400
 
 
+def trace_this(fn):
+    @functools.wraps(fn)
+    def wrapped(*args, **kwargs):
+        with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
+            app.logger.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            app.logger.debug("finish tracer span")
+            return res
+
+    return wrapped
+
+
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
@@ -106,7 +118,8 @@ def authenticated_only(f):
         if not current_user.is_authenticated:
             disconnect()
         else:
-            return f(*args, **kwargs)
+            fn = trace_this(f)
+            return fn(*args, **kwargs)
 
     return wrapped
 
@@ -165,6 +178,7 @@ class RDSNamespace(Namespace):
 
             app.logger.debug(
                 "start synchronization, research: {}".format(research))
+
             for index, port in enumerate(research["portOut"]):
                 parsedBackPort = parsePortBack(port)
                 parsedBackPort["servicename"] = port["port"]
@@ -192,6 +206,7 @@ class RDSNamespace(Namespace):
 
             httpManager.makeRequest(
                 "triggerMetadataSynchronization", data=jsonData)
+
             httpManager.makeRequest(
                 "triggerFileSynchronization", data=jsonData)
             httpManager.makeRequest("finishResearch", data=jsonData)
