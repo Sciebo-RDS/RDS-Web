@@ -204,12 +204,8 @@ class RDSNamespace(Namespace):
                 research, parseResearchBack(research)))
             saveResearch(parseResearchBack(research))
 
-            try:
-                httpManager.makeRequest(
-                    "triggerMetadataSynchronization", data=jsonData)
-            except:
-                app.logger.debug(
-                    "project does not support metadata sync for data {}".format(jsonData))
+            httpManager.makeRequest(
+                "triggerMetadataSynchronization", data=jsonData)
 
             httpManager.makeRequest(
                 "triggerFileSynchronization", data=jsonData)
