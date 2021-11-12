@@ -5,6 +5,7 @@ from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplica
 from .EasierRDS import parseDict
 from .app import socketio, clients, rc, app, tracer_obj
 from .Describo import getSessionId
+import logging
 import functools
 import os
 import json
