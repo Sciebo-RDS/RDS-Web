@@ -93,7 +93,6 @@ app = Flask(__name__,
             static_folder=os.getenv(
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
-
 app.logger.setLevel(logging.DEBUG)
 
 metrics = PrometheusMetrics(app)
@@ -119,9 +118,9 @@ config = jConfig(
 
 tracer_obj = config.initialize_tracer()
 tracing = FlaskTracing(tracer_obj, True, app)
-# app.logger.handlers.clear()
+app.logger.handlers.clear()
 app.logger.handlers.append(TracingHandler(tracer_obj))
-app.logger.setLevel(logging.DEBUG)
+app.logger.setLevel(logging.INFO)
 
 app.config.update(flask_config)
 Session(app)
