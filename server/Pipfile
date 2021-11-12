@@ -18,9 +18,10 @@ flask-opentracing = "*"
 opentracing-instrumentation = "*"
 jaeger-client = "*"
 research-data-services-common = {extras = ["flask"], version = "*"}
+gevent = "*"
 python-socketio = "*"
+gevent-websocket = "*"
 gunicorn = "*"
-eventlet = "*"
 
 [dev-packages]
 black = "==20.8b1"
