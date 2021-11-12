@@ -3,7 +3,7 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, app
+from .app import socketio, clients, rc, app, tracer_obj
 from .Describo import getSessionId
 import functools
 import os
@@ -94,6 +94,19 @@ def exchangeCodeData(data):
     return req.status_code < 400
 
 
+def trace_this(fn):
+    @functools.wraps(fn)
+    def wrapped(*args, **kwargs):
+        with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
+            app.logger.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            app.logger.debug("finish tracer span")
+            return res
+
+    return wrapped
+
+
+@trace_this
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
@@ -108,7 +121,8 @@ def authenticated_only(f):
         if not current_user.is_authenticated:
             disconnect()
         else:
-            return f(*args, **kwargs)
+            fn = trace_this(f)
+            return fn(*args, **kwargs)
 
     return wrapped
 

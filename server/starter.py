@@ -1,6 +1,6 @@
 try:
     import eventlet
-    eventlet.monkey_patch()
+    eventlet.monkey_patch(socket=False)
 
 except ImportError:
     pass
@@ -23,6 +23,12 @@ if __name__ == "__main__":
                  )
 
 else:
+    from flask_opentracing import FlaskTracing
+    from src.TracingHandler import TracingHandler
+
+    tracing = FlaskTracing(tracer_obj, True, app)
+
     gunicorn_logger = logging.getLogger("gunicorn.error")
     app.logger.handlers = gunicorn_logger.handlers
+    app.logger.handlers.append(TracingHandler(tracer_obj))
     app.logger.setLevel(gunicorn_logger.level)
