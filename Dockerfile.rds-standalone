@@ -30,7 +30,7 @@ ENV PROMETHEUS_MULTIPROC_DIR=/tmp
 RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
-RUN pip install setuptools wheel setuptools-rust pipenv supervisor==4.2.2
+RUN pip install setuptools wheel setuptools-rust gunicorn[eventlet] pipenv supervisor==4.2.2
 
 COPY ./server/requirements.txt ./server/Pipfile ./server/Pipfile.lock /srv/
 RUN pipenv install --system
@@ -40,7 +40,7 @@ COPY ./setup/misc/supervisord.rds.conf /etc/supervisor/supervisord.conf
 COPY ./setup/misc/start-nginx.nginx.sh /usr/bin/start-nginx.sh
 RUN chmod +x /usr/bin/start-nginx.sh
 COPY ./setup/misc/nginx/gunicorn.conf /etc/nginx/nginx.conf
-COPY ./server/starter.py /srv/
+COPY ./server/starter.py ./server/gunicorn.conf.py /srv/
 COPY ./server/src /srv/src
 
 ENTRYPOINT [ "supervisord", "-c" , "/etc/supervisor/supervisord.conf"]
