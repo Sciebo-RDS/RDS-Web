@@ -44,4 +44,4 @@ def post_fork(server, worker):
 
     tracer_obj = config.initialize_tracer()
     tracing = FlaskTracing(tracer_obj, True, app)
-    app.logger.handlers.append(TracingHandler(tracer_obj))
+    app.logger.handlers.extend(TracingHandler(tracer_obj))
