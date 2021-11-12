@@ -20,7 +20,7 @@ jaeger-client = "*"
 research-data-services-common = {extras = ["flask"], version = "*"}
 python-socketio = "*"
 gunicorn = "*"
-eventlet = "==0.30.2"
+eventlet = "*"
 
 [dev-packages]
 black = "==20.8b1"
