@@ -1,10 +1,14 @@
 import logging
+from .TracingHandler import TracingHandler
 from opentracing_instrumentation.client_hooks import install_all_patches
-
+from jaeger_client import Config as jConfig
+from jaeger_client.metrics.prometheus import (
+    PrometheusMetricsFactory,
+)
 from flask import request
 from functools import wraps
 import opentracing
-
+from flask_opentracing import FlaskTracing
 from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
@@ -92,11 +96,32 @@ app = Flask(__name__,
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
 
+### Tracing begin ###
+tracer_config = {
+    "sampler": {"type": "const", "param": 1, },
+    "local_agent": {
+        "reporting_host": "jaeger-agent",
+        "reporting_port": 5775,
+    },
+    "logging": True,
+}
 
+config = jConfig(
+    config=tracer_config,
+    service_name=f"RDSWebConnexionPlus",
+    metrics_factory=PrometheusMetricsFactory(
+        namespace=f"RDSWebConnexionPlus"
+    ),
+)
+
+
+tracer_obj = config.initialize_tracer()
+tracing = FlaskTracing(tracer_obj, True, app)
 install_all_patches()
 
 # add a TracingHandler for Logging
 gunicorn_logger = logging.getLogger("gunicorn.error")
+gunicorn_logger.addHandler(TracingHandler(tracer_obj))
 app.logger.handlers.extend(gunicorn_logger.handlers)
 app.logger.setLevel(gunicorn_logger.level)
 ### Tracing end ###
