@@ -1,7 +1,6 @@
 try:
     import eventlet
-    eventlet.monkey_patch(socket=False)
-
+    eventlet.monkey_patch()
 except ImportError:
     pass
 
