@@ -3,7 +3,7 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, app, tracer_obj
+from .app import socketio, clients, rc, app
 from .Describo import getSessionId
 import logging
 import functools
@@ -96,25 +96,35 @@ def exchangeCodeData(data):
     return req.status_code < 400
 
 
+def trace_this(fn):
+    @functools.wraps(fn)
+    def wrapped(*args, **kwargs):
+        #with app.test_request_context('/socket.io'):
+        with opentracing.tracer.start_active_span(f'Websocket {fn.__name__}') as scope:
+            app.logger.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            app.logger.debug("finish tracer span")
+            return res
+
+    return wrapped
+
+
+#@trace_this
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
-        with tracer_obj.start_active_span(f'Websocket {f.__name__}') as scope:
-            app.logger.debug("start tracer span")
-            app.logger.debug("logged? {}, {}, {}".format(
-                current_user.is_authenticated, args, kwargs))
+        app.logger.debug("logged? {}, {}, {}".format(
+            current_user.is_authenticated, args, kwargs))
 
-            emit("LoginStatus", json.dumps({
-                "status": current_user.is_authenticated,
-                "user": current_user.userId
-            }))
+        emit("LoginStatus", json.dumps({
+            "status": current_user.is_authenticated,
+            "user": current_user.userId
+        }))
 
-            if not current_user.is_authenticated:
-                disconnect()
-            else:
-                res = f(*args, **kwargs)
-                app.logger.debug("finish tracer span")
-                return res
+        if not current_user.is_authenticated:
+            disconnect()
+        else:
+            return f(*args, **kwargs)
 
     return wrapped
 
