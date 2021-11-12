@@ -22,7 +22,6 @@ export default {
             Vue.prototype.auth.loggedIn = true
             Vue.prototype.$socket.client.on('connect', disableLoadingIndicator);
             Vue.prototype.$socket.client.open()
-            console.log("opened socket")
         }
 
         function disableLoadingIndicator() {
