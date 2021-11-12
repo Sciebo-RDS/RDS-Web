@@ -1,5 +1,5 @@
 import eventlet
-eventlet.monkey_patch(socket=False)
+eventlet.monkey_patch()
 
 from src.server import app, socketio
 import os
