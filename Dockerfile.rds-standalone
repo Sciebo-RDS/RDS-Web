@@ -27,7 +27,7 @@ ENV REDIS_HELPER_HOST=http://owncloud_redis
 ENV REDIS_HELPER_PORT=6379
 ENV PROMETHEUS_MULTIPROC_DIR=/tmp
 
-RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash make build-base libevent-dev
+RUN apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash make build-base
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
 RUN pip install setuptools wheel setuptools-rust pipenv supervisor==4.2.2
