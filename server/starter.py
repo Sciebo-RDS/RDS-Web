@@ -15,6 +15,6 @@ load_dotenv(dotenv_path=env_path)
 if __name__ == "__main__":
     socketio.run(app,
                  debug=os.getenv("DEV_FLASK_DEBUG", "False") == "True",
-                 host="0.0.0.0",
+                 host="localhost",
                  port=8080
                  )
