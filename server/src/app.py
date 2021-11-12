@@ -94,6 +94,8 @@ app = Flask(__name__,
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
 
+app.logger.setLevel(logging.DEBUG)
+
 metrics = PrometheusMetrics(app)
 
 install_all_patches()
@@ -117,11 +119,9 @@ config = jConfig(
 
 tracer_obj = config.initialize_tracer()
 tracing = FlaskTracing(tracer_obj, True, app)
-
-gunicorn_logger = logging.getLogger("gunicorn.error")
-app.logger.handlers.extend(gunicorn_logger.handlers)
+# app.logger.handlers.clear()
 app.logger.handlers.append(TracingHandler(tracer_obj))
-app.logger.setLevel(gunicorn_logger.level)
+app.logger.setLevel(logging.DEBUG)
 
 app.config.update(flask_config)
 Session(app)
