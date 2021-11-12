@@ -3,7 +3,7 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, tracer_obj, app
+from .app import socketio, clients, rc, tracing, tracer_obj, app
 from .Describo import getSessionId
 import logging
 import functools
