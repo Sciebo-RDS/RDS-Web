@@ -1,6 +1,3 @@
-import jwt
-import os
-import uuid
 from flask_cors import CORS
 from flask import Response, stream_with_context, session, request, redirect, url_for
 from flask_login import (
@@ -14,9 +11,11 @@ from flask_login import (
 from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
 from .websocket import exchangeCodeData, RDSNamespace
 import json
-import gevent.monkey
-gevent.monkey.patch_all(ssl=False)
 import requests
+import uuid
+import os
+import os
+import jwt
 
 CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
 
