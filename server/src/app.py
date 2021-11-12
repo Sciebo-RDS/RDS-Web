@@ -1,7 +1,15 @@
-from flask_login import LoginManager
-from flask_cors import CORS
-
-from prometheus_flask_exporter import PrometheusMetrics
+import logging
+from .TracingHandler import TracingHandler
+from opentracing_instrumentation.client_hooks import install_all_patches
+from jaeger_client import Config as jConfig
+from jaeger_client.metrics.prometheus import (
+    PrometheusMetricsFactory,
+)
+from flask import request
+from functools import wraps
+import opentracing
+from flask_opentracing import FlaskTracing
+from prometheus_flask_exporter.multiprocess import GunicornPrometheusMetrics
 import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
@@ -13,7 +21,6 @@ from flask_session import Session
 
 from pathlib import Path
 from dotenv import load_dotenv
-
 env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=env_path)
 
@@ -89,17 +96,46 @@ app = Flask(__name__,
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
 
-metrics = PrometheusMetrics(app)
+### Tracing begin ###
+tracer_config = {
+    "sampler": {"type": "const", "param": 1, },
+    "local_agent": {
+        "reporting_host": "jaeger-agent",
+        "reporting_port": 5775,
+    },
+    "logging": True,
+}
+
+config = jConfig(
+    config=tracer_config,
+    service_name=f"RDSWebConnexionPlus",
+    metrics_factory=PrometheusMetricsFactory(
+        namespace=f"RDSWebConnexionPlus"
+    ),
+)
+
+
+tracer_obj = config.initialize_tracer()
+tracing = FlaskTracing(tracer_obj, True, app)
+install_all_patches()
+
+# add a TracingHandler for Logging
+gunicorn_logger = logging.getLogger("gunicorn.error")
+app.logger.handlers.extend(gunicorn_logger.handlers)
+app.logger.addHandler(TracingHandler(tracer_obj))
+app.logger.setLevel(gunicorn_logger.level)
+### Tracing end ###
+
 app.config.update(flask_config)
 
+try:
+    metrics = GunicornPrometheusMetrics(app)
+except:
+    print("error in prometheus setup")
 Session(app)
-CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
-login_manager = LoginManager(app)
-login_manager.login_view = "index"
 
 socketio = SocketIO(
     app,
     cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS")),
-    manage_session=False,
-    logger=True
+    manage_session=False
 )

@@ -3,13 +3,16 @@ from flask_socketio import emit, disconnect, Namespace
 from flask_login import current_user, logout_user
 from .Util import parseResearch, parseResearchBack, parsePortBack, removeDuplicates, checkForEmpty
 from .EasierRDS import parseDict
-from .app import socketio, clients, rc, app
+from .app import socketio, clients, rc, tracing, tracer_obj, app
 from .Describo import getSessionId
+import logging
 import functools
 import os
 import json
 import requests
 import jwt
+from RDS import FileTransferMode
+
 
 def refreshUserServices():
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
@@ -149,8 +152,6 @@ def saveResearch(research):
 class RDSNamespace(Namespace):
     @authenticated_only
     def on_connect(self, data):
-        app.logger.debug("connects to websocket")
-
         current_user.websocketId = request.sid
         clients[current_user.userId] = current_user
 

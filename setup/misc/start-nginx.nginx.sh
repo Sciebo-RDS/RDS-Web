@@ -6,5 +6,4 @@ do
   cat $file.bak | envsubst $EXISTING_VARS > $file
   rm $file.bak
 done
-
-gunicorn -k eventlet -w 1 -b 0.0.0.0:8080  --user root --group root --access-logfile "/dev/stdout" --log-file "/dev/stdout" --log-level "debug" starter:app
+nginx -g 'daemon off;'

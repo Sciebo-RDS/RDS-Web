@@ -1,25 +1,34 @@
-import jwt
-import os
-import uuid
+from flask_cors import CORS
 from flask import Response, stream_with_context, session, request, redirect, url_for
 from flask_login import (
+    LoginManager,
     login_user,
     UserMixin,
     login_required,
     logout_user,
     current_user,
 )
-from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url, login_manager
+from .app import app, socketio, user_store, use_predefined_user, use_embed_mode, use_proxy, redirect_url
 from .websocket import exchangeCodeData, RDSNamespace
 import json
 import requests
+import uuid
+import os
+import os
+import jwt
 
+CORS(app, origins=json.loads(os.getenv("FLASK_ORIGINS")), supports_credentials=True)
+
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "index"
 socketio.on_namespace(RDSNamespace("/"))
 
 req = requests.get(
     "{}/apps/rds/api/1.0/publickey".format(
         os.getenv("OWNCLOUD_URL",
-                  "https://sciebords.uni-muenster.de")
+                  "https://10.14.29.60/owncloud/index.php")
     ),
     verify=os.getenv("VERIFY_SSL", "False") == "True"
 ).json()
@@ -103,8 +112,6 @@ def questions():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        app.logger.debug("User authorized? {}".format(
-            current_user.is_authenticated))
         return ("", 200) if (current_user.is_authenticated) else ("", 401)
 
     try:
