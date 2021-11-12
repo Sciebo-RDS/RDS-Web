@@ -13,8 +13,10 @@ env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=env_path)
 
 if __name__ == "__main__":
-    socketio.run(app,
-                 debug=os.getenv("DEV_FLASK_DEBUG", "False") == "True",
-                 host="localhost",
-                 port=5000
-                 )
+    try:
+        socketio.run(app,
+                     debug=os.getenv("DEV_FLASK_DEBUG", "False") == "True",
+                     port=5000
+                     )
+    finally:
+        pass
