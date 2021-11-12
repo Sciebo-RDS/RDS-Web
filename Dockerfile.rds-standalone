@@ -15,7 +15,7 @@ RUN yarn install --non-interactive
 COPY client .
 RUN yarn standalone
 
-FROM python:3.9
+FROM python:3.9-alpine
 WORKDIR /srv
 
 EXPOSE 80
@@ -27,7 +27,7 @@ ENV REDIS_HELPER_HOST=http://owncloud_redis
 ENV REDIS_HELPER_PORT=6379
 ENV PROMETHEUS_MULTIPROC_DIR=/tmp
 
-RUN apk update && apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash make build-base libevent-dev
+RUN apk update && apk add --no-cache nginx gcc musl-dev python3-dev libffi-dev openssl-dev cargo g++ gettext bash make build-base libevent-dev py3-gevent
 RUN mkdir -p /run/nginx
 RUN mkdir -p /var/lib/nginx/tmp
 RUN pip install setuptools wheel setuptools-rust pipenv supervisor==4.2.2
