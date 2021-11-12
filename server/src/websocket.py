@@ -98,17 +98,15 @@ def exchangeCodeData(data):
 def trace_this(fn):
     @functools.wraps(fn)
     def wrapped(*args, **kwargs):
-        with app.test_request_context('/socket.io'):
-            with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
-                app.logger.debug("start tracer span")
-                res = fn(*args, **kwargs)
-                app.logger.debug("finish tracer span")
-                return res
+        with tracer_obj.start_active_span(f'Websocket {fn.__name__}') as scope:
+            app.logger.debug("start tracer span")
+            res = fn(*args, **kwargs)
+            app.logger.debug("finish tracer span")
+            return res
 
     return wrapped
 
 
-@trace_this
 def authenticated_only(f):
     @functools.wraps(f)
     def wrapped(*args, **kwargs):
@@ -123,7 +121,8 @@ def authenticated_only(f):
         if not current_user.is_authenticated:
             disconnect()
         else:
-            return f(*args, **kwargs)
+            fn = trace_this(f)
+            return fn(*args, **kwargs)
 
     return wrapped
 
@@ -180,24 +179,27 @@ class RDSNamespace(Namespace):
 
             app.logger.debug(
                 "start synchronization, research: {}".format(research))
+
             for index, port in enumerate(research["portOut"]):
                 parsedBackPort = parsePortBack(port)
                 parsedBackPort["servicename"] = port["port"]
 
-                if FileTransferMode(parsedBackPort["fileTransferMode"]) == FileTransferMode.passive:
-                    continue
+                try:
+                    createProjectResp = json.loads(httpManager.makeRequest(
+                        "createProject", data=parsedBackPort))
 
-                createProjectResp = json.loads(httpManager.makeRequest(
-                    "createProject", data=parsedBackPort))
+                    app.logger.debug(
+                        "got response: {}".format(createProjectResp))
 
-                app.logger.debug("got response: {}".format(createProjectResp))
+                    if "customProperties" not in research["portOut"][index]:
+                        research["portOut"][index]["properties"]["customProperties"] = {}
 
-                if "customProperties" not in research["portOut"][index]:
-                    research["portOut"][index]["properties"]["customProperties"] = {}
-
-                research["portOut"][index]["properties"]["customProperties"].update(
-                    createProjectResp
-                )
+                    research["portOut"][index]["properties"]["customProperties"].update(
+                        createProjectResp
+                    )
+                except:
+                    app.logger.debug("no project were created for {}".format(
+                        parsedBackPort["servicename"]))
 
             app.logger.debug("research before: {}, \nafter: {}".format(
                 research, parseResearchBack(research)))
@@ -205,6 +207,7 @@ class RDSNamespace(Namespace):
 
             httpManager.makeRequest(
                 "triggerMetadataSynchronization", data=jsonData)
+
             httpManager.makeRequest(
                 "triggerFileSynchronization", data=jsonData)
             httpManager.makeRequest("finishResearch", data=jsonData)
