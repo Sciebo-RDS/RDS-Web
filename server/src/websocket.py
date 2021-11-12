@@ -10,6 +10,8 @@ import os
 import json
 import requests
 import jwt
+from RDS import FileTransferMode
+
 
 def refreshUserServices():
     emit("UserServiceList", httpManager.makeRequest("getUserServices"))
@@ -169,22 +171,20 @@ class RDSNamespace(Namespace):
                 parsedBackPort = parsePortBack(port)
                 parsedBackPort["servicename"] = port["port"]
 
-                try:
-                    createProjectResp = json.loads(httpManager.makeRequest(
-                        "createProject", data=parsedBackPort))
+                if FileTransferMode(parsedBackPort["fileTransferMode"]) == FileTransferMode.passive:
+                    continue
 
-                    app.logger.debug(
-                        "got response: {}".format(createProjectResp))
+                createProjectResp = json.loads(httpManager.makeRequest(
+                    "createProject", data=parsedBackPort))
 
-                    if "customProperties" not in research["portOut"][index]:
-                        research["portOut"][index]["properties"]["customProperties"] = {}
+                app.logger.debug("got response: {}".format(createProjectResp))
 
-                    research["portOut"][index]["properties"]["customProperties"].update(
-                        createProjectResp
-                    )
-                except:
-                    app.logger.debug("no project were created for {}".format(
-                        parsedBackPort["servicename"]))
+                if "customProperties" not in research["portOut"][index]:
+                    research["portOut"][index]["properties"]["customProperties"] = {}
+
+                research["portOut"][index]["properties"]["customProperties"].update(
+                    createProjectResp
+                )
 
             app.logger.debug("research before: {}, \nafter: {}".format(
                 research, parseResearchBack(research)))
