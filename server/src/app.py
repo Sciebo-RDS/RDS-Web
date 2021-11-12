@@ -91,7 +91,8 @@ else:
 
 app = Flask(__name__,
             static_folder=os.getenv(
-                "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
+                "FLASK_STATIC_FOLDER", "/usr/share/nginx/html"),
+            logger=True
             )
 
 app.logger.setLevel(logging.DEBUG)
@@ -129,6 +130,5 @@ Session(app)
 socketio = SocketIO(
     app,
     cors_allowed_origins=json.loads(os.getenv("FLASK_ORIGINS")),
-    manage_session=False,
-    logger=True
+    manage_session=False
 )
