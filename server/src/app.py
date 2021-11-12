@@ -94,9 +94,13 @@ app = Flask(__name__,
 
 
 install_all_patches()
+
+# add a TracingHandler for Logging
 gunicorn_logger = logging.getLogger("gunicorn.error")
 app.logger.handlers.extend(gunicorn_logger.handlers)
 app.logger.setLevel(gunicorn_logger.level)
+### Tracing end ###
+
 app.config.update(flask_config)
 
 try:
