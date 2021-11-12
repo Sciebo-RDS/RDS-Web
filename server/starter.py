@@ -16,5 +16,5 @@ if __name__ == "__main__":
     socketio.run(app,
                  debug=os.getenv("DEV_FLASK_DEBUG", "False") == "True",
                  host="localhost",
-                 port=8080
+                 port=5000
                  )

@@ -5,7 +5,6 @@ import redis_pubsub_dict
 from rediscluster import RedisCluster
 from flask import Flask
 import uuid
-import logging
 import os
 import json
 from flask_socketio import SocketIO
@@ -93,10 +92,9 @@ app = Flask(__name__,
             static_folder=os.getenv(
                 "FLASK_STATIC_FOLDER", "/usr/share/nginx/html")
             )
-app.logger.setLevel(logging.DEBUG)
+
 
 metrics = PrometheusMetrics(app)
-
 install_all_patches()
 
 tracer_config = {
