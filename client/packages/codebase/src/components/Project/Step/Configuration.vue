@@ -7,20 +7,7 @@
         <v-col>
           <v-card flat>
             <v-card-subtitle v-translate>
-              1. Enter your working title here
-            </v-card-subtitle>
-
-            <v-card-actions>
-              <v-text-field
-                label="Working title"
-                @input="changeResearchname"
-                v-model="workingTitle"
-              />
-            </v-card-actions>
-          </v-card>
-          <v-card flat>
-            <v-card-subtitle v-translate>
-              2. Which folder do you want to publish?
+              1. Which folder do you want to publish?
             </v-card-subtitle>
 
             <v-card-actions>
@@ -42,7 +29,7 @@
         <v-col>
           <v-card flat>
             <v-card-subtitle v-translate>
-              3. Which Services do you want to publish to?
+              2. Which Services do you want to publish to?
             </v-card-subtitle>
             <v-card-text>
               <v-select
@@ -136,9 +123,6 @@ export default {
     window.removeEventListener("message", this.eventloop);
   },
   methods: {
-    changeResearchname() {
-      this.$emit("changeResearchname", this.workingTitle);
-    },
     eventloop(event) {
       if (event.data.length > 0) {
         var payload = JSON.parse(event.data);
