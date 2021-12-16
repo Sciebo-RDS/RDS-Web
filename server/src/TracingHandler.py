@@ -10,6 +10,8 @@ class TracingHandler(logging.StreamHandler):
     def emit(self, record):
         span = request_context.get_current_span()
 
-        if span is not None:
-            msg = self.format(record)
-            span.log_kv({logging.getLevelName(record.levelno): msg})
+        if span is None:
+            span = request_context.start_active_span("Tracing")
+
+        msg = self.format(record)
+        span.log_kv({logging.getLevelName(record.levelno): msg})
